@@ -1,77 +1,344 @@
 <?php
 namespace CommerceKit\Commerce\Features;
+
 use CommerceKit\Commerce\Classes\Trait\Hookable;
 
 class BuyButtonForWoocommerce {
     use Hookable;
 
+    protected $settings = [];
+
     public function __construct() {
-        // Register hooks and shortcodes.
-        $this->filter('woocommerce_add_to_cart_redirect', [ $this, 'handle_add_to_cart_redirect' ], 10, 1);
-        $this->filter('woocommerce_add_to_cart_validation', [ $this, 'validate_add_to_cart' ], 10, 3);
-        $this->add_shortcode('buy_button', [ $this, 'buy_button_handler' ]);
+        $this->settings = commercekit_get_buy_button_settings();
+
+        // Non-AJAX: single product page form submit + archive link
+        $this->action( 'template_redirect', [ $this, 'buy_now_button_submit' ] );
+
+        // AJAX handlers (variable products always, simple products when Ajax is on)
+        $this->action( 'wp_ajax_ck_buy_button_add_to_cart',        [ $this, 'ajax_add_to_cart' ] );
+        $this->action( 'wp_ajax_nopriv_ck_buy_button_add_to_cart', [ $this, 'ajax_add_to_cart' ] );
+
+        $this->action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+
+        if ( $this->settings['enable_single'] === 'yes' ) {
+            $this->button_position_single();
+        }
+
+        if ( $this->settings['enable_archive'] === 'yes' ) {
+            $this->button_position_archive();
+        }
+
+        // Backward-compatible shortcode
+        $this->add_shortcode( 'buy_button', [ $this, 'shortcode_buy_button' ] );
+    }
+
+    protected function button_position_single() {
+        if ( $this->settings['button_position_single'] === 'after_add_to_cart' ) {
+            $this->action( 'woocommerce_after_add_to_cart_button', [ $this, 'buy_now_button_single' ] );
+        } else {
+            $this->action( 'woocommerce_before_add_to_cart_button', [ $this, 'buy_now_button_single' ] );
+        }
+    }
+
+    protected function button_position_archive() {
+        $priority = $this->settings['button_position_archive'] === 'after_add_to_cart' ? 11 : 9;
+        $this->action( 'woocommerce_after_shop_loop_item', [ $this, 'buy_now_button_archive' ], $priority );
+    }
+
+    public function enqueue_scripts() {
+        $js_file = COMMERCE_KIT_PATH . 'features/buy-button-for-woocommerce/buy-button.js';
+
+        wp_enqueue_script(
+            'ck-buy-button-script',
+            COMMERCE_KIT_URL . 'features/buy-button-for-woocommerce/buy-button.js',
+            [ 'jquery' ],
+            file_exists( $js_file ) ? filemtime( $js_file ) : '1.0',
+            true
+        );
+
+        wp_localize_script( 'ck-buy-button-script', 'CK_BUY_BUTTON', [
+            'ajax_url'            => admin_url( 'admin-ajax.php' ),
+            'nonce'               => wp_create_nonce( 'ck_buy_button_nonce' ),
+            'is_ajax'             => $this->settings['ajax_add_to_cart'],
+            'redirect_location'   => $this->settings['redirect_location'],
+            'button_text'         => $this->settings['button_text'] ?: 'Buy Now',
+            'i18n_select_options' => __( 'Please select product options before clicking Buy Now.', 'commerce-kit' ),
+        ] );
+
+        if ( $this->settings['button_style'] === 'custom' ) {
+            $this->output_custom_css();
+        }
+    }
+
+    protected function output_custom_css() {
+        $s   = $this->settings;
+        $css = '.wc-buy-now-btn{';
+
+        if ( ! empty( $s['button_text_color'] ) ) {
+            $css .= 'color:' . sanitize_hex_color( $s['button_text_color'] ) . '!important;';
+        }
+        if ( ! empty( $s['button_background_color'] ) ) {
+            $css .= 'background-color:' . sanitize_hex_color( $s['button_background_color'] ) . '!important;';
+        }
+        if ( ! empty( $s['button_border_color'] ) ) {
+            $css .= 'border-color:' . sanitize_hex_color( $s['button_border_color'] ) . '!important;';
+        }
+        if ( ! empty( $s['button_border_size'] ) ) {
+            $css .= 'border-width:' . absint( $s['button_border_size'] ) . 'px!important;border-style:solid;';
+        }
+        if ( ! empty( $s['button_border_radius'] ) ) {
+            $css .= 'border-radius:' . absint( $s['button_border_radius'] ) . 'px!important;';
+        }
+        if ( ! empty( $s['button_font_size'] ) ) {
+            $css .= 'font-size:' . absint( $s['button_font_size'] ) . 'px!important;';
+        }
+
+        foreach ( [ 'top', 'right', 'bottom', 'left' ] as $side ) {
+            $val = $s['button_margin'][ $side ] ?? '';
+            if ( $val !== '' ) {
+                $css .= 'margin-' . $side . ':' . absint( $val ) . 'px!important;';
+            }
+        }
+        foreach ( [ 'top', 'right', 'bottom', 'left' ] as $side ) {
+            $val = $s['button_padding'][ $side ] ?? '';
+            if ( $val !== '' ) {
+                $css .= 'padding-' . $side . ':' . absint( $val ) . 'px!important;';
+            }
+        }
+
+        $css .= '}';
+        wp_add_inline_style( 'woocommerce-inline', $css );
     }
 
     /**
-     * Handle add to cart redirect.
-     *
-     * @param string $url The original redirect URL.
-     * @return string Modified URL.
+     * Button markup on the single product page.
+     * Placed inside WooCommerce's <form class="cart">, so the form POST carries
+     * variation_id and attribute_* selections automatically for variable products.
      */
-    function handle_add_to_cart_redirect($url) {
-        if (!isset($_REQUEST['buy-button-wc']) || empty($_REQUEST['buy-button-wc'])) {
-            return $url;
+    public function buy_now_button_single() {
+        global $product;
+
+        if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
+            return;
         }
-        $checkout_url = wc_get_checkout_url();
-        if (isset($checkout_url) && !empty($checkout_url)) {
-            $url = $checkout_url;
-        }
-        return $url;
+
+        $product_id   = $product->get_id();
+        $button_text  = $this->settings['button_text'] ?: 'Buy Now';
+        $redirect     = $this->settings['redirect_location'];
+        $product_type = $product->get_type();
+
+        printf(
+            '<button type="submit" name="wc-quick-buy-now" value="%d" class="button alt wc-buy-now-btn wc-buy-now-btn-single" data-wc-buy-now="true" data-redirect-location="%s" data-product_type="%s">%s</button>',
+            $product_id,
+            esc_attr( $redirect ),
+            esc_attr( $product_type ),
+            esc_html( $button_text )
+        );
     }
 
     /**
-     * Validate add to cart.
-     *
-     * @param bool $passed_validation Whether the product passes validation.
-     * @param int $product_id The ID of the product.
-     * @param int $quantity The quantity being added.
-     * @return bool Whether the product passes validation.
+     * Button markup on the shop/archive page.
+     * Variable products link to the product page (variation must be selected there).
+     * Simple products get a direct add-to-cart link handled by template_redirect.
      */
-    function validate_add_to_cart($passed_validation, $product_id, $quantity) {
-        if (!isset($_REQUEST['buy-button-wc']) || empty($_REQUEST['buy-button-wc'])) {
-            return $passed_validation;
+    public function buy_now_button_archive() {
+        global $product;
+
+        if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
+            return;
         }
-        if (!WC()->cart->is_empty()) {
+
+        if ( ! $product->is_purchasable() || ! $product->is_in_stock() ) {
+            return;
+        }
+
+        $button_text = $this->settings['button_text'] ?: 'Buy Now';
+        $product_id  = $product->get_id();
+
+        // Variable: send user to product page to select a variation
+        if ( $product->is_type( 'variable' ) ) {
+            printf(
+                '<a href="%s" class="button wc-buy-now-btn wc-buy-now-btn-archive" data-product_type="variable">%s</a>',
+                esc_url( get_permalink( $product_id ) ),
+                esc_html( $button_text )
+            );
+            return;
+        }
+
+        $quantity = max( 1, absint( $this->settings['default_shop_quantity'] ) );
+
+        if ( $product->get_manage_stock() ) {
+            $stock = $product->get_stock_quantity();
+            if ( $stock !== null && $stock < $quantity && ! $product->backorders_allowed() ) {
+                $quantity = max( 1, $stock );
+            }
+        }
+
+        $redirect_url = add_query_arg( [
+            'wc-quick-buy-now' => $product_id,
+            'quantity'         => $quantity,
+        ], $this->button_redirect_location( $product_id ) );
+
+        printf(
+            '<a href="%s" class="button wc-buy-now-btn wc-buy-now-btn-archive" data-product_id="%d" data-quantity="%d" data-wc-buy-now="true" data-product_type="simple">%s</a>',
+            esc_url( $redirect_url ),
+            $product_id,
+            $quantity,
+            esc_html( $button_text )
+        );
+    }
+
+    /**
+     * Handles non-AJAX Buy Now clicks.
+     * Covers both the single product page form submit (POST) and the archive link (GET).
+     */
+    public function buy_now_button_submit() {
+        if ( ! isset( $_REQUEST['wc-quick-buy-now'] ) ) {
+            return;
+        }
+
+        $product_id   = absint( $_REQUEST['wc-quick-buy-now'] );
+        $quantity     = isset( $_REQUEST['quantity'] ) ? max( 1, absint( $_REQUEST['quantity'] ) ) : 1;
+        $variation_id = isset( $_REQUEST['variation_id'] ) ? absint( $_REQUEST['variation_id'] ) : 0;
+        $variation    = [];
+
+        if ( ! $product_id ) {
+            return;
+        }
+
+        $product = wc_get_product( $product_id );
+        if ( ! $product ) {
+            return;
+        }
+
+        if ( $this->settings['reset_cart'] === 'yes' ) {
             WC()->cart->empty_cart();
         }
-        return $passed_validation;
+
+        if ( $variation_id && $product->is_type( 'variable' ) ) {
+            foreach ( $_REQUEST as $key => $value ) {
+                if ( strpos( $key, 'attribute_' ) === 0 ) {
+                    $variation[ sanitize_text_field( $key ) ] = sanitize_text_field( $value );
+                }
+            }
+            if ( ! $this->is_product_in_cart( $product_id, $variation_id ) ) {
+                WC()->cart->add_to_cart( $product_id, $quantity, $variation_id, $variation );
+            }
+        } else {
+            if ( ! ( $product->is_sold_individually() && $this->is_product_in_cart( $product_id ) ) ) {
+                WC()->cart->add_to_cart( $product_id, $quantity );
+            }
+        }
+
+        wp_safe_redirect( $this->button_redirect_location( $product_id ) );
+        exit;
     }
 
     /**
-     * Shortcode handler for the buy button.
-     *
-     * @param array $atts Shortcode attributes.
-     * @return string Shortcode output.
+     * AJAX handler. Used for variable products (always) and simple products when
+     * Ajax Add to Cart is enabled.
      */
-    function buy_button_handler($atts) {
-        if (!isset($atts['id']) || empty($atts['id'])) {
-            return __('You need to provide a valid product ID in the shortcode', 'buy-button-for-woocommerce');
+    public function ajax_add_to_cart() {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'ck_buy_button_nonce' ) ) {
+            wp_send_json_error( [ 'message' => __( 'Security check failed.', 'commerce-kit' ) ], 403 );
         }
-        $atts = array_map('sanitize_text_field', $atts);
-        $button_text = 'Buy Now';
-        if (isset($atts['button_text']) && !empty($atts['button_text'])) {
-            $button_text = $atts['button_text'];
+
+        $product_id   = isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0;
+        $variation_id = isset( $_POST['variation_id'] ) ? absint( $_POST['variation_id'] ) : 0;
+        $quantity     = isset( $_POST['quantity'] ) ? max( 1, absint( $_POST['quantity'] ) ) : 1;
+        $variation    = [];
+
+        if ( ! $product_id ) {
+            wp_send_json_error( [ 'message' => __( 'Invalid product.', 'commerce-kit' ) ] );
         }
-        $class = 'woocommerce';
-        if (isset($atts['class']) && !empty($atts['class'])) {
-            $class = $class . ' ' . $atts['class'];
+
+        $product = wc_get_product( $product_id );
+        if ( ! $product ) {
+            wp_send_json_error( [ 'message' => __( 'Product not found.', 'commerce-kit' ) ] );
         }
-        $button_code = '';
-        $url = add_query_arg(array(
-            'add-to-cart' => $atts['id'],
-            'buy-button-wc' => 1,
-        ));
-        $button_code .= '<div class="' . esc_attr($class) . '"><a href="' . esc_url($url) . '" class="button" rel="nofollow">' . esc_html($button_text) . '</a></div>';
-        return $button_code;
+
+        if ( $this->settings['reset_cart'] === 'yes' ) {
+            WC()->cart->empty_cart();
+        }
+
+        $added = false;
+
+        if ( $variation_id && $product->is_type( 'variable' ) ) {
+            if ( isset( $_POST['variation'] ) && is_array( $_POST['variation'] ) ) {
+                foreach ( $_POST['variation'] as $name => $value ) {
+                    if ( strpos( $name, 'attribute_' ) === 0 ) {
+                        $variation[ sanitize_text_field( $name ) ] = sanitize_text_field( $value );
+                    }
+                }
+            }
+            if ( ! $this->is_product_in_cart( $product_id, $variation_id ) ) {
+                WC()->cart->add_to_cart( $product_id, $quantity, $variation_id, $variation );
+            }
+            $added = true;
+        } elseif ( $product->is_type( 'simple' ) ) {
+            if ( ! ( $product->is_sold_individually() && $this->is_product_in_cart( $product_id ) ) ) {
+                WC()->cart->add_to_cart( $product_id, $quantity );
+            }
+            $added = true;
+        }
+
+        if ( $added ) {
+            wp_send_json_success( [
+                'redirect_url' => $this->button_redirect_location( $product_id ),
+            ] );
+        } else {
+            wp_send_json_error( [ 'message' => __( 'Failed to add product to cart.', 'commerce-kit' ) ] );
+        }
+    }
+
+    protected function button_redirect_location( $product_id ) {
+        $location   = $this->settings['redirect_location'];
+        $custom_url = $this->settings['custom_redirect_url'];
+
+        switch ( $location ) {
+            case 'cart':
+                return wc_get_cart_url();
+            case 'custom':
+                return ! empty( $custom_url ) ? esc_url_raw( $custom_url ) : wc_get_checkout_url();
+            default:
+                return wc_get_checkout_url();
+        }
+    }
+
+    private function is_product_in_cart( $product_id, $variation_id = 0 ) {
+        foreach ( WC()->cart->get_cart() as $item ) {
+            if ( $variation_id ) {
+                if ( (int) $item['product_id'] === $product_id && (int) $item['variation_id'] === $variation_id ) {
+                    return true;
+                }
+            } else {
+                if ( (int) $item['product_id'] === $product_id ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Backward-compatible shortcode [buy_button id="123"]
+    public function shortcode_buy_button( $atts ) {
+        if ( empty( $atts['id'] ) ) {
+            return __( 'You need to provide a valid product ID in the shortcode', 'commerce-kit' );
+        }
+        $atts        = array_map( 'sanitize_text_field', $atts );
+        $button_text = ! empty( $atts['button_text'] ) ? $atts['button_text'] : ( $this->settings['button_text'] ?: 'Buy Now' );
+        $class       = 'woocommerce' . ( ! empty( $atts['class'] ) ? ' ' . $atts['class'] : '' );
+
+        $url = add_query_arg( [
+            'add-to-cart'      => $atts['id'],
+            'wc-quick-buy-now' => $atts['id'],
+        ] );
+
+        return sprintf(
+            '<div class="%s"><a href="%s" class="button wc-buy-now-btn" rel="nofollow">%s</a></div>',
+            esc_attr( $class ),
+            esc_url( $url ),
+            esc_html( $button_text )
+        );
     }
 }
