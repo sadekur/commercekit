@@ -116,42 +116,110 @@ When the Customer Messages toggle is turned on, a highlighted notice appears:
 
 **Status:** ✅ Complete
 
-Adds a **"Buy Now"** shortcode that places a product directly into the cart and immediately redirects the shopper to checkout — skipping the cart page entirely. Any items already in the cart are cleared first so the buyer goes straight to a single-product checkout.
+Adds a **"Buy Now"** button to single product pages and the shop/archive listing. When clicked, the button adds the product to the cart and immediately redirects the shopper — skipping the cart page entirely. Supports both **simple** and **variable** products, configurable redirect destinations, custom button styles, and an optional AJAX mode.
 
-#### Usage
+#### Setting it up
 
-Place the shortcode anywhere: pages, posts, widgets, or custom HTML blocks.
+1. Enable **Buy Button for WooCommerce** on the Features page
+2. Go to **CommerceKit → Buy Button**
+3. Configure the **General** and **Button Styles** tabs (see below)
+4. Click **Save Changes**
 
-**Basic usage:**
+---
+
+#### General Settings
+
+**Enable Button On**
+
+| Option | Description |
+|---|---|
+| **Single Product Page** | Renders the Buy Now button on individual product pages |
+| **Shop / Archive Page** | Renders the Buy Now button on shop and category listing pages |
+
+**Button Position on Single Product Page**
+
+| Value | Hook used |
+|---|---|
+| After Add to Cart Button *(default)* | `woocommerce_after_add_to_cart_button` |
+| Before Add to Cart Button | `woocommerce_before_add_to_cart_button` |
+
+**Button Position on Shop / Archive Page**
+
+| Value | Behaviour |
+|---|---|
+| After Add to Cart Button *(default)* | Appended after the WooCommerce loop item button |
+| Before Add to Cart Button | Prepended before the WooCommerce loop item button |
+
+> **Note:** On the archive page, variable products show a Buy Now button that links to the product page so the customer can select a variation before buying.
+
+**Redirect Location**
+
+| Option | Destination |
+|---|---|
+| Checkout Page *(default)* | WooCommerce checkout URL |
+| Cart Page | WooCommerce cart URL |
+| Custom Page | A URL you specify in the **Custom Redirect URL** field |
+
+**Other options**
+
+| Option | Default | Description |
+|---|---|---|
+| **Button Text** | `Buy Now` | Text displayed on every Buy Now button |
+| **Default Shop Quantity** | `1` | Quantity added to cart when clicked on the shop/archive page |
+| **Auto Reset Cart** | Off | Clears the cart before adding the product — ensures a single-product checkout |
+| **Ajax Add to Cart** | Off | Submits via AJAX on the single product page for simple products. Variable products always use AJAX regardless of this setting |
+
+---
+
+#### Button Styles
+
+Navigate to the **Button Styles** tab to customise the button's appearance.
+
+**Style mode**
+
+- **Default Styles (Theme)** — inherits `.button` styles from your active theme (recommended)
+- **Custom Styles** — apply explicit CSS values via the fields below
+
+**Custom style fields** *(visible when Custom Styles is selected)*
+
+| Field | Description |
+|---|---|
+| **Text Color** | Button label color |
+| **Background Color** | Button fill color |
+| **Border Color** | Button border color |
+| **Border Size** | Border width in px |
+| **Border Radius** | Corner radius in px |
+| **Font Size** | Label font size in px |
+| **Margin** | Top / Right / Bottom / Left in px |
+| **Padding** | Top / Right / Bottom / Left in px |
+
+A **live preview** at the bottom of the tab reflects your custom values instantly.
+
+---
+
+#### Variable product support
+
+On the single product page, clicking Buy Now intercepts the WooCommerce variation form via JavaScript. The selected variation and attributes are read from the form and sent to the server via AJAX. If no variation has been selected, the button shows an alert asking the customer to choose product options first.
+
+---
+
+#### Shortcode (backward compatible)
+
+The original shortcode continues to work and respects the current **Button Text** and **Redirect Location** settings:
+
 ```
 [buy_button id="123"]
-```
-
-**With custom button text:**
-```
-[buy_button id="123" button_text="Buy Now"]
-```
-
-**With a custom CSS class:**
-```
+[buy_button id="123" button_text="Get It Now"]
 [buy_button id="123" button_text="Get It Now" class="my-custom-button"]
 ```
-
-#### Shortcode attributes
 
 | Attribute | Required | Default | Description |
 |---|---|---|---|
 | `id` | Yes | — | WooCommerce product ID |
-| `button_text` | No | `Buy Now` | Text shown on the button |
-| `class` | No | — | Additional CSS class added to the wrapper `<div>` |
+| `button_text` | No | *(from settings)* | Overrides the button label for this instance |
+| `class` | No | — | Additional CSS class on the wrapper `<div>` |
 
-To find a product's ID: go to **Products**, hover over a product name, and the ID appears in the URL shown at the bottom of the browser.
-
-#### Behaviour notes
-
-- The button renders as a standard WooCommerce-styled `<a>` link — it inherits your theme's `.button` styles
-- Clicking the button clears the existing cart, adds the product, and redirects to the checkout page
-- Only simple products are supported. Variable products require a variation to be selected before adding to cart, which this shortcode does not handle
+> **Note:** The shortcode supports simple products only. For variable products use the automatic hooks on the single product page.
 
 ---
 
