@@ -118,6 +118,8 @@ const App = () => {
                 return <StockThreshold />;
             case "/commerce-kit-tip-settings":
                 return <TipSettings />;
+            case "/buy-button-settings":
+                return <BuyButtonSettings />;
             default:
                 return (
                     <div className="p-8">
