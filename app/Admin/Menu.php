@@ -50,6 +50,15 @@ class Menu {
             'commerce-kit#/commerce-kit-tip-settings',
             [ $this, 'admin_page_content' ]
         );
+
+        add_submenu_page(
+            'commerce-kit',
+            __( 'Buy Button Settings', 'commerce-kit' ),
+            __( 'Buy Button', 'commerce-kit' ),
+            'manage_options',
+            'commerce-kit#/buy-button-settings',
+            [ $this, 'admin_page_content' ]
+        );
     }
 
     public function admin_page_content() {
