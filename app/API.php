@@ -7,6 +7,7 @@ use CommerceKit\Commerce\API\Stock_Threshold as Stock;
 use CommerceKit\Commerce\API\Settings;
 use CommerceKit\Commerce\API\Blocks;
 use CommerceKit\Commerce\API\Tips;
+use CommerceKit\Commerce\API\BuyButton;
 
 class API {
     use Hookable;
