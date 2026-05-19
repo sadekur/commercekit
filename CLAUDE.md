@@ -17,6 +17,15 @@ No test suite configured.
 
 CommerceKit is a WooCommerce enhancement plugin. Entry point is `commercekit.php`, which boots the singleton `COMMERCE_KIT` class and registers all core classes on the `plugins_loaded` hook.
 
+### Plugin Constants
+
+Defined in `commercekit.php`:
+- `COMMERCE_KIT_VERSION` — plugin version string
+- `COMMERCE_KIT_FILE` — absolute path to `commercekit.php`
+- `COMMERCE_KIT_PATH` — plugin directory path (with trailing slash)
+- `COMMERCE_KIT_URL` — plugin directory URL (with trailing slash)
+- `COMMERCE_KIT_ASSETS` — URL to the `assets/` directory
+
 ### PHP Namespace & Autoloading
 
 PSR-4 via Composer:
@@ -59,17 +68,25 @@ Features live in `features/<kebab-name>/<kebab-name>.php` and are loaded by `app
 
 **The feature class constructor is only called when the feature is enabled** — no guard needed inside the class itself.
 
-Current features: `woocommerce-tips`, `woocommerce-faq`, `woocommerce-product-barcode`, `buy-button-for-woocommerce`, `stock-threshold-for-wc`.
+Current features and implementation status:
+
+| Settings key | Directory | Status |
+|---|---|---|
+| `stock-threshold-for-wc` | `stock-threshold-for-wc` | Complete |
+| `buy-button-for-woocommerce` | `buy-button-for-woocommerce` | Complete |
+| `woocommerce-tips` | `woocommerce-tips` | UI only — tip amounts not added to order totals |
+| `woocommerce-faq` | `woocommerce-faq` | PHP file does not exist yet |
+| `woocommerce-product_barcode` | `woocommerce-product-barcode` | PHP file does not exist yet |
 
 ### Admin Menu
 
-`app/Admin/Menu.php` registers the admin menu via `admin_menu`. Submenu pages added conditionally based on `commerce_kit_settings`. Submenu pages that link into the React SPA use a hash-suffixed slug (e.g. `commerce-kit#/stock-threshold`) and render `<div id="commerce_kit_render"></div>` — the SPA takes over from there.
+`app/Admin/Menu.php` registers the admin menu via `admin_menu`. All submenus are always registered (not conditional on feature toggles) — the React SPA hides/shows them via JS based on saved settings. Submenu pages that link into the React SPA use a hash-suffixed slug (e.g. `commerce-kit#/stock-threshold`) and all render the same `<div id="commerce_kit_render"></div>` — the SPA takes over from there.
 
 ### Blocks System
 
 Gutenberg blocks live in `blocks/<block-name>/` with `block.json`, `index.js`, `edit.js`, `render.php`. Blocks register only when their key is `'on'` in `commerce_kit_block_settings`. All block editor JS compiles from `blocks/App.jsx` → `build/block.build.js`.
 
-Current blocks: `accordion`, `category-products-slider`, `generic-faq`, `variant-faq`.
+Current blocks: `accordion`, `category-products-slider`, `generic-faq`, `variant-faq`. The `generic-faq` and `variant-faq` blocks are hardcoded placeholder stubs — not yet functional.
 
 ### REST API
 
@@ -87,7 +104,7 @@ Current endpoints:
 Webpack entry points:
 - `spa/admin/src/App.jsx` → `build/admin.build.js` — Admin React SPA
 - `blocks/App.jsx` → `build/block.build.js` — Gutenberg block editor JS
-- `spa/public/src/App.jsx` → `build/public.build.js` — Frontend React app
+- `spa/public/src/App.jsx` → `build/public.build.js` — Frontend React app (currently a stub)
 - `assets/css/tailwind.css` → `build/tailwind.build.js`
 
 React, ReactDOM, and all `@wordpress/*` packages are **externals** — loaded from WordPress, not bundled.
@@ -95,8 +112,22 @@ React, ReactDOM, and all `@wordpress/*` packages are **externals** — loaded fr
 The admin SPA mounts on `#commerce_kit_render` and uses **hash-based routing**. `App.jsx` switches on `window.location.hash`:
 - `""` or `"/"` → `Tabs` (Feature / Blocks / Settings tabs)
 - `"/stock-threshold"` → `StockThreshold` page
+- `"/commerce-kit-tip-settings"` → `TipSettings` page
 
 Tailwind scans `app/**/*.php` and `spa/**/src/**/*.jsx`.
+
+### Adding a New Feature Page to the Admin SPA
+
+Four files must change together when adding a new submenu page:
+
+1. **`app/Admin/Menu.php`** — add `add_submenu_page()` with slug `commerce-kit#/<your-hash>`
+2. **`spa/admin/src/App.jsx`** — add the feature key → anchor CSS selector to `FEATURE_SUBMENUS` (controls sidebar show/hide), and add a `case "/<your-hash>"` to `renderPage()`
+3. **`spa/admin/src/pages/YourPage.jsx`** — create the page component
+4. **`app/API.php`** + **`app/API/<Handler>.php`** — register and implement the REST endpoints the page needs
+
+### Sidebar Submenu Visibility
+
+`App.jsx` reads `window.COMMERCEKIT.settings_data` on mount to show/hide feature submenus. When features are saved, `Feature.jsx` dispatches a `commerceKitSettingsUpdated` custom event with the updated toggle object as `event.detail`; `App.jsx` listens and re-syncs visibility without a page reload.
 
 ### Shared Admin Components
 
@@ -112,8 +143,8 @@ Localized differently per context:
 
 ### Asset Versioning Convention
 
-- Admin scripts: `time()` (always cache-bust)
-- Frontend scripts: `filemtime()` (cache-bust on file change only)
+- Build artifacts and block scripts: `time()` (always cache-bust)
+- Static assets in `assets/`: `filemtime()` (cache-bust on file change only)
 
 ### WooCommerce Blocks Checkout Compatibility
 
@@ -125,3 +156,12 @@ if ( ! is_cart() && ! is_checkout() && ! $is_store_api ) {
     return $value;
 }
 ```
+
+### Stock Threshold Cart Price Double-Adjustment
+
+`StockThresholdForWc` uses two properties to prevent `woocommerce_product_get_price` from re-adjusting prices that `woocommerce_before_calculate_totals` already set via `$product->set_price()`:
+
+- `$adjusted_cart_items` — product IDs set directly by `adjust_cart_item_prices()`; `get_adjusted_price()` skips any product in this map
+- `$original_cart_prices` — raw DB prices captured once (using `get_price('edit')` to bypass the filter); never reset between recalculation calls so the threshold is always applied to the true base price
+
+Any new price-adjustment code in this class must follow the same pattern to avoid compound adjustments when WooCommerce calls `calculate_totals()` multiple times per request.
