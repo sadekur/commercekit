@@ -75,6 +75,20 @@ class API {
             'permission_callback' => [ new Stock(), 'stock_threshold_permission' ]
         ]);
 
+        // Register REST API routes for buy button settings
+
+        $this->register_route( '/get-buy-button-settings', [
+            'methods'             => 'GET',
+            'callback'            => [ new BuyButton(), 'get_settings' ],
+            'permission_callback' => [ new BuyButton(), 'get_settings_permission' ],
+        ] );
+
+        $this->register_route( '/save-buy-button-settings', [
+            'methods'             => 'POST',
+            'callback'            => [ new BuyButton(), 'save_settings' ],
+            'permission_callback' => [ new BuyButton(), 'save_settings_permission' ],
+        ] );
+
         // Register REST API route for variation stock
 
         $this->register_route( '/get-variation-stock', [
