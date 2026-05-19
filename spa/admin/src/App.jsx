@@ -3,13 +3,15 @@ import ReactDOM from "react-dom/client";
 import Tabs from "./pages/Tabs";
 import StockThreshold from "./pages/StockThreshold";
 import TipSettings from "./pages/TipSettings";
+import BuyButtonSettings from "./pages/BuyButtonSettings";
 
 // Add an entry here whenever a new feature gets its own submenu page.
 // key   = commerce_kit_settings feature key
 // value = CSS attribute selector that matches the submenu <a> element
 const FEATURE_SUBMENUS = {
-    "stock-threshold-for-wc": 'a[href*="#/stock-threshold"]',
-    "woocommerce-tips":        'a[href*="#/commerce-kit-tip-settings"]',
+    "stock-threshold-for-wc":    'a[href*="#/stock-threshold"]',
+    "woocommerce-tips":          'a[href*="#/commerce-kit-tip-settings"]',
+    "buy-button-for-woocommerce":'a[href*="#/buy-button-settings"]',
 };
 
 const isCommerceKitScreen = () =>
