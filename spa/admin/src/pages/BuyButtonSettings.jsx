@@ -9,6 +9,7 @@ import SettingRow from "../../common/SettingRow";
 import ColorField from "../../common/ColorField";
 import SmallNumberInput from "../../common/SmallNumberInput";
 import DimensionFields from "../../common/DimensionFields";
+import SaveRow from "../../common/SaveRow";
 
 const DEFAULTS = {
     enable_single:           true,
