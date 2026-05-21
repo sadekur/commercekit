@@ -1,6 +1,3 @@
-/* ─────────────────────────────────────────────
-   Pill badge component
-───────────────────────────────────────────── */
 const Pill = ({ color, label }) => {
   const colorMap = {
     red: "bg-red-500/10 text-red-500 border-red-500/30",
