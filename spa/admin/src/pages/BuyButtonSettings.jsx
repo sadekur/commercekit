@@ -27,23 +27,6 @@ const DEFAULTS = {
     button_padding:          { top: "", right: "", bottom: "", left: "" },
 };
 
-const RadioGroup = ({ options, value, onChange }) => (
-    <div className="flex flex-col gap-1.5">
-        {options.map((opt) => (
-            <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
-                <input
-                    type="radio"
-                    value={opt.value}
-                    checked={value === opt.value}
-                    onChange={() => onChange(opt.value)}
-                    className="accent-blue-600"
-                />
-                <span className="text-[13px] text-gray-700">{opt.label}</span>
-            </label>
-        ))}
-    </div>
-);
-
 const SettingRow = ({ label, description, children, border = true }) => (
     <div className={`flex items-start justify-between px-6 py-4 ${border ? "border-b border-gray-100" : ""}`}>
         <div className="pr-6 flex-1">
