@@ -3,7 +3,6 @@ import axios from "axios";
 import SettingSkeleton from "../../common/Skeletons/SettingSkalaton";
 import { SaveButtonIcon, SaveChangesIcon, WarningIcon } from "../../common/Svgs";
 import Toggle from "../common/Toggle";
-import NumberField from "../common/NumberField";
 import SectionHeader from "../../common/SectionHeader";
 
 
