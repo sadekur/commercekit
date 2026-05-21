@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SettingSkeleton from "../../common/Skeletons/SettingSkalaton";
 import { SaveButtonIcon, SaveChangesIcon, WarningIcon } from "../../common/Svgs";
-import Toggle from "../common/Toggle";
 import SectionHeader from "../../common/SectionHeader";
+import NumberField from "../../common/NumberField";
+import Toggle from "../../common/Toggle";
 
 
 const StockThreshold = () => {
