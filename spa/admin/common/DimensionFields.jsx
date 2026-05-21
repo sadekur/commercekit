@@ -11,3 +11,4 @@ const DimensionFields = ({ value, onChange }) => (
         ))}
     </div>
 );
+export default DimensionFields;
