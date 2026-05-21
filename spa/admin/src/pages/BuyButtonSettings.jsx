@@ -6,6 +6,7 @@ import SectionHeader from "../../common/SectionHeader";
 import Toggle from "../../common/Toggle";
 import RadioGroup from "../../common/RadioGroup";
 import SettingRow from "../../common/SettingRow";
+import ColorField from "../../common/ColorField";
 
 const DEFAULTS = {
     enable_single:           true,
