@@ -11,3 +11,5 @@ const ColorField = ({ value, onChange }) => (
         />
     </div>
 );
+
+export default ColorField;
