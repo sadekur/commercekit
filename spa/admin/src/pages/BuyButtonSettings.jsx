@@ -7,6 +7,7 @@ import Toggle from "../../common/Toggle";
 import RadioGroup from "../../common/RadioGroup";
 import SettingRow from "../../common/SettingRow";
 import ColorField from "../../common/ColorField";
+import SmallNumberInput from "../../common/SmallNumberInput";
 
 const DEFAULTS = {
     enable_single:           true,

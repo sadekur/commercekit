@@ -8,3 +8,4 @@ const SmallNumberInput = ({ value, onChange, placeholder = "" }) => (
         className="w-16 px-2 py-1.5 text-[13px] text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-150 font-mono"
     />
 );
+export default SmallNumberInput;
