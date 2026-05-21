@@ -1,6 +1,3 @@
-/* ─────────────────────────────────────────────
-   Toggle switch component
-───────────────────────────────────────────── */
 const Toggle = ({ checked, onChange, label }) => (
   <label className="flex items-center gap-3 cursor-pointer select-none">
     <span
