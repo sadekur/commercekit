@@ -90,7 +90,7 @@ final class COMMERCE_KIT{
 		}
 
 		if ( is_admin() ) {
-			new CommerceKit\Commerce\Admin();
+			new CommerceKit\Commerce\Admin\Menu();
 		}
 
 	}
