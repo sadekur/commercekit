@@ -14,3 +14,4 @@ const SaveRow = ({ isSaving }) => (
         <span className="text-xs text-gray-400">Changes are applied immediately after saving.</span>
     </div>
 );
+export default SaveRow;
