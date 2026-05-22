@@ -47,6 +47,8 @@ class Assets {
      * Loads accordion/variation JS and styles needed for frontend block rendering.
      */
     public function enqueue_frontend_assets() {
+        $ck_settings = get_option( 'commerce_kit_settings', [] );
+
         wp_enqueue_script(
             'commerce-kit-frontend-script',
             COMMERCE_KIT_ASSETS . '/js/frontend.js',
@@ -54,13 +56,35 @@ class Assets {
             filemtime( COMMERCE_KIT_PATH . 'assets/js/frontend.js' ),
             true
         );
-        wp_localize_script( 'commerce-kit-frontend-script', 'COMMERCEKIT', [
-            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+
+        $ck_data = [
+            'ajaxurl'  => admin_url( 'admin-ajax.php' ),
             'adminurl' => admin_url(),
-            'resturl' => untrailingslashit( rest_url( 'commerce-kit/v1' ) ),
-            'nonce'   => wp_create_nonce( 'commerce-kit' ),
-            'error'   => __( 'Something went wrong', 'commerce-kit' ),
-        ] );
+            'resturl'  => untrailingslashit( rest_url( 'commerce-kit/v1' ) ),
+            'nonce'    => wp_create_nonce( 'commerce-kit' ),
+            'error'    => __( 'Something went wrong', 'commerce-kit' ),
+        ];
+
+        if ( ( $ck_settings['buy-button-for-woocommerce'] ?? '' ) === 'on' ) {
+            $bb = commercekit_get_buy_button_settings();
+
+            $ck_data['buy_button'] = [
+                'nonce'               => wp_create_nonce( 'ck_buy_button_nonce' ),
+                'is_ajax'             => $bb['ajax_add_to_cart'],
+                'button_text'         => $bb['button_text'] ?: 'Buy Now',
+                'i18n_select_options' => __( 'Please select product options before clicking Buy Now.', 'commerce-kit' ),
+            ];
+
+            wp_enqueue_script(
+                'ck-buy-button-script',
+                COMMERCE_KIT_URL . 'features/buy-button-for-woocommerce/buy-button.js',
+                [ 'commerce-kit-frontend-script' ],
+                filemtime( COMMERCE_KIT_PATH . 'features/buy-button-for-woocommerce/buy-button.js' ),
+                true
+            );
+        }
+
+        wp_localize_script( 'commerce-kit-frontend-script', 'COMMERCEKIT', $ck_data );
 
         wp_enqueue_style(
             'commerce-kit-frontend-style',
