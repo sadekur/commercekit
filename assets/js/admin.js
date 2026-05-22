@@ -1,5 +1,5 @@
 (function () {
-    var hidden = (window.CommerceKitMenu && window.CommerceKitMenu.hiddenHashes) || [];
+    var hidden = (window.COMMERCEKIT && window.COMMERCEKIT.hiddenHashes) || [];
 
     function syncMenuVisibility() {
         var menu = document.querySelector('#adminmenu .toplevel_page_commerce-kit');

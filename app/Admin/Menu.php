@@ -74,12 +74,11 @@ class Menu {
     }
 
     /**
-     * Runs on every admin page (admin_head). Hides submenu items whose feature
-     * is disabled so they never appear in the WordPress hover flyout. React
-     * re-uses the same <li> elements on the CommerceKit page for instant
-     * show/hide without a page reload.
+     * Runs on every admin page. Enqueues the menu-visibility script and passes
+     * the list of disabled feature hashes so the script can hide them from the
+     * WordPress sidebar (including the hover flyout on non-CommerceKit pages).
      */
-    public function inject_submenu_visibility() {
+    public function enqueue_menu_visibility() {
         $settings = get_option( 'commerce_kit_settings', [] );
 
         $feature_hashes = [
@@ -95,32 +94,17 @@ class Menu {
             }
         }
 
-        if ( empty( $hidden_hashes ) ) {
-            return;
-        }
-        ?>
-        <script>
-        (function () {
-            var hidden = <?php echo wp_json_encode( $hidden_hashes ); ?>;
-            function syncMenuVisibility() {
-                var menu = document.querySelector('#adminmenu .toplevel_page_commerce-kit');
-                if ( ! menu ) return;
-                hidden.forEach( function ( hash ) {
-                    var anchor = menu.querySelector( 'a[href*="' + hash + '"]' );
-                    if ( anchor ) {
-                        var li = anchor.closest( 'li' );
-                        if ( li ) li.style.display = 'none';
-                    }
-                } );
-            }
-            if ( document.readyState === 'loading' ) {
-                document.addEventListener( 'DOMContentLoaded', syncMenuVisibility );
-            } else {
-                syncMenuVisibility();
-            }
-        })();
-        </script>
-        <?php
+        wp_enqueue_script(
+            'commerce-kit-menu-visibility',
+            COMMERCE_KIT_ASSETS . 'js/menu-visibility.js',
+            [],
+            filemtime( COMMERCE_KIT_PATH . 'assets/js/menu-visibility.js' ),
+            true
+        );
+
+        wp_localize_script( 'commerce-kit-menu-visibility', 'CommerceKitMenu', [
+            'hiddenHashes' => $hidden_hashes,
+        ] );
     }
 
 }
