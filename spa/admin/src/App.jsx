@@ -29,7 +29,7 @@ const isCommerceKitScreen = () =>
 const App = () => {
     const [currentPage, setCurrentPage] = useState("");
 
-    // ── 1. Hash routing ──────────────────────────────────────────────────────
+    // 1. Hash routing
     useEffect(() => {
         const onHashChange = () => {
             const hash = window.location.hash.replace("#", "") || "";
