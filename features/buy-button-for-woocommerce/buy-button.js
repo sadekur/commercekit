@@ -1,4 +1,3 @@
-/* global COMMERCEKIT, jQuery */
 (function ($) {
     'use strict';
 
