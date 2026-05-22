@@ -73,4 +73,54 @@ class Menu {
         <?php
     }
 
+    /**
+     * Runs on every admin page (admin_head). Hides submenu items whose feature
+     * is disabled so they never appear in the WordPress hover flyout. React
+     * re-uses the same <li> elements on the CommerceKit page for instant
+     * show/hide without a page reload.
+     */
+    public function inject_submenu_visibility() {
+        $settings = get_option( 'commerce_kit_settings', [] );
+
+        $feature_hashes = [
+            'stock-threshold-for-wc'     => '#/stock-threshold',
+            'woocommerce-tips'           => '#/commerce-kit-tip-settings',
+            'buy-button-for-woocommerce' => '#/buy-button-settings',
+        ];
+
+        $hidden_hashes = [];
+        foreach ( $feature_hashes as $key => $hash ) {
+            if ( ( $settings[ $key ] ?? '' ) !== 'on' ) {
+                $hidden_hashes[] = $hash;
+            }
+        }
+
+        if ( empty( $hidden_hashes ) ) {
+            return;
+        }
+        ?>
+        <script>
+        (function () {
+            var hidden = <?php echo wp_json_encode( $hidden_hashes ); ?>;
+            function syncMenuVisibility() {
+                var menu = document.querySelector('#adminmenu .toplevel_page_commerce-kit');
+                if ( ! menu ) return;
+                hidden.forEach( function ( hash ) {
+                    var anchor = menu.querySelector( 'a[href*="' + hash + '"]' );
+                    if ( anchor ) {
+                        var li = anchor.closest( 'li' );
+                        if ( li ) li.style.display = 'none';
+                    }
+                } );
+            }
+            if ( document.readyState === 'loading' ) {
+                document.addEventListener( 'DOMContentLoaded', syncMenuVisibility );
+            } else {
+                syncMenuVisibility();
+            }
+        })();
+        </script>
+        <?php
+    }
+
 }
