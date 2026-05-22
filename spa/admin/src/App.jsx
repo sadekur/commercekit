@@ -91,20 +91,23 @@ const App = () => {
     }, [currentPage]);
 
     // ── 4. Dashboard-link click handler ─────────────────────────────────────
+    // Both the top-level menu link and the Dashboard submenu link share the
+    // same href. Attach the handler to all of them so clicking either one
+    // resets the hash instead of triggering a full page reload.
     useEffect(() => {
         if (!isCommerceKitScreen()) return;
-        const anchor = document.querySelector(
+        const anchors = document.querySelectorAll(
             '#adminmenu a[href="admin.php?page=commerce-kit"]'
         );
-        if (!anchor) return;
+        if (!anchors.length) return;
 
         const onClick = (e) => {
             e.preventDefault();
             window.location.hash = "";
             setCurrentPage("");
         };
-        anchor.addEventListener("click", onClick);
-        return () => anchor.removeEventListener("click", onClick);
+        anchors.forEach((a) => a.addEventListener("click", onClick));
+        return () => anchors.forEach((a) => a.removeEventListener("click", onClick));
     }, []);
 
     // ── Page renderer ────────────────────────────────────────────────────────
