@@ -128,7 +128,7 @@ class BuyButtonForWoocommerce {
         $product_type = $product->get_type();
 
         printf(
-            '<button type="submit" name="wc-quick-buy-now" value="%d" class="button alt wc-buy-now-btn wc-buy-now-btn-single" data-wc-buy-now="true" data-redirect-location="%s" data-product_type="%s">%s</button>',
+            '<button type="button" class="button alt wc-buy-now-btn wc-buy-now-btn-single" data-product-id="%d" data-redirect-location="%s" data-product-type="%s">%s</button>',
             $product_id,
             esc_attr( $redirect ),
             esc_attr( $product_type ),
