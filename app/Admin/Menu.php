@@ -8,8 +8,7 @@ class Menu {
     use Hookable;
 
     function __construct() {
-        $this->action( 'admin_menu',             [ $this, 'add_admin_menu' ] );
-        $this->action( 'admin_enqueue_scripts',  [ $this, 'enqueue_menu_visibility' ] );
+        $this->action( 'admin_menu', [ $this, 'add_admin_menu' ] );
     }
 
     public function add_admin_menu() {
