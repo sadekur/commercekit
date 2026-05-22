@@ -141,7 +141,6 @@ const BuyButtonSettings = () => {
             .finally(() => setIsSaving(false));
     };
 
-    /* ── early returns ── */
     if (isLoading) return <SettingSkeleton />;
 
     if (!isFeatureEnabled) {

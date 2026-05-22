@@ -98,6 +98,7 @@ Current endpoints:
 - `GET /get-tips`, `POST /save-tips` — WooCommerce tips
 - `GET /get-stock-threshold`, `POST /save-stock-threshold` — stock threshold config
 - `GET /get-variation-stock` — variation stock data (public, no auth required)
+- `GET /get-buy-button-settings`, `POST /save-buy-button-settings` — buy button config
 
 ### JavaScript / React SPA
 
@@ -113,6 +114,7 @@ The admin SPA mounts on `#commerce_kit_render` and uses **hash-based routing**. 
 - `""` or `"/"` → `Tabs` (Feature / Blocks / Settings tabs)
 - `"/stock-threshold"` → `StockThreshold` page
 - `"/commerce-kit-tip-settings"` → `TipSettings` page
+- `"/buy-button-settings"` → `BuyButtonSettings` page
 
 Tailwind scans `app/**/*.php` and `spa/**/src/**/*.jsx`.
 
@@ -133,7 +135,7 @@ Four files must change together when adding a new submenu page:
 
 Two component directories exist — choose the right one:
 - `spa/admin/src/common/` — primitive field components used inside page JSX: `Toggle`, `Pill`, `NumberField`
-- `spa/admin/common/` — page-level layout components: `CommonHeader`, `SectionHeader`, `Skeletons/`, `Svgs`, `Toggle`, `Pill`, `NumberField`, `CheckboxField`, `InputRow`, `FieldRow`
+- `spa/admin/common/` — page-level layout components: `CommonHeader`, `SectionHeader`, `Skeletons/`, `Svgs`, `Toggle`, `Pill`, `NumberField`, `CheckboxField`, `InputRow`, `FieldRow`, `SettingRow`, `SaveRow`, `RadioGroup`, `ColorField`, `DimensionFields`, `SmallNumberInput`
 
 ### COMMERCEKIT JS Global
 
