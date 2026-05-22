@@ -81,7 +81,7 @@ const App = () => {
             window.removeEventListener("commerceKitSettingsUpdated", onSettingsUpdated);
     }, []);
 
-    // ── 3. Sidebar active-item highlight ────────────────────────────────────
+    // ── 3. Sidebar active-item highlighting
     // Runs on every hash/page change to keep the .current class in sync.
     useEffect(() => {
         if (!isCommerceKitScreen()) return;
