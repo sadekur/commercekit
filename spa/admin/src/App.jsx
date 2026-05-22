@@ -127,7 +127,7 @@ const App = () => {
         return () => anchor.removeEventListener("click", onClick);
     }, []);
 
-    // ── Page renderer ────────────────────────────────────────────────────────
+    // ── Page renderer
     const renderPage = () => {
         switch (currentPage) {
             case "":
