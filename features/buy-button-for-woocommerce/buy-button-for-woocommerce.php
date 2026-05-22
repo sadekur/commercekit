@@ -18,7 +18,9 @@ class BuyButtonForWoocommerce {
         $this->action( 'wp_ajax_ck_buy_button_add_to_cart',        [ $this, 'ajax_add_to_cart' ] );
         $this->action( 'wp_ajax_nopriv_ck_buy_button_add_to_cart', [ $this, 'ajax_add_to_cart' ] );
 
-        $this->action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+        if ( $this->settings['button_style'] === 'custom' ) {
+            $this->action( 'wp_enqueue_scripts', [ $this, 'output_custom_css' ] );
+        }
 
         if ( $this->settings['enable_single'] === 'yes' ) {
             $this->button_position_single();
