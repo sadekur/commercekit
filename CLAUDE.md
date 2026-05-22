@@ -80,7 +80,7 @@ Current features and implementation status:
 
 ### Admin Menu
 
-`app/Admin/Menu.php` registers the admin menu via `admin_menu`. All submenus are always registered (not conditional on feature toggles) — the React SPA hides/shows them via JS based on saved settings. Submenu pages that link into the React SPA use a hash-suffixed slug (e.g. `commerce-kit#/stock-threshold`) and all render the same `<div id="commerce_kit_render"></div>` — the SPA takes over from there.
+`app/Admin/Menu.php` registers the admin menu via `admin_menu`. Feature submenus are registered conditionally in PHP based on `commerce_kit_settings` — only enabled features get a submenu entry. This prevents WordPress from rendering disabled submenus in the hover flyout on other admin pages where the React SPA is not mounted. The React SPA additionally syncs sidebar visibility on the CommerceKit page itself so disabling a feature hides its submenu without a full page reload; enabling a feature requires a reload for the new PHP-registered submenu to appear. Submenu pages use a hash-suffixed slug (e.g. `commerce-kit#/stock-threshold`) and all render the same `<div id="commerce_kit_render"></div>` — the SPA takes over from there.
 
 ### Blocks System
 
