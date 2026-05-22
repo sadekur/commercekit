@@ -6,12 +6,26 @@ import TipSettings from "./pages/TipSettings";
 import BuyButtonSettings from "./pages/BuyButtonSettings";
 
 // Add an entry here whenever a new feature gets its own submenu page.
-// key   = commerce_kit_settings feature key
-// value = CSS attribute selector that matches the submenu <a> element
+// key      = commerce_kit_settings feature key
+// selector = CSS attribute selector that matches the submenu <a> element
+// label    = menu label shown in the sidebar
+// href     = relative href WordPress uses for this submenu anchor
 const FEATURE_SUBMENUS = {
-    "stock-threshold-for-wc":    'a[href*="#/stock-threshold"]',
-    "woocommerce-tips":          'a[href*="#/commerce-kit-tip-settings"]',
-    "buy-button-for-woocommerce":'a[href*="#/buy-button-settings"]',
+    "stock-threshold-for-wc": {
+        selector: 'a[href*="#/stock-threshold"]',
+        label:    "Stock Threshold",
+        href:     "admin.php?page=commerce-kit#/stock-threshold",
+    },
+    "woocommerce-tips": {
+        selector: 'a[href*="#/commerce-kit-tip-settings"]',
+        label:    "Tips Settings",
+        href:     "admin.php?page=commerce-kit#/commerce-kit-tip-settings",
+    },
+    "buy-button-for-woocommerce": {
+        selector: 'a[href*="#/buy-button-settings"]',
+        label:    "Buy Button",
+        href:     "admin.php?page=commerce-kit#/buy-button-settings",
+    },
 };
 
 const isCommerceKitScreen = () =>
