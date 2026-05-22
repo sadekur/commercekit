@@ -40,7 +40,7 @@ const App = () => {
         return () => window.removeEventListener("hashchange", onHashChange);
     }, []);
 
-    // ── 2. Sidebar submenu visibility ────────────────────────────────────────
+    // ── 2. Sidebar submenu visibility
     // Runs once on mount. Hides/shows feature-gated submenus based on saved
     // settings and re-syncs whenever Feature.jsx dispatches the update event.
     useEffect(() => {
