@@ -168,7 +168,6 @@ const BuyButtonSettings = () => {
 
     const isCustomStyle = formData.button_style === "custom";
 
-    /* ── main render ── */
     return (
         <div className="max-w-3xl">
 
