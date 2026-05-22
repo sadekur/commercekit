@@ -54,13 +54,23 @@ const App = () => {
         );
         if (!menu) return;
 
+        const submenuList = menu.querySelector("ul.wp-submenu");
+
         const syncSubmenus = (settings) => {
+            if (!submenuList) return;
             Object.keys(FEATURE_SUBMENUS).forEach((featureKey) => {
-                const anchor = menu.querySelector(FEATURE_SUBMENUS[featureKey]);
-                if (!anchor) return;
-                const li = anchor.closest("li");
-                if (!li) return;
-                li.style.display = settings[featureKey] === "on" ? "" : "none";
+                const { selector, label, href } = FEATURE_SUBMENUS[featureKey];
+                const isEnabled = settings[featureKey] === "on";
+                const existingLi = menu.querySelector(selector)?.closest("li");
+
+                if (isEnabled && !existingLi) {
+                    // PHP didn't register this submenu (was disabled on load) — create it now.
+                    const li = document.createElement("li");
+                    li.innerHTML = `<a href="${href}">${label}</a>`;
+                    submenuList.appendChild(li);
+                } else if (!isEnabled && existingLi) {
+                    existingLi.remove();
+                }
             });
         };
 
