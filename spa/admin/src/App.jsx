@@ -108,7 +108,7 @@ const App = () => {
         }
     }, [currentPage]);
 
-    // ── 4. Sidebar Dashboard-link click handler ──────────────────────────────
+    // ── 4. Sidebar Dashboard-link click handler
     // Prevents a full page reload when clicking the Dashboard menu item while
     // already on the CommerceKit screen — just resets the hash instead.
     useEffect(() => {
