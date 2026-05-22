@@ -72,7 +72,7 @@
         var productType = $btn.data('product_type');
 
         if (productType === 'variable') {
-            return; // let the <a> href navigate to the product page
+            return;
         }
 
         e.preventDefault();
