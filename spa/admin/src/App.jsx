@@ -5,22 +5,18 @@ import StockThreshold from "./pages/StockThreshold";
 import TipSettings from "./pages/TipSettings";
 import BuyButtonSettings from "./pages/BuyButtonSettings";
 
+// Add an entry here whenever a new feature gets its own submenu page.
+// key   = commerce_kit_settings feature key
+// value = CSS selector that matches the submenu <a> element
+//
+// PHP (Menu.php) always registers all submenus so their <li> elements exist in
+// the DOM on every admin page. inject_submenu_visibility() in Menu.php hides
+// disabled ones globally via admin_head. Here we only toggle display on the
+// CommerceKit page for instant show/hide after the user saves settings.
 const FEATURE_SUBMENUS = {
-    "stock-threshold-for-wc": {
-        selector: 'a[href*="#/stock-threshold"]',
-        label:    "Stock Threshold",
-        href:     "admin.php?page=commerce-kit#/stock-threshold",
-    },
-    "woocommerce-tips": {
-        selector: 'a[href*="#/commerce-kit-tip-settings"]',
-        label:    "Tips Settings",
-        href:     "admin.php?page=commerce-kit#/commerce-kit-tip-settings",
-    },
-    "buy-button-for-woocommerce": {
-        selector: 'a[href*="#/buy-button-settings"]',
-        label:    "Buy Button",
-        href:     "admin.php?page=commerce-kit#/buy-button-settings",
-    },
+    "stock-threshold-for-wc":    'a[href*="#/stock-threshold"]',
+    "woocommerce-tips":          'a[href*="#/commerce-kit-tip-settings"]',
+    "buy-button-for-woocommerce":'a[href*="#/buy-button-settings"]',
 };
 
 const isCommerceKitScreen = () =>
@@ -29,60 +25,48 @@ const isCommerceKitScreen = () =>
 const App = () => {
     const [currentPage, setCurrentPage] = useState("");
 
-    // 1. Hash routing
+    // ── 1. Hash routing ──────────────────────────────────────────────────────
     useEffect(() => {
         const onHashChange = () => {
             const hash = window.location.hash.replace("#", "") || "";
             setCurrentPage(hash);
         };
         window.addEventListener("hashchange", onHashChange);
-        onHashChange(); // run immediately on mount
+        onHashChange();
         return () => window.removeEventListener("hashchange", onHashChange);
     }, []);
 
-    // ── 2. Sidebar submenu visibility
-    // Runs once on mount. Hides/shows feature-gated submenus based on saved
-    // settings and re-syncs whenever Feature.jsx dispatches the update event.
+    // ── 2. Sidebar submenu visibility ────────────────────────────────────────
+    // PHP hides disabled submenus on page load (every admin page). This effect
+    // re-syncs on the CommerceKit page whenever features are saved so the
+    // sidebar updates instantly without a reload.
     useEffect(() => {
         const menu = document.querySelector(
             "#adminmenu li.toplevel_page_commerce-kit"
         );
         if (!menu) return;
 
-        const submenuList = menu.querySelector("ul.wp-submenu");
-
         const syncSubmenus = (settings) => {
-            if (!submenuList) return;
             Object.keys(FEATURE_SUBMENUS).forEach((featureKey) => {
-                const { selector, label, href } = FEATURE_SUBMENUS[featureKey];
-                const isEnabled = settings[featureKey] === "on";
-                const existingLi = menu.querySelector(selector)?.closest("li");
-
-                if (isEnabled && !existingLi) {
-                    // PHP didn't register this submenu (was disabled on load) — create it now.
-                    const li = document.createElement("li");
-                    li.innerHTML = `<a href="${href}">${label}</a>`;
-                    submenuList.appendChild(li);
-                } else if (!isEnabled && existingLi) {
-                    existingLi.remove();
-                }
+                const anchor = menu.querySelector(FEATURE_SUBMENUS[featureKey]);
+                if (!anchor) return;
+                const li = anchor.closest("li");
+                if (!li) return;
+                li.style.display = settings[featureKey] === "on" ? "" : "none";
             });
         };
 
-        // Initial sync from PHP-localized COMMERCEKIT.settings_data
         syncSubmenus(
             (window.COMMERCEKIT && window.COMMERCEKIT.settings_data) || {}
         );
 
-        // Re-sync every time features are saved (dispatched by Feature.jsx)
         const onSettingsUpdated = (e) => syncSubmenus(e.detail || {});
         window.addEventListener("commerceKitSettingsUpdated", onSettingsUpdated);
         return () =>
             window.removeEventListener("commerceKitSettingsUpdated", onSettingsUpdated);
     }, []);
 
-    // ── 3. Sidebar active-item highlighting
-    // Runs on every hash/page change to keep the .current class in sync.
+    // ── 3. Sidebar active-item highlight ────────────────────────────────────
     useEffect(() => {
         if (!isCommerceKitScreen()) return;
         const menu = document.querySelector(
@@ -90,17 +74,15 @@ const App = () => {
         );
         if (!menu) return;
 
-        // Clear all current highlights first
         menu.querySelectorAll(".wp-submenu li").forEach((li) =>
             li.classList.remove("current")
         );
 
-        const hash = window.location.hash; // e.g. "#/stock-threshold"
+        const hash = window.location.hash;
         if (hash && hash !== "#/") {
             const anchor = menu.querySelector(`a[href*="${hash}"]`);
             anchor?.closest("li")?.classList.add("current");
         } else {
-            // No hash → highlight the top-level Dashboard item
             const anchor = menu.querySelector(
                 'a[href="admin.php?page=commerce-kit"]'
             );
@@ -108,9 +90,7 @@ const App = () => {
         }
     }, [currentPage]);
 
-    // ── 4. Sidebar Dashboard-link click handler
-    // Prevents a full page reload when clicking the Dashboard menu item while
-    // already on the CommerceKit screen — just resets the hash instead.
+    // ── 4. Dashboard-link click handler ─────────────────────────────────────
     useEffect(() => {
         if (!isCommerceKitScreen()) return;
         const anchor = document.querySelector(
@@ -127,7 +107,7 @@ const App = () => {
         return () => anchor.removeEventListener("click", onClick);
     }, []);
 
-    // ── Page renderer
+    // ── Page renderer ────────────────────────────────────────────────────────
     const renderPage = () => {
         switch (currentPage) {
             case "":
