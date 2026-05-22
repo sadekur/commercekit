@@ -108,12 +108,26 @@ class Assets {
             true
         );
 
+        $settings       = get_option( 'commerce_kit_settings', [] );
+        $feature_hashes = [
+            'stock-threshold-for-wc'     => '#/stock-threshold',
+            'woocommerce-tips'           => '#/commerce-kit-tip-settings',
+            'buy-button-for-woocommerce' => '#/buy-button-settings',
+        ];
+        $hidden_hashes = [];
+        foreach ( $feature_hashes as $key => $hash ) {
+            if ( ( $settings[ $key ] ?? '' ) !== 'on' ) {
+                $hidden_hashes[] = $hash;
+            }
+        }
+
         wp_localize_script( 'commerce-kit-admin-script', 'COMMERCEKIT', [
             'nonce'         => wp_create_nonce( 'wp_rest' ),
             'adminurl'      => admin_url(),
             'ajaxurl'       => admin_url( 'admin-ajax.php' ),
             'apiurl'        => untrailingslashit( rest_url( 'commerce-kit/v1' ) ),
-            'settings_data' => get_option( 'commerce_kit_settings', [] ),
+            'settings_data' => $settings,
+            'hiddenHashes'  => $hidden_hashes,
             'error'         => __( 'Something went wrong', 'commerce-kit' ),
         ] );
 
