@@ -53,8 +53,7 @@ if ( ! function_exists( 'commercekit_get_buy_button_settings' ) ) :
 
         $saved    = get_option( 'commerce_kit_buy_button_settings', [] );
         $settings = array_merge( $defaults, $saved );
-
-        // Deep-merge dimension arrays so missing sides fall back to defaults.
+        
         foreach ( [ 'button_margin', 'button_padding' ] as $key ) {
             if ( isset( $saved[ $key ] ) && is_array( $saved[ $key ] ) ) {
                 $settings[ $key ] = array_merge( $defaults[ $key ], $saved[ $key ] );
