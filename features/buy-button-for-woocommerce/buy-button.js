@@ -1,13 +1,14 @@
-/* global CK_BUY_BUTTON, jQuery */
+/* global COMMERCEKIT, jQuery */
 (function ($) {
     'use strict';
 
-    if (typeof CK_BUY_BUTTON === 'undefined') return;
+    var ckBB = COMMERCEKIT && COMMERCEKIT.buy_button;
+    if (!ckBB) return;
 
-    var isAjax    = CK_BUY_BUTTON.is_ajax === 'yes';
-    var btnText   = CK_BUY_BUTTON.button_text || 'Buy Now';
-    var ajaxUrl   = CK_BUY_BUTTON.ajax_url;
-    var nonce     = CK_BUY_BUTTON.nonce;
+    var isAjax  = ckBB.is_ajax === 'yes';
+    var btnText = ckBB.button_text || 'Buy Now';
+    var ajaxUrl = COMMERCEKIT.ajaxurl;
+    var nonce   = ckBB.nonce;
 
     function ajaxBuyNow($btn, productId, variationId, quantity, variation) {
         $btn.prop('disabled', true).text('...');
@@ -32,9 +33,7 @@
         });
     }
 
-    // Single product page Buy Now button.
-    // type="button" so WooCommerce's form.cart submit handlers never fire.
-    // All three paths are handled explicitly here.
+    // Single product page — type="button" so WooCommerce form.cart submit never fires.
     $(document).on('click', '.wc-buy-now-btn-single', function () {
         var $btn        = $(this);
         var $form       = $btn.closest('form.cart');
@@ -44,11 +43,10 @@
         var quantity    = parseInt($form.find('input.qty').val(), 10) || 1;
 
         if (isVariable) {
-            // Variable: capture selected variation, always use AJAX.
             var variationId = parseInt($form.find('input[name="variation_id"]').val(), 10) || 0;
 
             if (variationId === 0) {
-                alert(CK_BUY_BUTTON.i18n_select_options);
+                alert(ckBB.i18n_select_options);
                 return;
             }
 
@@ -60,14 +58,30 @@
             ajaxBuyNow($btn, productId, variationId, quantity, variation);
 
         } else if (isAjax) {
-            // Simple + AJAX on: use AJAX.
             ajaxBuyNow($btn, productId, 0, quantity, {});
 
         } else {
-            // Simple + AJAX off: GET redirect; template_redirect catches wc-quick-buy-now.
             var base = window.location.href.split('?')[0].split('#')[0];
             window.location.href = base + '?wc-quick-buy-now=' + productId + '&quantity=' + quantity;
         }
+    });
+
+    // Archive/shop page — variable products use their href (link to product page);
+    // simple products always use AJAX regardless of the isAjax setting.
+    $(document).on('click', '.wc-buy-now-btn-archive', function (e) {
+        var $btn        = $(this);
+        var productType = $btn.data('product_type');
+
+        if (productType === 'variable') {
+            return; // let the <a> href navigate to the product page
+        }
+
+        e.preventDefault();
+
+        var productId = parseInt($btn.data('product_id'), 10);
+        var quantity  = parseInt($btn.data('quantity'), 10) || 1;
+
+        ajaxBuyNow($btn, productId, 0, quantity, {});
     });
 
 })(jQuery);
