@@ -31,10 +31,10 @@ class Menu {
             [ $this, 'admin_page_content' ]
         );
 
-        // Always register all feature submenus so their <li> elements are
-        // present in the DOM on every admin page. inject_submenu_visibility()
-        // hides the disabled ones via an inline admin_head script, which runs
-        // globally (fixing the hover-flyout bug). React toggles display on the
+        // Always register all feature submenus so their <li> elements exist in
+        // the DOM on every admin page. Assets.php passes hiddenHashes via the
+        // COMMERCEKIT global; admin.js reads it and hides disabled items on load
+        // (fixing the hover-flyout bug). React toggles display on the
         // CommerceKit page for instant show/hide without a page reload.
         add_submenu_page(
             'commerce-kit',
