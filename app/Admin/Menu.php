@@ -9,6 +9,7 @@ class Menu {
 
     function __construct() {
         $this->action( 'admin_menu', [ $this, 'add_admin_menu' ] );
+        $this->action( 'admin_head',  [ $this, 'inject_submenu_visibility' ] );
     }
 
     public function add_admin_menu() {
@@ -31,43 +32,37 @@ class Menu {
             [ $this, 'admin_page_content' ]
         );
 
-        // Register feature submenus only when the feature is enabled so that
-        // WordPress does not render disabled submenus in the hover flyout on
-        // other admin pages (where the React SPA is not mounted to hide them).
-        $settings = get_option( 'commerce_kit_settings', [] );
+        // Always register all feature submenus so their <li> elements are
+        // present in the DOM on every admin page. inject_submenu_visibility()
+        // hides the disabled ones via an inline admin_head script, which runs
+        // globally (fixing the hover-flyout bug). React toggles display on the
+        // CommerceKit page for instant show/hide without a page reload.
+        add_submenu_page(
+            'commerce-kit',
+            __( 'Stock Threshold', 'commerce-kit' ),
+            __( 'Stock Threshold', 'commerce-kit' ),
+            'manage_options',
+            'commerce-kit#/stock-threshold',
+            [ $this, 'admin_page_content' ]
+        );
 
-        if ( ( $settings['stock-threshold-for-wc'] ?? '' ) === 'on' ) {
-            add_submenu_page(
-                'commerce-kit',
-                __( 'Stock Threshold', 'commerce-kit' ),
-                __( 'Stock Threshold', 'commerce-kit' ),
-                'manage_options',
-                'commerce-kit#/stock-threshold',
-                [ $this, 'admin_page_content' ]
-            );
-        }
+        add_submenu_page(
+            'commerce-kit',
+            'CommerceKit Tips Settings',
+            'Tips Settings',
+            'manage_options',
+            'commerce-kit#/commerce-kit-tip-settings',
+            [ $this, 'admin_page_content' ]
+        );
 
-        if ( ( $settings['woocommerce-tips'] ?? '' ) === 'on' ) {
-            add_submenu_page(
-                'commerce-kit',
-                'CommerceKit Tips Settings',
-                'Tips Settings',
-                'manage_options',
-                'commerce-kit#/commerce-kit-tip-settings',
-                [ $this, 'admin_page_content' ]
-            );
-        }
-
-        if ( ( $settings['buy-button-for-woocommerce'] ?? '' ) === 'on' ) {
-            add_submenu_page(
-                'commerce-kit',
-                __( 'Buy Button Settings', 'commerce-kit' ),
-                __( 'Buy Button', 'commerce-kit' ),
-                'manage_options',
-                'commerce-kit#/buy-button-settings',
-                [ $this, 'admin_page_content' ]
-            );
-        }
+        add_submenu_page(
+            'commerce-kit',
+            __( 'Buy Button Settings', 'commerce-kit' ),
+            __( 'Buy Button', 'commerce-kit' ),
+            'manage_options',
+            'commerce-kit#/buy-button-settings',
+            [ $this, 'admin_page_content' ]
+        );
     }
 
     public function admin_page_content() {
