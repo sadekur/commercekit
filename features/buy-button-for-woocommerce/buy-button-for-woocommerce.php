@@ -47,7 +47,7 @@ class BuyButtonForWoocommerce {
         $this->action( 'woocommerce_after_shop_loop_item', [ $this, 'buy_now_button_archive' ], $priority );
     }
 
-    protected function output_custom_css() {
+    public function output_custom_css() {
         $s   = $this->settings;
         $css = '.wc-buy-now-btn{';
 
