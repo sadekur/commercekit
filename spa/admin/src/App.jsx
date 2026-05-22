@@ -5,11 +5,6 @@ import StockThreshold from "./pages/StockThreshold";
 import TipSettings from "./pages/TipSettings";
 import BuyButtonSettings from "./pages/BuyButtonSettings";
 
-// Add an entry here whenever a new feature gets its own submenu page.
-// key      = commerce_kit_settings feature key
-// selector = CSS attribute selector that matches the submenu <a> element
-// label    = menu label shown in the sidebar
-// href     = relative href WordPress uses for this submenu anchor
 const FEATURE_SUBMENUS = {
     "stock-threshold-for-wc": {
         selector: 'a[href*="#/stock-threshold"]',
