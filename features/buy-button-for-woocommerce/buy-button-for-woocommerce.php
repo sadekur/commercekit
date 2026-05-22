@@ -47,31 +47,6 @@ class BuyButtonForWoocommerce {
         $this->action( 'woocommerce_after_shop_loop_item', [ $this, 'buy_now_button_archive' ], $priority );
     }
 
-    public function enqueue_scripts() {
-        $js_file = COMMERCE_KIT_PATH . 'features/buy-button-for-woocommerce/buy-button.js';
-
-        wp_enqueue_script(
-            'ck-buy-button-script',
-            COMMERCE_KIT_URL . 'features/buy-button-for-woocommerce/buy-button.js',
-            [ 'jquery' ],
-            file_exists( $js_file ) ? filemtime( $js_file ) : '1.0',
-            true
-        );
-
-        wp_localize_script( 'ck-buy-button-script', 'CK_BUY_BUTTON', [
-            'ajax_url'            => admin_url( 'admin-ajax.php' ),
-            'nonce'               => wp_create_nonce( 'ck_buy_button_nonce' ),
-            'is_ajax'             => $this->settings['ajax_add_to_cart'],
-            'redirect_location'   => $this->settings['redirect_location'],
-            'button_text'         => $this->settings['button_text'] ?: 'Buy Now',
-            'i18n_select_options' => __( 'Please select product options before clicking Buy Now.', 'commerce-kit' ),
-        ] );
-
-        if ( $this->settings['button_style'] === 'custom' ) {
-            $this->output_custom_css();
-        }
-    }
-
     protected function output_custom_css() {
         $s   = $this->settings;
         $css = '.wc-buy-now-btn{';
