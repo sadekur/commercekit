@@ -32,23 +32,22 @@
         });
     }
 
-    // Single product page Buy Now button
-    $(document).on('click', '.wc-buy-now-btn-single', function (e) {
-        var $btn         = $(this);
-        var $form        = $btn.closest('form.cart');
-        var productId    = parseInt($btn.val(), 10);
-        var productType  = $btn.data('product_type');
-        var isVariable   = productType === 'variable';
+    // Single product page Buy Now button.
+    // type="button" so WooCommerce's form.cart submit handlers never fire.
+    // All three paths are handled explicitly here.
+    $(document).on('click', '.wc-buy-now-btn-single', function () {
+        var $btn        = $(this);
+        var $form       = $btn.closest('form.cart');
+        var productId   = parseInt($btn.data('product-id'), 10);
+        var productType = $btn.data('product-type');
+        var isVariable  = productType === 'variable';
+        var quantity    = parseInt($form.find('input.qty').val(), 10) || 1;
 
-        // Variable products always go through AJAX (need to capture selected variation).
-        // Simple products use AJAX only when Ajax Add to Cart setting is on.
-        if (isVariable || isAjax) {
-            e.preventDefault();
-
+        if (isVariable) {
+            // Variable: capture selected variation, always use AJAX.
             var variationId = parseInt($form.find('input[name="variation_id"]').val(), 10) || 0;
 
-            if (isVariable && variationId === 0) {
-                /* translators: shown when user clicks Buy Now without selecting a variation */
+            if (variationId === 0) {
                 alert(CK_BUY_BUTTON.i18n_select_options);
                 return;
             }
@@ -58,12 +57,17 @@
                 variation[$(this).attr('name')] = $(this).val();
             });
 
-            var quantity = parseInt($form.find('input.qty').val(), 10) || 1;
-
             ajaxBuyNow($btn, productId, variationId, quantity, variation);
+
+        } else if (isAjax) {
+            // Simple + AJAX on: use AJAX.
+            ajaxBuyNow($btn, productId, 0, quantity, {});
+
+        } else {
+            // Simple + AJAX off: GET redirect; template_redirect catches wc-quick-buy-now.
+            var base = window.location.href.split('?')[0].split('#')[0];
+            window.location.href = base + '?wc-quick-buy-now=' + productId + '&quantity=' + quantity;
         }
-        // Simple + non-AJAX: let the form submit naturally.
-        // template_redirect on the server intercepts wc-quick-buy-now in POST.
     });
 
 })(jQuery);
