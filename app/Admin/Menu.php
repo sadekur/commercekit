@@ -72,38 +72,5 @@ class Menu {
         <?php
     }
 
-    /**
-     * Runs on every admin page. Enqueues the menu-visibility script and passes
-     * the list of disabled feature hashes so the script can hide them from the
-     * WordPress sidebar (including the hover flyout on non-CommerceKit pages).
-     */
-    public function enqueue_menu_visibility() {
-        $settings = get_option( 'commerce_kit_settings', [] );
-
-        $feature_hashes = [
-            'stock-threshold-for-wc'     => '#/stock-threshold',
-            'woocommerce-tips'           => '#/commerce-kit-tip-settings',
-            'buy-button-for-woocommerce' => '#/buy-button-settings',
-        ];
-
-        $hidden_hashes = [];
-        foreach ( $feature_hashes as $key => $hash ) {
-            if ( ( $settings[ $key ] ?? '' ) !== 'on' ) {
-                $hidden_hashes[] = $hash;
-            }
-        }
-
-        wp_enqueue_script(
-            'commerce-kit-menu-visibility',
-            COMMERCE_KIT_ASSETS . 'js/menu-visibility.js',
-            [],
-            filemtime( COMMERCE_KIT_PATH . 'assets/js/menu-visibility.js' ),
-            true
-        );
-
-        wp_localize_script( 'commerce-kit-menu-visibility', 'CommerceKitMenu', [
-            'hiddenHashes' => $hidden_hashes,
-        ] );
-    }
 
 }
