@@ -146,7 +146,9 @@ const Blocks = () => {
 			/>
 
 			{isLoading ? (
-				<div>Loading...</div>
+				<div className="mt-4 grid grid-cols-4 md:grid-cols-4 sm:grid-cols-1 gap-6">
+					{Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
+				</div>
 			) : (
 				<div className='mt-4 grid grid-cols-4 md:grid-cols-4 sm:grid-cols-1 gap-6'>
 					{toggles.map((toggle) => (
