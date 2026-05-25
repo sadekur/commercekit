@@ -38,4 +38,4 @@ const Dashboard = () => {
     );
 };
 
-export default Tabs;
+export default Dashboard;
