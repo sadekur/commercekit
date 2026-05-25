@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CommonHeader from "../../../common/CommonHeader";
+import SkeletonCard from "../../../common/Skeletons/SkeletonCard";
 
 const Blocks = () => {
 	const url = `${COMMERCEKIT.apiurl}/block-register-save`;
