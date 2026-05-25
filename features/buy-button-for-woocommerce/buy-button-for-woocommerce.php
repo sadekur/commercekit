@@ -189,11 +189,11 @@ class BuyButtonForWoocommerce {
                     $variation[ sanitize_text_field( $key ) ] = sanitize_text_field( $value );
                 }
             }
-            if ( ! $this->is_product_in_cart( $product_id, $variation_id ) ) {
+            if ( ! commercekit_is_product_in_cart( $product_id, $variation_id ) ) {
                 WC()->cart->add_to_cart( $product_id, $quantity, $variation_id, $variation );
             }
         } else {
-            if ( ! ( $product->is_sold_individually() && $this->is_product_in_cart( $product_id ) ) ) {
+            if ( ! ( $product->is_sold_individually() && commercekit_is_product_in_cart( $product_id ) ) ) {
                 WC()->cart->add_to_cart( $product_id, $quantity );
             }
         }
@@ -239,12 +239,12 @@ class BuyButtonForWoocommerce {
                     }
                 }
             }
-            if ( ! $this->is_product_in_cart( $product_id, $variation_id ) ) {
+            if ( ! commercekit_is_product_in_cart( $product_id, $variation_id ) ) {
                 WC()->cart->add_to_cart( $product_id, $quantity, $variation_id, $variation );
             }
             $added = true;
         } elseif ( $product->is_type( 'simple' ) ) {
-            if ( ! ( $product->is_sold_individually() && $this->is_product_in_cart( $product_id ) ) ) {
+            if ( ! ( $product->is_sold_individually() && commercekit_is_product_in_cart( $product_id ) ) ) {
                 WC()->cart->add_to_cart( $product_id, $quantity );
             }
             $added = true;
