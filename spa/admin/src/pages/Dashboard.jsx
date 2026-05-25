@@ -3,7 +3,7 @@ import Feature from "./components/Feature";
 import Blocks from "./components/Blocks";
 import Settings from "./components/Settings";
 
-const Tabs = () => {
+const Dashboard = () => {
     const [activeTab, setActiveTab] = useState("feature");
 
     const tabs = ["feature", "blocks", "settings"];
