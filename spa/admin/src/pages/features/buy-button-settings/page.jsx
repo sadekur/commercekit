@@ -35,11 +35,21 @@ const DEFAULTS = {
 
 const BuyButtonSettings = () => {
     const [isLoading, setIsLoading]               = useState(true);
+    const [isTabLoading, setIsTabLoading]         = useState(false);
     const [isSaving, setIsSaving]                 = useState(false);
     const [saveStatus, setSaveStatus]             = useState(null);
     const [isFeatureEnabled, setIsFeatureEnabled] = useState(false);
     const [activeTab, setActiveTab]               = useState("general");
     const [formData, setFormData]                 = useState(DEFAULTS);
+
+    const handleTabChange = (tabId) => {
+        if (tabId === activeTab) return;
+        setIsTabLoading(true);
+        setTimeout(() => {
+            setActiveTab(tabId);
+            setIsTabLoading(false);
+        }, 300);
+    };
 
     const set = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
 
