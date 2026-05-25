@@ -25,7 +25,7 @@ class BuyButton {
             'enable_single', 'enable_archive',
             'button_position_single', 'button_position_archive',
             'redirect_location', 'button_text',
-            'reset_cart', 'ajax_add_to_cart', 'button_style',
+            'reset_cart', 'ajax_add_to_cart', 'hide_add_to_cart', 'button_style',
             'button_text_color', 'button_background_color', 'button_border_color',
         ] as $key ) {
             $settings[ $key ] = isset( $body[ $key ] )
