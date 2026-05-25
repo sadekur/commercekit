@@ -70,8 +70,8 @@ endif;
      *
      * @return array List of active blocks.
      */
-	if( ! function_exists( 'get_active_blocks' ) ) :
-    function get_active_blocks() {
+	if( ! function_exists( 'commerce_kit_get_active_blocks' ) ) :
+    function commerce_kit_get_active_blocks() {
         $blocks_dir     = COMMERCE_KIT_PATH . 'blocks/';
         $categories     = glob( $blocks_dir );
         $block_settings = get_option('commerce_kit_block_settings');
@@ -95,3 +95,10 @@ endif;
         return $active_blocks;
     }
 endif;
+
+if ( ! function_exists( 'commercekit_button_position_archive' ) ) {
+    function commercekit_button_position_archive() {
+        $priority = $this->settings['button_position_archive'] === 'after_add_to_cart' ? 11 : 9;
+        $this->action( 'woocommerce_after_shop_loop_item', [ $this, 'buy_now_button_archive' ], $priority );
+    }
+}
