@@ -96,9 +96,35 @@ endif;
     }
 endif;
 
-if ( ! function_exists( 'commercekit_button_position_archive' ) ) {
-    function commercekit_button_position_archive() {
-        $priority = $this->settings['button_position_archive'] === 'after_add_to_cart' ? 11 : 9;
-        $this->action( 'woocommerce_after_shop_loop_item', [ $this, 'buy_now_button_archive' ], $priority );
+if ( ! function_exists( 'commercekit_buy_button_redirect_location' ) ) :
+    function commercekit_buy_button_redirect_location( $product_id, array $settings ) {
+        $location   = $settings['redirect_location']   ?? 'checkout';
+        $custom_url = $settings['custom_redirect_url'] ?? '';
+
+        switch ( $location ) {
+            case 'cart':
+                return wc_get_cart_url();
+            case 'custom':
+                return ! empty( $custom_url ) ? esc_url_raw( $custom_url ) : wc_get_checkout_url();
+            default:
+                return wc_get_checkout_url();
+        }
     }
-}
+endif;
+
+if ( ! function_exists( 'commercekit_is_product_in_cart' ) ) :
+    function commercekit_is_product_in_cart( $product_id, $variation_id = 0 ) {
+        foreach ( WC()->cart->get_cart() as $item ) {
+            if ( $variation_id ) {
+                if ( (int) $item['product_id'] === $product_id && (int) $item['variation_id'] === $variation_id ) {
+                    return true;
+                }
+            } else {
+                if ( (int) $item['product_id'] === $product_id ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+endif;
