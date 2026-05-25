@@ -373,11 +373,20 @@ const BuyButtonSettings = () => {
                             <SettingRow
                                 label="Ajax Add to Cart"
                                 description="Use AJAX for simple products on the single product page (variable products always use AJAX)."
-                                border={false}
                             >
                                 <Toggle
                                     checked={formData.ajax_add_to_cart}
                                     onChange={(e) => set("ajax_add_to_cart", e.target.checked)}
+                                />
+                            </SettingRow>
+                            <SettingRow
+                                label="Hide WooCommerce Add to Cart Button"
+                                description="Hide the default WooCommerce Add to Cart button on single product and shop pages."
+                                border={false}
+                            >
+                                <Toggle
+                                    checked={formData.hide_add_to_cart}
+                                    onChange={(e) => set("hide_add_to_cart", e.target.checked)}
                                 />
                             </SettingRow>
                         </div>
