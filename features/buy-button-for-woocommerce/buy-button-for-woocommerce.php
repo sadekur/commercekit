@@ -23,11 +23,15 @@ class BuyButtonForWoocommerce {
         }
 
         if ( $this->settings['enable_single'] === 'yes' ) {
-            $this->button_position_single();
+            $hook = $this->settings['button_position_single'] === 'after_add_to_cart'
+                ? 'woocommerce_after_add_to_cart_button'
+                : 'woocommerce_before_add_to_cart_button';
+            $this->action( $hook, [ $this, 'buy_now_button_single' ] );
         }
 
         if ( $this->settings['enable_archive'] === 'yes' ) {
-            $this->button_position_archive();
+            $priority = $this->settings['button_position_archive'] === 'after_add_to_cart' ? 11 : 9;
+            $this->action( 'woocommerce_after_shop_loop_item', [ $this, 'buy_now_button_archive' ], $priority );
         }
 
         // Backward-compatible shortcode
