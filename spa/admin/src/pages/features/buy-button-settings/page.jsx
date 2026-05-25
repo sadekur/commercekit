@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import SettingSkeleton from "../../../../common/Skeletons/SettingSkalaton";
 import { WarningIcon } from "../../../../common/Svgs";
 import SectionHeader from "../../../../common/SectionHeader";
 import Toggle from "../../../../common/Toggle";
