@@ -1,3 +1,5 @@
+import SmallNumberInput from "./SmallNumberInput";
+
 const DimensionFields = ({ value, onChange }) => (
     <div className="flex gap-3 flex-wrap">
         {["top", "right", "bottom", "left"].map((side) => (
