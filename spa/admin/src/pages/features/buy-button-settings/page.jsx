@@ -249,8 +249,32 @@ const BuyButtonSettings = () => {
 
             <form onSubmit={handleSave} className="space-y-4">
 
+                {/* ══════════════ TAB SWITCHING SKELETON ══════════════ */}
+                {isTabLoading && (
+                    <div className="animate-pulse space-y-4">
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
+                                <div className="px-6 py-3.5 bg-gray-50 border-b border-gray-100">
+                                    <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+                                    <div className="h-3 bg-gray-100 rounded w-1/2"></div>
+                                </div>
+                                {[1, 2].map((j) => (
+                                    <div key={j} className="flex items-center justify-between px-6 py-4 border-b border-gray-100 last:border-b-0">
+                                        <div className="flex-1 pr-8">
+                                            <div className="h-3.5 bg-gray-200 rounded w-2/5 mb-2"></div>
+                                            <div className="h-3 bg-gray-100 rounded w-3/5"></div>
+                                        </div>
+                                        <div className="h-6 w-11 bg-gray-200 rounded-full flex-shrink-0"></div>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                        <div className="h-10 w-32 bg-gray-200 rounded-lg"></div>
+                    </div>
+                )}
+
                 {/* ══════════════ GENERAL TAB ══════════════ */}
-                {activeTab === "general" && (
+                {!isTabLoading && activeTab === "general" && (
                     <>
                         {/* Enable Button On */}
                         <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
