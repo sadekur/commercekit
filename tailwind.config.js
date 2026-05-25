@@ -3,7 +3,7 @@ module.exports = {
       './app/**/*.php',
       './views/**/*.html',
       './spa/public/src/**/*.jsx',
-      './spa/admin/src/**/*.jsx',
+      './spa/admin/**/*.jsx',
       './spa/admin/common/**/*.jsx',
   ],
   theme: {
