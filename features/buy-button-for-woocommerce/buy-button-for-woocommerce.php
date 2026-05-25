@@ -42,6 +42,10 @@ class BuyButtonForWoocommerce {
         $this->add_shortcode( 'buy_button', [ $this, 'shortcode_buy_button' ] );
     }
 
+    public function output_hide_add_to_cart_css() {
+        wp_add_inline_style( 'woocommerce-inline', '.single_add_to_cart_button,.add_to_cart_button{display:none!important;}' );
+    }
+
     public function output_custom_css() {
         $s   = $this->settings;
         $css = '.wc-buy-now-btn{';
