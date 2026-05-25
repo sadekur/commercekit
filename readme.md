@@ -168,6 +168,7 @@ Adds a **"Buy Now"** button to single product pages and the shop/archive listing
 | **Default Shop Quantity** | `1` | Quantity added to cart when clicked on the shop/archive page |
 | **Auto Reset Cart** | Off | Clears the cart before adding the product — ensures a single-product checkout |
 | **Ajax Add to Cart** | Off | Submits via AJAX on the single product page for simple products. Variable products always use AJAX regardless of this setting |
+| **Hide WooCommerce Add to Cart Button** | Off | Hides the default WooCommerce Add to Cart button on both the single product page and shop/archive pages. Useful when you want Buy Now to be the only purchase action |
 
 ---
 
