@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Feature from "./tabs/Feature";
 import Blocks from "./tabs/Blocks";
 import Settings from "./tabs/Settings";
-import SkeletonCard from "../../../common/Skeletons/SkeletonCard";
+import SkeletonCard from "../../common/Skeletons/SkeletonCard";
 
 const STORAGE_KEY = "commercekit_dashboard_tab";
 const tabs = ["feature", "blocks", "settings"];
