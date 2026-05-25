@@ -67,6 +67,7 @@ const BuyButtonSettings = () => {
             default_shop_quantity:   parseInt(data.default_shop_quantity) || 1,
             reset_cart:              data.reset_cart              === "yes",
             ajax_add_to_cart:        data.ajax_add_to_cart        === "yes",
+            hide_add_to_cart:        data.hide_add_to_cart        === "yes",
             button_style:            data.button_style            || "default",
             button_text_color:       data.button_text_color       || "",
             button_background_color: data.button_background_color || "",
