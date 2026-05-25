@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Requirements
+
+PHP 7.2+, WordPress 5.9+, WooCommerce 5.0+.
+
 ## Build Commands
 
 ```bash
@@ -108,7 +112,7 @@ Webpack entry points:
 - `spa/public/src/App.jsx` → `build/public.build.js` — Frontend React app (currently a stub)
 - `assets/css/tailwind.css` → `build/tailwind.build.js`
 
-React, ReactDOM, and all `@wordpress/*` packages are **externals** — loaded from WordPress, not bundled.
+**Externals** (loaded from WordPress, not bundled): `react`, `react-dom`, `@wordpress/blocks`, `@wordpress/block-editor`, `@wordpress/element`. Other `@wordpress/*` packages (e.g. `api-fetch`, `components`) are **not** externals — if used they will be bundled.
 
 The admin SPA mounts on `#commerce_kit_render` and uses **hash-based routing**. `App.jsx` switches on `window.location.hash`:
 - `""` or `"/"` → `Tabs` (Feature / Blocks / Settings tabs)
@@ -142,6 +146,16 @@ Two component directories exist — choose the right one:
 Localized differently per context:
 - **Admin** (`commerce-kit-admin-script`): `nonce` (wp_rest), `adminurl`, `ajaxurl`, `apiurl` (REST base), `settings_data` (feature toggles object)
 - **Frontend** (`commerce-kit-frontend-script`): `nonce` (commerce-kit), `adminurl`, `ajaxurl`, `resturl` (REST base), `error`
+
+The buy button feature extends the frontend global with a `buy_button` sub-object: `is_ajax` (`'yes'`/`'no'`), `button_text`, `nonce`, `i18n_select_options`.
+
+### Buy Button Vanilla JS
+
+`features/buy-button-for-woocommerce/buy-button.js` is a standalone jQuery file — **not compiled through webpack**. It reads `COMMERCEKIT.buy_button` and handles two click targets:
+- `.wc-buy-now-btn-single` — product page button; reads qty and variation from the parent `form.cart`
+- `.wc-buy-now-btn-archive` — shop/archive page button; always uses AJAX regardless of `is_ajax`
+
+Simple products on single pages use either AJAX (`action: ck_buy_button_add_to_cart`) or a `?wc-quick-buy-now=` query string depending on `is_ajax`. Variable products always use AJAX and require a `variation_id` already set in the form.
 
 ### Asset Versioning Convention
 
