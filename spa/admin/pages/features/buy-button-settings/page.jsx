@@ -22,6 +22,7 @@ const DEFAULTS = {
     default_shop_quantity:   1,
     reset_cart:              false,
     ajax_add_to_cart:        false,
+    hide_add_to_cart:        false,
     button_style:            "default",
     button_text_color:       "",
     button_background_color: "",
