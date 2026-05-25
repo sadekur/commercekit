@@ -4,6 +4,7 @@ import Tabs from "./pages/Dashboard";
 import StockThreshold from "./pages/features/stock-threshold/page";
 import TipSettings from "./pages/features/tip-settings/page";
 import BuyButtonSettings from "./pages/features/buy-button-settings/page";
+import Dashboard from "./pages/Dashboard";
 
 // Add an entry here whenever a new feature gets its own submenu page.
 // key   = commerce_kit_settings feature key
