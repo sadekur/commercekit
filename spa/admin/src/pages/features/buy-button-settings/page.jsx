@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { WarningIcon } from "../../../../common/Svgs";
+import TabPageSkeleton from "../../../../common/Skeletons/TabPageSkeleton";
 import SectionHeader from "../../../../common/SectionHeader";
 import Toggle from "../../../../common/Toggle";
 import RadioGroup from "../../../../common/RadioGroup";
