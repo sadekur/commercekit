@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import Tabs from "./pages/Tabs";
-import StockThreshold from "./pages/StockThreshold";
-import TipSettings from "./pages/TipSettings";
-import BuyButtonSettings from "./pages/BuyButtonSettings";
+import StockThreshold from "./pages/features/stock-threshold/page";
+import TipSettings from "./pages/features/tip-settings/page";
+import BuyButtonSettings from "./pages/features/buy-button-settings/page";
 
 // Add an entry here whenever a new feature gets its own submenu page.
 // key   = commerce_kit_settings feature key
