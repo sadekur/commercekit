@@ -22,6 +22,10 @@ class BuyButtonForWoocommerce {
             $this->action( 'wp_enqueue_scripts', [ $this, 'output_custom_css' ] );
         }
 
+        if ( $this->settings['hide_add_to_cart'] === 'yes' ) {
+            $this->action( 'wp_enqueue_scripts', [ $this, 'output_hide_add_to_cart_css' ] );
+        }
+
         if ( $this->settings['enable_single'] === 'yes' ) {
             $hook = $this->settings['button_position_single'] === 'after_add_to_cart'
                 ? 'woocommerce_after_add_to_cart_button'
