@@ -40,6 +40,7 @@ if ( ! function_exists( 'commercekit_get_buy_button_settings' ) ) :
             'default_shop_quantity'   => 1,
             'reset_cart'              => 'no',
             'ajax_add_to_cart'        => 'no',
+            'hide_add_to_cart'        => 'no',
             'button_style'            => 'default',
             'button_text_color'       => '',
             'button_background_color' => '',
