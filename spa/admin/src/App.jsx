@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import StockThreshold from "./pages/features/stock-threshold/page";
 import TipSettings from "./pages/features/tip-settings/page";
 import BuyButtonSettings from "./pages/features/buy-button-settings/page";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/dashboard/page";
 
 const FEATURE_SUBMENUS = {
     "stock-threshold-for-wc":    'a[href*="#/stock-threshold"]',
