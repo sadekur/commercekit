@@ -4,7 +4,7 @@ module.exports = (env, argv) => {
 	return {
 		mode: argv.mode || "development",
 		entry: {
-			admin: path.resolve(__dirname, "spa/admin/src/App.jsx"),
+			admin: path.resolve(__dirname, "spa/admin/App.jsx"),
 			block: path.resolve(__dirname, "blocks/App.jsx"),
 			public: path.resolve(__dirname, "spa/public/src/App.jsx"),
 			tailwind: path.resolve(__dirname, "assets/css/tailwind.css"),
