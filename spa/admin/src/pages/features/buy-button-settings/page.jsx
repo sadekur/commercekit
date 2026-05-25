@@ -537,7 +537,7 @@ const BuyButtonSettings = () => {
                     </>
                 )}
 
-                <SaveRow isSaving={isSaving} />
+                {!isTabLoading && <SaveRow isSaving={isSaving} />}
             </form>
         </div>
     );
