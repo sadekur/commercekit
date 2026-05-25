@@ -430,7 +430,7 @@ const BuyButtonSettings = () => {
                 )}
 
                 {/* ══════════════ BUTTON STYLES TAB ══════════════ */}
-                {activeTab === "button_styles" && (
+                {!isTabLoading && activeTab === "button_styles" && (
                     <>
                         {/* Style mode */}
                         <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
