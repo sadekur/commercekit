@@ -145,7 +145,7 @@ class BuyButtonForWoocommerce {
         $redirect_url = add_query_arg( [
             'wc-quick-buy-now' => $product_id,
             'quantity'         => $quantity,
-        ], $this->button_redirect_location( $product_id ) );
+        ], commercekit_buy_button_redirect_location( $product_id, $this->settings ) );
 
         printf(
             '<a href="%s" class="button wc-buy-now-btn wc-buy-now-btn-archive" data-product_id="%d" data-quantity="%d" data-wc-buy-now="true" data-product_type="simple">%s</a>',
@@ -198,7 +198,7 @@ class BuyButtonForWoocommerce {
             }
         }
 
-        wp_safe_redirect( $this->button_redirect_location( $product_id ) );
+        wp_safe_redirect( commercekit_buy_button_redirect_location( $product_id, $this->settings ) );
         exit;
     }
 
@@ -252,7 +252,7 @@ class BuyButtonForWoocommerce {
 
         if ( $added ) {
             wp_send_json_success( [
-                'redirect_url' => $this->button_redirect_location( $product_id ),
+                'redirect_url' => commercekit_buy_button_redirect_location( $product_id, $this->settings ),
             ] );
         } else {
             wp_send_json_error( [ 'message' => __( 'Failed to add product to cart.', 'commerce-kit' ) ] );
