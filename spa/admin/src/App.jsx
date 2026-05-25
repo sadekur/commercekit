@@ -5,14 +5,6 @@ import TipSettings from "./pages/features/tip-settings/page";
 import BuyButtonSettings from "./pages/features/buy-button-settings/page";
 import Dashboard from "./pages/Dashboard";
 
-// Add an entry here whenever a new feature gets its own submenu page.
-// key   = commerce_kit_settings feature key
-// value = CSS selector that matches the submenu <a> element
-//
-// PHP (Menu.php) always registers all submenus so their <li> elements exist in
-// the DOM on every admin page. inject_submenu_visibility() in Menu.php hides
-// disabled ones globally via admin_head. Here we only toggle display on the
-// CommerceKit page for instant show/hide after the user saves settings.
 const FEATURE_SUBMENUS = {
     "stock-threshold-for-wc":    'a[href*="#/stock-threshold"]',
     "woocommerce-tips":          'a[href*="#/commerce-kit-tip-settings"]',
