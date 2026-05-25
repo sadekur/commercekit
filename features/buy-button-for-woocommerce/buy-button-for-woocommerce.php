@@ -38,19 +38,6 @@ class BuyButtonForWoocommerce {
         $this->add_shortcode( 'buy_button', [ $this, 'shortcode_buy_button' ] );
     }
 
-    protected function button_position_single() {
-        if ( $this->settings['button_position_single'] === 'after_add_to_cart' ) {
-            $this->action( 'woocommerce_after_add_to_cart_button', [ $this, 'buy_now_button_single' ] );
-        } else {
-            $this->action( 'woocommerce_before_add_to_cart_button', [ $this, 'buy_now_button_single' ] );
-        }
-    }
-
-    protected function button_position_archive() {
-        $priority = $this->settings['button_position_archive'] === 'after_add_to_cart' ? 11 : 9;
-        $this->action( 'woocommerce_after_shop_loop_item', [ $this, 'buy_now_button_archive' ], $priority );
-    }
-
     public function output_custom_css() {
         $s   = $this->settings;
         $css = '.wc-buy-now-btn{';
