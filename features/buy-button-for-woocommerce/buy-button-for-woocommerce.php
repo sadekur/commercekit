@@ -259,35 +259,6 @@ class BuyButtonForWoocommerce {
         }
     }
 
-    protected function button_redirect_location( $product_id ) {
-        $location   = $this->settings['redirect_location'];
-        $custom_url = $this->settings['custom_redirect_url'];
-
-        switch ( $location ) {
-            case 'cart':
-                return wc_get_cart_url();
-            case 'custom':
-                return ! empty( $custom_url ) ? esc_url_raw( $custom_url ) : wc_get_checkout_url();
-            default:
-                return wc_get_checkout_url();
-        }
-    }
-
-    private function is_product_in_cart( $product_id, $variation_id = 0 ) {
-        foreach ( WC()->cart->get_cart() as $item ) {
-            if ( $variation_id ) {
-                if ( (int) $item['product_id'] === $product_id && (int) $item['variation_id'] === $variation_id ) {
-                    return true;
-                }
-            } else {
-                if ( (int) $item['product_id'] === $product_id ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     // Backward-compatible shortcode [buy_button id="123"]
     public function shortcode_buy_button( $atts ) {
         if ( empty( $atts['id'] ) ) {
