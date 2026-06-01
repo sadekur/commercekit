@@ -77,9 +77,9 @@ final class COMMERCE_KIT{
 	 */
 	public function init_plugin() {
 
-		new CommerceKit\Commerce\Assets();
+		new CommerceKit\Commerce\Common\Assets();
 		new CommerceKit\Commerce\Email();
-		new CommerceKit\Commerce\API();
+		new CommerceKit\Commerce\Common\API();
 		new CommerceKit\Commerce\Common\Init();
 		new CommerceKit\Commerce\Blocks();
 		new CommerceKit\Commerce\Features();
