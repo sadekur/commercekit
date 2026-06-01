@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Toggle from "../../../common/Toggle";
+import SkeletonCard from "../../../common/Skeletons/SkeletonCard";
 
 const FEATURES = [
     {
         name: "stock-threshold-for-wc",
         icon: "📈",
         label: "Stock Threshold for WooCommerce",
-        description: "Adjusts product prices based on stock levels with customer-visible low / medium / high stock messages.",
+        description: "Dynamically adjusts product prices based on current stock levels. Adds customer-visible low, medium, and high stock messages across product, cart, checkout, and order pages.",
         status: "complete",
         configHash: "/stock-threshold",
     },
@@ -15,7 +16,7 @@ const FEATURES = [
         name: "buy-button-for-woocommerce",
         icon: "🛒",
         label: "Buy Button for WooCommerce",
-        description: "Adds a Buy Now button that clears the cart and redirects customers straight to checkout.",
+        description: "Adds a customisable Buy Now button that clears the cart and redirects the customer directly to checkout. Supports single product, archive pages, and a shortcode.",
         status: "complete",
         configHash: "/buy-button-settings",
     },
@@ -23,7 +24,7 @@ const FEATURES = [
         name: "woocommerce-tips",
         icon: "💡",
         label: "WooCommerce Tips",
-        description: "Displays a tip or donation input on cart and checkout pages. UI renders — tip amounts are not yet added to order totals.",
+        description: "Displays a configurable tip or donation input on the cart and checkout pages. The UI renders correctly — tip amounts are not yet added to order totals.",
         status: "partial",
         configHash: "/commerce-kit-tip-settings",
     },
@@ -31,7 +32,7 @@ const FEATURES = [
         name: "woocommerce-faq",
         icon: "❓",
         label: "WooCommerce FAQ",
-        description: "Add frequently asked questions to product pages. PHP implementation is not yet available.",
+        description: "Attach frequently asked questions directly to product pages. The feature toggle is registered — PHP implementation is not yet available.",
         status: "soon",
         configHash: null,
     },
@@ -39,7 +40,7 @@ const FEATURES = [
         name: "woocommerce-product_barcode",
         icon: "🔖",
         label: "WooCommerce Product Barcode",
-        description: "Display product barcodes on product detail pages. PHP implementation is not yet available.",
+        description: "Display scannable product barcodes on product detail pages. The feature toggle is registered — PHP implementation is not yet available.",
         status: "soon",
         configHash: null,
     },
@@ -111,23 +112,13 @@ const Features = () => {
             .finally(() => setIsSaving(false));
     };
 
-    if (isLoading) {
-        return (
-            <div className="space-y-3">
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className="h-[76px] bg-white rounded-xl border border-gray-200 animate-pulse" />
-                ))}
-            </div>
-        );
-    }
-
     return (
         <form onSubmit={handleSave}>
             {/* Section header */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-5">
                 <div>
                     <h2 className="m-0 text-[15px] font-bold text-gray-900">Manage Features</h2>
-                    <p className="m-0 mt-0.5 text-[12px] text-gray-500">Enable or disable plugin features</p>
+                    <p className="m-0 mt-0.5 text-[12px] text-gray-500">Toggle features on or off and configure each one</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <button
@@ -158,10 +149,10 @@ const Features = () => {
                 </div>
             </div>
 
-            {/* Save status toast */}
+            {/* Save toast */}
             {saveStatus && (
                 <div
-                    className={`flex items-center gap-2 px-4 py-2.5 mb-4 rounded-xl text-[13px] font-semibold border ${
+                    className={`flex items-center gap-2 px-4 py-2.5 mb-5 rounded-xl text-[13px] font-semibold border ${
                         saveStatus === "success"
                             ? "bg-green-50 text-green-700 border-green-200"
                             : "bg-red-50 text-red-600 border-red-200"
@@ -176,60 +167,61 @@ const Features = () => {
                 </div>
             )}
 
-            {/* Feature list */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-                {FEATURES.map((feature, idx) => {
-                    const badge   = STATUS[feature.status];
-                    const enabled = values[feature.name];
-                    const isLast  = idx === FEATURES.length - 1;
-                    return (
-                        <div
-                            key={feature.name}
-                            className={`flex items-center gap-4 px-5 py-4 ${
-                                !isLast ? "border-b border-gray-100" : ""
-                            }`}
-                        >
-                            {/* Icon */}
-                            <span className="text-2xl w-8 text-center flex-shrink-0">{feature.icon}</span>
-
-                            {/* Info */}
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="text-[14px] font-semibold text-gray-900">
-                                        {feature.label}
-                                    </span>
+            {/* Feature grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+                {isLoading
+                    ? Array.from({ length: 5 }).map((_, i) => <SkeletonCard key={i} />)
+                    : FEATURES.map((feature) => {
+                        const badge   = STATUS[feature.status];
+                        const enabled = values[feature.name];
+                        return (
+                            <div
+                                key={feature.name}
+                                className={`bg-white rounded-xl border shadow-sm flex flex-col p-5 transition-shadow duration-200 hover:shadow-md ${
+                                    enabled ? "border-blue-200" : "border-gray-200"
+                                }`}
+                            >
+                                {/* Icon + badge */}
+                                <div className="flex items-start justify-between mb-3">
+                                    <span className="text-3xl leading-none">{feature.icon}</span>
                                     <span
                                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border ${badge.cls}`}
                                     >
                                         {badge.label}
                                     </span>
                                 </div>
-                                <p className="m-0 mt-0.5 text-[12px] text-gray-500 leading-relaxed">
-                                    {feature.description}
-                                </p>
-                            </div>
 
-                            {/* Configure link — only when enabled and has settings */}
-                            {enabled && feature.configHash && (
-                                <button
-                                    type="button"
-                                    onClick={() => { window.location.hash = feature.configHash; }}
-                                    className="flex-shrink-0 px-3 py-1.5 text-[12px] font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer"
-                                >
-                                    Configure →
-                                </button>
-                            )}
+                                {/* Title + description */}
+                                <div className="flex-1">
+                                    <h3 className="m-0 mb-1.5 text-[14px] font-bold text-gray-900 leading-snug">
+                                        {feature.label}
+                                    </h3>
+                                    <p className="m-0 text-[12px] text-gray-500 leading-relaxed line-clamp-4">
+                                        {feature.description}
+                                    </p>
+                                </div>
 
-                            {/* Toggle */}
-                            <div className="flex-shrink-0">
-                                <Toggle
-                                    checked={enabled}
-                                    onChange={() => handleToggle(feature.name)}
-                                />
+                                {/* Actions */}
+                                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                                    {enabled && feature.configHash ? (
+                                        <button
+                                            type="button"
+                                            onClick={() => { window.location.hash = feature.configHash; }}
+                                            className="px-2.5 py-1 text-[11px] font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer"
+                                        >
+                                            Configure →
+                                        </button>
+                                    ) : (
+                                        <span />
+                                    )}
+                                    <Toggle
+                                        checked={enabled}
+                                        onChange={() => handleToggle(feature.name)}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
             </div>
         </form>
     );
