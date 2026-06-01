@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Feature from "./tabs/Feature";
 import Blocks from "./tabs/Blocks";
 import Settings from "./tabs/Settings";
+import SkeletonCard from "../../common/Skeletons/SkeletonCard";
 
 const STORAGE_KEY = "commercekit_dashboard_tab";
 
@@ -28,7 +29,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="max-w-3xl">
+        <div className="w-full">
             {/* Plugin banner */}
             <div className="flex items-center gap-3 mb-6 pb-5 border-b border-gray-200">
                 <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-[17px] flex-shrink-0">
@@ -47,7 +48,7 @@ const Dashboard = () => {
                         key={tab.id}
                         type="button"
                         onClick={() => handleTabChange(tab.id)}
-                        className={`flex items-center gap-1.5 px-4 py-2.5 text-[13px] font-semibold border-b-2 -mb-px transition-colors duration-150 bg-transparent cursor-pointer ${
+                        className={`flex items-center gap-1.5 px-5 py-2.5 text-[13px] font-semibold border-b-2 -mb-px transition-colors duration-150 bg-transparent cursor-pointer ${
                             activeTab === tab.id
                                 ? "border-blue-600 text-blue-600"
                                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -62,9 +63,9 @@ const Dashboard = () => {
             {/* Tab content */}
             <div>
                 {isTabLoading ? (
-                    <div className="space-y-3">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                         {Array.from({ length: 4 }).map((_, i) => (
-                            <div key={i} className="h-[76px] bg-white rounded-xl border border-gray-200 animate-pulse" />
+                            <SkeletonCard key={i} />
                         ))}
                     </div>
                 ) : (
