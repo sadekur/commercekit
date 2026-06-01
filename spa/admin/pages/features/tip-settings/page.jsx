@@ -95,7 +95,7 @@ const TipSettings = () => {
   };
 
   /* ── early returns ── */
-  if (isLoading) return <SettingSkeleton />;
+  if (isLoading) return <TabPageSkeleton showTabs={false} cardCount={3} rowsPerCard={3} />;
 
   if (!isFeatureEnabled) {
     return (
