@@ -1,194 +1,198 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import CommonHeader from "../../../common/CommonHeader";
-import SkeletonCard from "../../../common/Skeletons/SkeletonCard";
+import Toggle from "../../../common/Toggle";
+
+const BLOCKS = [
+    {
+        name: "accordion",
+        icon: "📂",
+        label: "Accordion",
+        description: "Collapsible content sections with full border, font, and color styling control.",
+        status: "complete",
+    },
+    {
+        name: "category-products-slider",
+        icon: "🎠",
+        label: "Category Products Slider",
+        description: "Sliding product carousel filtered by a WooCommerce category, with autoplay support.",
+        status: "complete",
+    },
+    {
+        name: "generic-faq",
+        icon: "❓",
+        label: "Generic FAQ",
+        description: "FAQ block for pages and posts. Currently displays hardcoded placeholder content only.",
+        status: "soon",
+    },
+    {
+        name: "variant-faq",
+        icon: "🔀",
+        label: "Variant FAQ",
+        description: "Variant-specific FAQ block. Currently displays hardcoded placeholder content only.",
+        status: "soon",
+    },
+];
+
+const STATUS = {
+    complete: { label: "Complete",    cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+    soon:     { label: "Coming Soon", cls: "bg-gray-100  text-gray-500   border-gray-200"   },
+};
+
+// saveState: 'idle' | 'saving' | 'saved' | 'error'
+const initValues = () => Object.fromEntries(BLOCKS.map((b) => [b.name, false]));
 
 const Blocks = () => {
-	const url = `${COMMERCEKIT.apiurl}/block-register-save`;
-	const [isLoading, setIsLoading] = useState(true);
-	const [isSaving, setIsSaving] = useState(false);
-	const [savingMessage, setSavingMessage] = useState("Saving...");
+    const [isLoading, setIsLoading] = useState(true);
+    const [saveState, setSaveState] = useState("idle");
+    const [values,    setValues]    = useState(initValues);
 
-	const [toggles, setToggles] = useState([
-		{
-			id: 1,
-			label: "Accordion",
-			name: "accordion",
-			description: "Collapsible accordion sections with full styling control.",
-			value: false,
-		},
-		{
-			id: 2,
-			label: "Category Products Slider",
-			name: "category-products-slider",
-			description: "Sliding product carousel filtered by WooCommerce category.",
-			value: false,
-		},
-		{
-			id: 3,
-			label: "Generic FAQ",
-			name: "generic-faq",
-			description: "Display a list of frequently asked questions.",
-			value: false,
-		},
-		{
-			id: 4,
-			label: "Variant FAQ",
-			name: "variant-faq",
-			description: "FAQ block with variant-specific question support.",
-			value: false,
-		},
-	]);
+    useEffect(() => {
+        setIsLoading(true);
+        axios
+            .get(`${COMMERCEKIT.apiurl}/get-block-register`)
+            .then((r) => {
+                const data = r.data || {};
+                setValues(Object.fromEntries(BLOCKS.map((b) => [b.name, data[b.name] === "on"])));
+            })
+            .catch((err) => console.error("Error loading blocks:", err))
+            .finally(() => setIsLoading(false));
+    }, []);
 
-	const saveBlocks = (toggles) => {
-		const toggleValues = toggles.reduce((acc, toggle) => {
-			acc[toggle.name] = toggle.value ? "on" : "off";
-			return acc;
-		}, {});
-		setIsSaving(true);
-		setSavingMessage("Saving...");
+    const persist = (nextValues) => {
+        setSaveState("saving");
+        const payload = Object.fromEntries(
+            Object.entries(nextValues).map(([k, v]) => [k, v ? "on" : "off"])
+        );
+        axios
+            .post(
+                `${COMMERCEKIT.apiurl}/block-register-save`,
+                { settings: payload },
+                { headers: { "Content-Type": "application/json", "X-WP-Nonce": COMMERCEKIT.nonce } }
+            )
+            .then(() => {
+                setSaveState("saved");
+                setTimeout(() => setSaveState("idle"), 2000);
+            })
+            .catch((err) => {
+                console.error("Error saving blocks:", err);
+                setSaveState("error");
+                setTimeout(() => setSaveState("idle"), 2500);
+            });
+    };
 
-		axios
-			.post(
-				url,
-				{ settings: toggleValues },
-				{
-					headers: {
-						"Content-Type": "application/json",
-						"X-WP-Nonce": COMMERCEKIT.nonce,
-					},
-				}
-			)
-			.then(() => {
-				setSavingMessage("Settings Saved!");
-				setTimeout(() => {
-					setIsSaving(false);
-				}, 1500);
-			})
-			.catch((error) => {
-				console.error("Error saving settings:", error);
-				setSavingMessage("Error saving settings");
-				setTimeout(() => {
-					setIsSaving(false);
-				}, 1500);
-			});
-	};
+    const handleToggle = (name) => {
+        setValues((prev) => {
+            const next = { ...prev, [name]: !prev[name] };
+            persist(next);
+            return next;
+        });
+    };
 
-	const handleToggleChange = (id) => {
-		setToggles((prevToggles) => {
-			const updatedToggles = prevToggles.map((toggle) =>
-				toggle.id === id ? { ...toggle, value: !toggle.value } : toggle
-			);
-			saveBlocks(updatedToggles);
-			return updatedToggles;
-		});
-	};
+    const setAll = (val) => {
+        const next = Object.fromEntries(BLOCKS.map((b) => [b.name, val]));
+        setValues(next);
+        persist(next);
+    };
 
-	const handleDisableAll = () => {
-		setToggles((prevToggles) => {
-			const updatedToggles = prevToggles.map((toggle) => ({
-				...toggle,
-				value: false,
-			}));
-			saveBlocks(updatedToggles);
-			return updatedToggles;
-		});
-	};
+    if (isLoading) {
+        return (
+            <div className="space-y-3">
+                {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="h-[76px] bg-white rounded-xl border border-gray-200 animate-pulse" />
+                ))}
+            </div>
+        );
+    }
 
-	const handleEnableAll = () => {
-		setToggles((prevToggles) => {
-			const updatedToggles = prevToggles.map((toggle) => ({
-				...toggle,
-				value: true,
-			}));
-			saveBlocks(updatedToggles);
-			return updatedToggles;
-		});
-	};
+    return (
+        <div>
+            {/* Section header */}
+            <div className="flex items-center justify-between mb-4">
+                <div>
+                    <h2 className="m-0 text-[15px] font-bold text-gray-900">Manage Blocks</h2>
+                    <p className="m-0 mt-0.5 text-[12px] text-gray-500">
+                        Enabled blocks appear in the Gutenberg block inserter
+                    </p>
+                </div>
+                <div className="flex items-center gap-2">
+                    {/* Auto-save indicator */}
+                    {saveState !== "idle" && (
+                        <span
+                            className={`text-[12px] font-semibold px-3 py-1.5 rounded-lg border ${
+                                saveState === "saving"
+                                    ? "text-blue-600 bg-blue-50 border-blue-200"
+                                    : saveState === "saved"
+                                    ? "text-emerald-700 bg-emerald-50 border-emerald-200"
+                                    : "text-red-600 bg-red-50 border-red-200"
+                            }`}
+                        >
+                            {saveState === "saving" && "Saving…"}
+                            {saveState === "saved"  && "✓ Saved"}
+                            {saveState === "error"  && "✕ Error"}
+                        </span>
+                    )}
+                    <button
+                        type="button"
+                        onClick={() => setAll(false)}
+                        className="px-3 py-1.5 text-[12px] font-semibold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                        Disable All
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setAll(true)}
+                        className="px-3 py-1.5 text-[12px] font-semibold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                        Enable All
+                    </button>
+                </div>
+            </div>
 
-	useEffect(() => {
-		setIsLoading(true);
-		axios
-			.get(`${COMMERCEKIT.apiurl}/get-block-register`)
-			.then((response) => {
-				const data = response.data || {};
-				setToggles((prevToggles) =>
-					prevToggles.map((toggle) => ({
-						...toggle,
-						value: data[toggle.name] === "on",
-					}))
-				);
-			})
-			.catch((error) => {
-				console.log("error: ", error);
-			})
-			.finally(() => {
-				setIsLoading(false);
-			});
-	}, []);
+            {/* Block list */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                {BLOCKS.map((block, idx) => {
+                    const badge  = STATUS[block.status];
+                    const isLast = idx === BLOCKS.length - 1;
+                    return (
+                        <div
+                            key={block.name}
+                            className={`flex items-center gap-4 px-5 py-4 ${
+                                !isLast ? "border-b border-gray-100" : ""
+                            }`}
+                        >
+                            {/* Icon */}
+                            <span className="text-2xl w-8 text-center flex-shrink-0">{block.icon}</span>
 
-	return (
-		<div className='relative'>
-			{isSaving && (
-				<div className='commerce-kit-modal-save inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center'>
-					<div className='text-white font-semibold text-lg'>
-						{savingMessage}
-					</div>
-				</div>
-			)}
+                            {/* Info */}
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="text-[14px] font-semibold text-gray-900">
+                                        {block.label}
+                                    </span>
+                                    <span
+                                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border ${badge.cls}`}
+                                    >
+                                        {badge.label}
+                                    </span>
+                                </div>
+                                <p className="m-0 mt-0.5 text-[12px] text-gray-500 leading-relaxed">
+                                    {block.description}
+                                </p>
+                            </div>
 
-			<CommonHeader
-				title='Manage Blocks'
-				onDisableAll={handleDisableAll}
-				onEnableAll={handleEnableAll}
-			/>
-
-			{isLoading ? (
-				<div className="mt-4 grid grid-cols-4 md:grid-cols-4 sm:grid-cols-1 gap-6">
-					{Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
-				</div>
-			) : (
-				<div className='mt-4 grid grid-cols-4 md:grid-cols-4 sm:grid-cols-1 gap-6'>
-					{toggles.map((toggle) => (
-						<div
-							key={toggle.id}
-							className='p-4 bg-white shadow-md rounded-lg border border-gray-200 relative'>
-							<div className='flex flex-col h-full'>
-								<div className='mb-auto'>
-									<h3 className='text-lg font-semibold'>
-										{toggle.label}
-									</h3>
-									<p className='text-sm text-gray-600'>
-										{toggle.description}
-									</p>
-								</div>
-								<div className='mt-auto flex justify-end'>
-									<label className='relative inline-block w-12'>
-										<input
-											type='checkbox'
-											id={`toggle-${toggle.id}`}
-											name={toggle.name}
-											className='opacity-0 w-0 h-0'
-											checked={toggle.value}
-											onChange={() => handleToggleChange(toggle.id)}
-										/>
-										<span
-											className={`slider block rounded-full w-[50px] h-[22px] cursor-pointer transition-all duration-100 ${
-												toggle.value ? "bg-[#0029af]" : "bg-[#867c7c]"
-											}`}></span>
-										<span
-											className={`dot absolute left-2 top-6 w-3 h-3 bg-white rounded-full transition-transform duration-100 transform ${
-												toggle.value ? "translate-x-6" : ""
-											}`}></span>
-									</label>
-								</div>
-							</div>
-						</div>
-					))}
-				</div>
-			)}
-		</div>
-	);
+                            {/* Toggle */}
+                            <div className="flex-shrink-0">
+                                <Toggle
+                                    checked={values[block.name]}
+                                    onChange={() => handleToggle(block.name)}
+                                />
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
 };
 
 export default Blocks;
