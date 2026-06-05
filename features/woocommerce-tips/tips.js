@@ -37,8 +37,6 @@
         if (isCheckout) {
             $(document.body).trigger('update_checkout');
         } else {
-            // Classic cart: wc_fragment_refresh updates .ck-tips-wrapper and
-            // .cart_totals (both registered via woocommerce_add_to_cart_fragments).
             $(document.body).trigger('wc_fragment_refresh');
         }
     }
