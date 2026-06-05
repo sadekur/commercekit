@@ -41,7 +41,6 @@ const STATUS = {
 
 const initValues = () => Object.fromEntries(BLOCKS.map((b) => [b.name, false]));
 
-// saveState: 'idle' | 'saving' | 'saved' | 'error'
 const Blocks = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [saveState, setSaveState] = useState("idle");
