@@ -20,7 +20,7 @@
     }
 
     function removeTip() {
-        $.post(CK_TIPS.ajaxurl, {
+        $.post(COMMERCEKIT.ajaxurl, {
             action: 'ck_remove_tip',
             nonce:  CK_TIPS.nonce,
         }).done(function (res) {
