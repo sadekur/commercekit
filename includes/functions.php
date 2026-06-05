@@ -130,6 +130,7 @@ if ( ! function_exists( 'commercekit_is_product_in_cart' ) ) :
     }
 endif;
 
+// Helper function to get tip settings with defaults
 if ( ! function_exists( 'commercekit_get_load_tip_settings' ) ) :
     function commercekit_get_load_tip_settings(): array {
         $defaults = [
