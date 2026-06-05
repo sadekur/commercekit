@@ -2,8 +2,9 @@
     'use strict';
 
     var isCheckout = $('body').hasClass('woocommerce-checkout');
-    // COMMERCEKIT.is_blocks is set by PHP: true when cart/checkout page uses WC Blocks.
-    var isBlocks   = (typeof COMMERCEKIT !== 'undefined' && COMMERCEKIT.is_blocks);
+    var isBlocks   = !!(typeof COMMERCEKIT !== 'undefined' && COMMERCEKIT.is_blocks);
+
+    // ── AJAX helpers ─────────────────────────────────────────────────────────
 
     function setTip(data) {
         $.post(COMMERCEKIT.ajaxurl, {
@@ -13,7 +14,10 @@
             rate:   data.rate   || 0,
             amount: data.amount || 0,
         }).done(function (res) {
-            if (res.success) { refreshTotals(); }
+            if (res.success && res.data && res.data.tip) {
+                updateActiveState(res.data.tip);
+                refreshTotals();
+            }
         });
     }
 
@@ -22,16 +26,60 @@
             action: 'ck_remove_tip',
             nonce:  COMMERCEKIT.tips_nonce,
         }).done(function (res) {
-            if (res.success) { refreshTotals(); }
+            if (res.success) {
+                clearActiveState();
+                refreshTotals();
+            }
         });
     }
 
-    function refreshTotals() {
-        if (isBlocks) {
-            window.location.reload();
-            return;
+    // ── UI state (used on Blocks pages and as an immediate visual for classic) ─
+
+    function updateActiveState(tip) {
+        var $wrapper = $('.ck-tips-wrapper');
+
+        $wrapper.find('.ck-tip-btn').removeClass('ck-tip-active');
+
+        if (tip.type === 'custom') {
+            var symbol = (COMMERCEKIT.currency_symbol || '');
+            $wrapper.find('.ck-tip-custom-trigger')
+                .addClass('ck-tip-active')
+                .text('Custom Tip (' + symbol + parseFloat(tip.amount).toFixed(2) + ')');
+        } else if (tip.type === 'cash') {
+            $wrapper.find('.ck-tip-btn[data-type="cash"]').addClass('ck-tip-active');
+        } else {
+            $wrapper.find(
+                '.ck-tip-btn[data-rate="' + tip.rate + '"][data-type="' + tip.type + '"]'
+            ).addClass('ck-tip-active');
         }
 
+        // Ensure Remove Tip button is visible
+        var $remove = $wrapper.find('.ck-remove-tip');
+        if ($remove.length) {
+            $remove.show();
+        } else {
+            $wrapper.append(
+                '<button type="button" class="ck-remove-tip">Remove Tip</button>'
+            );
+        }
+    }
+
+    function clearActiveState() {
+        $('.ck-tip-btn').removeClass('ck-tip-active');
+        // Reset custom button label
+        $('.ck-tip-custom-trigger').text('Custom Tip');
+        $('.ck-remove-tip').hide();
+    }
+
+    // ── Totals refresh ───────────────────────────────────────────────────────
+
+    function refreshTotals() {
+        if (isBlocks) {
+            refreshBlocksTotals();
+            return;
+        }
+        // Classic cart: fragment refresh re-renders .ck-tips-wrapper + .cart_totals
+        // Classic checkout: update_checkout re-renders the order review section
         if (isCheckout) {
             $(document.body).trigger('update_checkout');
         } else {
@@ -39,7 +87,25 @@
         }
     }
 
-    // ── Event handlers (delegated so they survive fragment/reload DOM changes) ─
+    function refreshBlocksTotals() {
+        // WC Blocks manages cart state via @wordpress/data ('wc/store/cart' store).
+        // Invalidating the cart data resolution causes WC Blocks to re-fetch from
+        // /wc/store/v1/cart, which runs calculate_totals() server-side — our fee
+        // appears in the totals without any page reload.
+        if (window.wp && window.wp.data) {
+            try {
+                window.wp.data
+                    .dispatch('wc/store/cart')
+                    .invalidateResolutionForStoreSelector('getCartData');
+                return;
+            } catch (e) {
+                // wp.data or the method not available — fall through to reload
+            }
+        }
+        window.location.reload();
+    }
+
+    // ── Event handlers (delegated — survive fragment/DOM updates) ────────────
 
     $(document).on('click', '.ck-tip-btn:not(.ck-tip-custom-trigger)', function () {
         setTip({
