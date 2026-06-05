@@ -57,7 +57,7 @@ const initValues = () => Object.fromEntries(FEATURES.map((f) => [f.name, false])
 const Features = () => {
     const [isLoading,  setIsLoading]  = useState(true);
     const [isSaving,   setIsSaving]   = useState(false);
-    const [saveStatus, setSaveStatus] = useState(null); // 'success' | 'error' | null
+    const [saveStatus, setSaveStatus] = useState(null);
     const [values,     setValues]     = useState(initValues);
 
     useEffect(() => {
