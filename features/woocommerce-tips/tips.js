@@ -35,7 +35,6 @@
         }
 
         if (isCheckout) {
-            // Classic checkout: re-render the order review section.
             $(document.body).trigger('update_checkout');
         } else {
             // Classic cart: wc_fragment_refresh updates .ck-tips-wrapper and
