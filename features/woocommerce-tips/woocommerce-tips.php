@@ -41,34 +41,6 @@ class WoocommerceTips {
         $this->action( 'wp_ajax_nopriv_ck_set_tip',    [ $this, 'ajax_set_tip'    ] );
         $this->action( 'wp_ajax_ck_remove_tip',        [ $this, 'ajax_remove_tip' ] );
         $this->action( 'wp_ajax_nopriv_ck_remove_tip', [ $this, 'ajax_remove_tip' ] );
-
-        $this->action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
-    }
-
-    public function enqueue_assets(): void {
-        if ( ! is_cart() && ! is_checkout() ) {
-            return;
-        }
-
-        wp_enqueue_style(
-            'ck-tips-style',
-            COMMERCE_KIT_URL . 'features/woocommerce-tips/tips.css',
-            [],
-            filemtime( COMMERCE_KIT_PATH . 'features/woocommerce-tips/tips.css' )
-        );
-
-        wp_enqueue_script(
-            'ck-tips-script',
-            COMMERCE_KIT_URL . 'features/woocommerce-tips/tips.js',
-            [ 'jquery' ],
-            filemtime( COMMERCE_KIT_PATH . 'features/woocommerce-tips/tips.js' ),
-            true
-        );
-
-        wp_localize_script( 'ck-tips-script', 'CK_TIPS', [
-            'ajaxurl'   => admin_url( 'admin-ajax.php' ),
-            'nonce'     => wp_create_nonce( 'ck_tips_nonce' ),
-        ] );
     }
 
     public function render_tip_form(): void {
