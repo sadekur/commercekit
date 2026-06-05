@@ -58,8 +58,8 @@ class Assets {
         );
 
         $ck_data = [
-            'ajaxurl'  => admin_url( 'admin-ajax.php' ),
-            'adminurl' => admin_url(),
+            'ajaxurl'    => admin_url( 'admin-ajax.php' ),
+            'adminurl'   => admin_url(),
             'resturl'    => untrailingslashit( rest_url( 'commerce-kit/v1' ) ),
             'nonce'      => wp_create_nonce( 'commerce-kit' ),
             'error'      => __( 'Something went wrong', 'commerce-kit' ),
