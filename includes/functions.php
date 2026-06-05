@@ -151,7 +151,10 @@ if ( ! function_exists( 'commercekit_get_load_tip_settings' ) ) :
     }
 endif;
 
-private function is_blocks_page(): bool {
+/**
+ * Check if current page is cart or checkout and uses WC Blocks.
+ */
+function is_blocks_page(): bool {
         $page_id = 0;
         if ( is_cart() ) {
             $page_id = wc_get_page_id( 'cart' );
