@@ -24,8 +24,8 @@ const FEATURES = [
         name: "woocommerce-tips",
         icon: "💡",
         label: "WooCommerce Tips",
-        description: "Displays a configurable tip or donation input on the cart and checkout pages. The UI renders correctly — tip amounts are not yet added to order totals.",
-        status: "partial",
+        description: "Adds a tip form to the cart and checkout pages. Customers choose a preset rate, enter a custom amount, or select cash. Tip is added as a fee to the order total.",
+        status: "complete",
         configHash: "/commerce-kit-tip-settings",
     },
     {
