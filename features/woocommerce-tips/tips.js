@@ -10,7 +10,7 @@
     function setTip(data) {
         $.post(COMMERCEKIT.ajaxurl, {
             action: 'ck_set_tip',
-            nonce:  CK_TIPS.nonce,
+            nonce:  COMMERCEKIT.nonce,
             type:   data.type,
             rate:   data.rate   || 0,
             amount: data.amount || 0,
