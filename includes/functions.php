@@ -131,12 +131,19 @@ if ( ! function_exists( 'commercekit_is_product_in_cart' ) ) :
 endif;
 
 if ( ! function_exists( 'commercekit_get_load_tip_settings' ) ) :
-    function commercekit_get_load_settings() {
+    function load_settings(): array {
         $defaults = [
-            'load_css' => 'yes',
-            'load_js' => 'yes'
+            'tcwt_cart'     => 'off',
+            'tcwt_checkout' => 'off',
+            'tcwt_taxable'  => 'off',
+            'tcwt_title'    => 'Send us a tip',
+            'tcwt_type'     => 'percent',
+            'tcwt_rates'    => '5,10,15,20,25,30',
+            'tcwt_custom'   => 'yes',
+            'tcwt_cash'     => 'yes',
+            'tcwt_clear'    => 'yes',
         ];
-        $saved = get_option( 'commerce_kit_load_settings', [] );
-        return array_merge( $defaults, $saved );
+        $saved = get_option( 'commercekit-tips-settings', [] );
+        return array_merge( $defaults, is_array( $saved ) ? $saved : [] );
     }
 endif;
