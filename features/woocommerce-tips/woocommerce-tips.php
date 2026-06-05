@@ -12,9 +12,11 @@ class WoocommerceTips {
         $this->settings = commercekit_get_load_tip_settings();
 
         if ( $this->settings['tcwt_cart'] === 'on' ) {
-            // Classic cart template hook
+            // Classic cart template hook (fires when theme uses woocommerce/cart.php shortcode)
             $this->action( 'woocommerce_after_cart_table', [ $this, 'render_tip_form' ] );
-            // WooCommerce Blocks cart — injects between cart items and cart totals
+
+            // WooCommerce Blocks cart: filter fires on block render, we prepend before the block
+            // so the form sits outside React's root and won't be wiped during hydration.
             $this->filter( 'render_block_woocommerce/cart', [ $this, 'inject_for_blocks_cart' ] );
 
             $this->filter( 'woocommerce_add_to_cart_fragments', [ $this, 'cart_fragments' ] );
@@ -23,7 +25,8 @@ class WoocommerceTips {
         if ( $this->settings['tcwt_checkout'] === 'on' ) {
             // Classic checkout template hook
             $this->action( 'woocommerce_review_order_before_payment', [ $this, 'render_tip_form' ] );
-            // WooCommerce Blocks checkout — injects before the payment block
+
+            // WooCommerce Blocks checkout: inject before the checkout block
             $this->filter( 'render_block_woocommerce/checkout', [ $this, 'inject_for_blocks_checkout' ] );
         }
 
@@ -40,10 +43,6 @@ class WoocommerceTips {
         $this->action( 'wp_ajax_nopriv_ck_remove_tip', [ $this, 'ajax_remove_tip' ] );
 
         $this->action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
-    }
-
-    private function load_settings(): array {
-        return commercekit_get_load_tip_settings();
     }
 
     public function enqueue_assets(): void {
@@ -73,10 +72,6 @@ class WoocommerceTips {
         ] );
     }
 
-    /**
-     * Detect whether the current cart/checkout page uses WooCommerce Blocks.
-     * Checked at enqueue time, which is safe since the page ID is known.
-     */
     private function is_blocks_page(): bool {
         $page_id = 0;
         if ( is_cart() ) {
@@ -84,11 +79,9 @@ class WoocommerceTips {
         } elseif ( is_checkout() ) {
             $page_id = wc_get_page_id( 'checkout' );
         }
-
         if ( ! $page_id ) {
             return false;
         }
-
         $post = get_post( $page_id );
         return $post && (
             has_block( 'woocommerce/cart',     $post ) ||
@@ -179,46 +172,44 @@ class WoocommerceTips {
     }
 
     /**
-     * Inject the tip form into the WooCommerce Blocks cart between the
-     * cart items block and the cart totals block.
+     * WC Blocks cart: prepend tip form BEFORE the block's outer <div>.
+     * Placing it before the React root means React hydration cannot wipe it.
+     * The form appears above the cart items on Blocks pages.
+     *
+     * On classic cart pages this filter never fires (no woocommerce/cart block).
      */
     public function inject_for_blocks_cart( string $content ): string {
         ob_start();
         $this->render_tip_form();
-        $form = ob_get_clean();
-
-        // Insert before the cart totals inner block
-        $marker = 'class="wp-block-woocommerce-cart-totals-block"';
-        if ( strpos( $content, $marker ) !== false ) {
-            return str_replace( '<div ' . $marker, $form . '<div ' . $marker, $content );
-        }
-
-        // Fallback: append after the whole cart block
-        return $content . $form;
+        return ob_get_clean() . $content;
     }
 
     /**
-     * Inject the tip form into the WooCommerce Blocks checkout before the
-     * payment method block.
+     * WC Blocks checkout: try to insert the form before the payment block so it
+     * appears above the payment section. Falls back to prepending before the whole block.
+     *
+     * On classic checkout pages this filter never fires.
      */
     public function inject_for_blocks_checkout( string $content ): string {
         ob_start();
         $this->render_tip_form();
         $form = ob_get_clean();
 
-        // Insert before the payment inner block
-        $marker = 'class="wp-block-woocommerce-checkout-payment-block"';
+        // Insert directly before the payment inner block using its data attribute,
+        // which is stable across WC Blocks versions.
+        $marker = 'data-block-name="woocommerce/checkout-payment-block"';
         if ( strpos( $content, $marker ) !== false ) {
             return str_replace( '<div ' . $marker, $form . '<div ' . $marker, $content );
         }
 
-        // Fallback: append after the whole checkout block
-        return $content . $form;
+        // Fallback: prepend before the entire checkout block
+        return $form . $content;
     }
 
     /**
-     * Registers tip form and cart totals as WC fragments (classic cart only).
-     * WC Blocks uses its own Store API — fragments are not applicable there.
+     * Classic cart: register tip form and totals as WC fragments so selecting a
+     * tip updates the page without a reload.
+     * Not used on Blocks pages (Blocks uses its own Store API for cart state).
      */
     public function cart_fragments( array $fragments ): array {
         ob_start();
@@ -247,7 +238,7 @@ class WoocommerceTips {
             return;
         }
 
-        // Recalculate percent tips live so they stay accurate if cart items change.
+        // Recalculate percent tips live so they stay accurate when cart items change.
         if ( $tip['type'] === 'percent' && isset( $tip['rate'] ) ) {
             $amount = round( ( $cart->get_subtotal() * (float) $tip['rate'] ) / 100, wc_get_price_decimals() );
         } else {
