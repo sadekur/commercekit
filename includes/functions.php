@@ -129,3 +129,4 @@ if ( ! function_exists( 'commercekit_is_product_in_cart' ) ) :
         return false;
     }
 endif;
+
