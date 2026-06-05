@@ -154,8 +154,8 @@ endif;
 /**
  * Check if current page is cart or checkout and uses WC Blocks.
  */
-if ( ! function_exists( 'is_blocks_page' ) ) :
-function is_blocks_page(): bool {
+if ( ! function_exists( 'commercekit_is_blocks_page' ) ) :
+    function commercekit_is_blocks_page(): bool {
         $page_id = 0;
         if ( is_cart() ) {
             $page_id = wc_get_page_id( 'cart' );
@@ -171,3 +171,4 @@ function is_blocks_page(): bool {
             has_block( 'woocommerce/checkout', $post )
         );
     }
+endif;
