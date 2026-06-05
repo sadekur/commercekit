@@ -131,7 +131,7 @@ if ( ! function_exists( 'commercekit_is_product_in_cart' ) ) :
 endif;
 
 if ( ! function_exists( 'commercekit_get_load_tip_settings' ) ) :
-    function load_settings(): array {
+    function commercekit_get_load_tip_settings(): array {
         $defaults = [
             'tcwt_cart'     => 'off',
             'tcwt_checkout' => 'off',
