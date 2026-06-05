@@ -9,7 +9,7 @@ class WoocommerceTips {
     private array $settings;
 
     public function __construct() {
-        $this->settings = $this->load_settings();
+        $this->settings = commercekit_get_load_tip_settings();
 
         if ( $this->settings['tcwt_cart'] === 'on' ) {
             $this->action( 'woocommerce_after_cart_table',      [ $this, 'render_tip_form' ] );
