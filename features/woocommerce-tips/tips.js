@@ -30,9 +30,6 @@
 
     function refreshTotals() {
         if (isBlocks) {
-            // WC Blocks manages cart state via its own Store API.
-            // A full reload is required to re-render the PHP-injected tip form
-            // and for the Blocks totals to pick up the updated session fee.
             window.location.reload();
             return;
         }
