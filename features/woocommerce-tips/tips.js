@@ -5,8 +5,6 @@
     // CK_TIPS.is_blocks is set by PHP: true when cart/checkout page uses WC Blocks.
     var isBlocks   = (typeof CK_TIPS !== 'undefined' && CK_TIPS.is_blocks);
 
-    // ── AJAX helpers ─────────────────────────────────────────────────────────
-
     function setTip(data) {
         $.post(COMMERCEKIT.ajaxurl, {
             action: 'ck_set_tip',
