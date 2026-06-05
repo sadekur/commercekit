@@ -73,7 +73,7 @@ PSR-4 via Composer:
 | `commerce_kit_settings` | Feature enable/disable toggles (`'on'`/`'off'`) |
 | `commerce_kit_block_settings` | Block enable/disable toggles |
 | `commerce_kit_stock_threshold` | Stock threshold config (merged with defaults from `commercekit_get_stock_settings()`) |
-| `commercekit-tips-settings` | WooCommerce tips UI settings; stores flat array with `tcwt_*` keys (e.g. `tcwt_cart`, `tcwt_checkout`, `tcwt_btncolor`, `tcwt_btntext`, `tcwt_textcolor`, `tcwt_note`) |
+| `commercekit-tips-settings` | WooCommerce tips settings; flat array with `tcwt_*` keys: `tcwt_cart`, `tcwt_checkout`, `tcwt_taxable`, `tcwt_title`, `tcwt_type` (`percent`/`fixed`), `tcwt_rates` (comma-separated), `tcwt_custom`, `tcwt_cash`, `tcwt_clear` (all `on`/`off` or `yes`/`no`) |
 | `commerce_kit_buy_button_settings` | Buy button config (merged with defaults from `commercekit_get_buy_button_settings()`) |
 
 ### Features System
@@ -88,7 +88,7 @@ Current features and implementation status:
 |---|---|---|
 | `stock-threshold-for-wc` | `stock-threshold-for-wc` | Complete |
 | `buy-button-for-woocommerce` | `buy-button-for-woocommerce` | Complete |
-| `woocommerce-tips` | `woocommerce-tips` | UI only — tip amounts not added to order totals |
+| `woocommerce-tips` | `woocommerce-tips` | Complete |
 | `woocommerce-faq` | `woocommerce-faq` | PHP file does not exist yet |
 | `woocommerce-product_barcode` | `woocommerce-product-barcode` | PHP file does not exist yet |
 
@@ -196,3 +196,21 @@ if ( ! is_cart() && ! is_checkout() && ! $is_store_api ) {
 - `$original_cart_prices` — raw DB prices captured once (using `get_price('edit')` to bypass the filter); never reset between recalculation calls so the threshold is always applied to the true base price
 
 Any new price-adjustment code in this class must follow the same pattern to avoid compound adjustments when WooCommerce calls `calculate_totals()` multiple times per request.
+
+### WooCommerce Tips — Architecture
+
+The tips feature adds preset-rate and custom-amount buttons to the cart and checkout pages. Key design decisions:
+
+**Session storage:** The active tip is stored in `WC()->session->set('ck_tip', [...])` as an array with keys `type`, `rate`, `amount`, `label`. All methods read from and write to this session key.
+
+**Fee approach:** `woocommerce_cart_calculate_fees` reads the session and calls `$cart->add_fee($label, $amount, $taxable)`. WooCommerce automatically carries fee lines to the order, thank-you page, and admin order view — no custom order display code needed. Percent tips are **recalculated live** in `add_tip_fee()` (not just stored) so they stay accurate if cart items change after selection.
+
+**Fragment updates (cart page):** `woocommerce_add_to_cart_fragments` registers both `.ck-tips-wrapper` (the tip form HTML) and `.cart_totals` as WC fragments. After AJAX tip selection, `wc_fragment_refresh` is triggered in JS and WC replaces both elements — no page reload needed.
+
+**Checkout update:** On checkout, `$(document.body).trigger('update_checkout')` re-renders the full order review via WC's own AJAX, which fires `render_tip_form()` again via `woocommerce_review_order_before_payment`.
+
+**Standalone JS/CSS:** `features/woocommerce-tips/tips.js` and `tips.css` are not webpack-compiled. They are enqueued directly by `enqueue_assets()` on cart/checkout pages only. All event handlers in `tips.js` are delegated so they survive fragment DOM replacement.
+
+**AJAX actions:** `ck_set_tip` and `ck_remove_tip` (both public + logged-in), nonce `ck_tips_nonce`.
+
+**Known bug in current file:** `woocommerce-tips.php` line 12 calls `commercekit_get_load_tip_settings()` which does not exist — the private `load_settings()` method was accidentally removed during editing. This causes a PHP fatal error that prevents all hooks from registering. Fix: replace the call with `$this->load_settings()` and restore the method body (reads `commercekit-tips-settings` option, merges with defaults array).

@@ -12,16 +12,23 @@ class WoocommerceTips {
         $this->settings = commercekit_get_load_tip_settings();
 
         if ( $this->settings['tcwt_cart'] === 'on' ) {
-            $this->action( 'woocommerce_after_cart_table',      [ $this, 'render_tip_form' ] );
-            $this->filter( 'woocommerce_add_to_cart_fragments', [ $this, 'cart_fragments'  ] );
+            // Classic cart template hook
+            $this->action( 'woocommerce_after_cart_table', [ $this, 'render_tip_form' ] );
+            // WooCommerce Blocks cart — injects between cart items and cart totals
+            $this->filter( 'render_block_woocommerce/cart', [ $this, 'inject_for_blocks_cart' ] );
+
+            $this->filter( 'woocommerce_add_to_cart_fragments', [ $this, 'cart_fragments' ] );
         }
 
         if ( $this->settings['tcwt_checkout'] === 'on' ) {
+            // Classic checkout template hook
             $this->action( 'woocommerce_review_order_before_payment', [ $this, 'render_tip_form' ] );
+            // WooCommerce Blocks checkout — injects before the payment block
+            $this->filter( 'render_block_woocommerce/checkout', [ $this, 'inject_for_blocks_checkout' ] );
         }
 
-        $this->action( 'woocommerce_cart_calculate_fees',   [ $this, 'add_tip_fee'       ] );
-        $this->action( 'woocommerce_checkout_order_created',[ $this, 'save_tip_to_order' ] );
+        $this->action( 'woocommerce_cart_calculate_fees',    [ $this, 'add_tip_fee'       ] );
+        $this->action( 'woocommerce_checkout_order_created', [ $this, 'save_tip_to_order' ] );
 
         if ( $this->settings['tcwt_clear'] === 'yes' ) {
             $this->action( 'woocommerce_thankyou', [ $this, 'clear_tip' ] );
@@ -33,6 +40,10 @@ class WoocommerceTips {
         $this->action( 'wp_ajax_nopriv_ck_remove_tip', [ $this, 'ajax_remove_tip' ] );
 
         $this->action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+    }
+
+    private function load_settings(): array {
+        return commercekit_get_load_tip_settings();
     }
 
     public function enqueue_assets(): void {
@@ -56,9 +67,33 @@ class WoocommerceTips {
         );
 
         wp_localize_script( 'ck-tips-script', 'CK_TIPS', [
-            'ajaxurl' => admin_url( 'admin-ajax.php' ),
-            'nonce'   => wp_create_nonce( 'ck_tips_nonce' ),
+            'ajaxurl'   => admin_url( 'admin-ajax.php' ),
+            'nonce'     => wp_create_nonce( 'ck_tips_nonce' ),
+            'is_blocks' => $this->is_blocks_page(),
         ] );
+    }
+
+    /**
+     * Detect whether the current cart/checkout page uses WooCommerce Blocks.
+     * Checked at enqueue time, which is safe since the page ID is known.
+     */
+    private function is_blocks_page(): bool {
+        $page_id = 0;
+        if ( is_cart() ) {
+            $page_id = wc_get_page_id( 'cart' );
+        } elseif ( is_checkout() ) {
+            $page_id = wc_get_page_id( 'checkout' );
+        }
+
+        if ( ! $page_id ) {
+            return false;
+        }
+
+        $post = get_post( $page_id );
+        return $post && (
+            has_block( 'woocommerce/cart',     $post ) ||
+            has_block( 'woocommerce/checkout', $post )
+        );
     }
 
     public function render_tip_form(): void {
@@ -144,8 +179,46 @@ class WoocommerceTips {
     }
 
     /**
-     * Registers the tip form and cart totals as WC fragments so they update
-     * without a page reload when the user selects or removes a tip.
+     * Inject the tip form into the WooCommerce Blocks cart between the
+     * cart items block and the cart totals block.
+     */
+    public function inject_for_blocks_cart( string $content ): string {
+        ob_start();
+        $this->render_tip_form();
+        $form = ob_get_clean();
+
+        // Insert before the cart totals inner block
+        $marker = 'class="wp-block-woocommerce-cart-totals-block"';
+        if ( strpos( $content, $marker ) !== false ) {
+            return str_replace( '<div ' . $marker, $form . '<div ' . $marker, $content );
+        }
+
+        // Fallback: append after the whole cart block
+        return $content . $form;
+    }
+
+    /**
+     * Inject the tip form into the WooCommerce Blocks checkout before the
+     * payment method block.
+     */
+    public function inject_for_blocks_checkout( string $content ): string {
+        ob_start();
+        $this->render_tip_form();
+        $form = ob_get_clean();
+
+        // Insert before the payment inner block
+        $marker = 'class="wp-block-woocommerce-checkout-payment-block"';
+        if ( strpos( $content, $marker ) !== false ) {
+            return str_replace( '<div ' . $marker, $form . '<div ' . $marker, $content );
+        }
+
+        // Fallback: append after the whole checkout block
+        return $content . $form;
+    }
+
+    /**
+     * Registers tip form and cart totals as WC fragments (classic cart only).
+     * WC Blocks uses its own Store API — fragments are not applicable there.
      */
     public function cart_fragments( array $fragments ): array {
         ob_start();
@@ -170,7 +243,6 @@ class WoocommerceTips {
             return;
         }
 
-        // Cash tip has no monetary value — just intent.
         if ( $tip['type'] === 'cash' ) {
             return;
         }
@@ -267,10 +339,6 @@ class WoocommerceTips {
         wp_send_json_success();
     }
 
-    /**
-     * Persists the raw tip data to the order so it can be referenced later.
-     * The actual fee line is saved automatically by WooCommerce via add_fee().
-     */
     public function save_tip_to_order( \WC_Order $order ): void {
         $tip = WC()->session ? WC()->session->get( 'ck_tip', [] ) : [];
         if ( ! empty( $tip ) ) {
