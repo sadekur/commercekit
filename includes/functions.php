@@ -130,3 +130,12 @@ if ( ! function_exists( 'commercekit_is_product_in_cart' ) ) :
     }
 endif;
 
+if ( ! function_exists( 'commercekit_get_product_stock_status' ) ) :
+    function commercekit_get_product_stock_status( $product_id ) {
+        $product = wc_get_product( $product_id );
+        if ( ! $product ) {
+            return 'unknown';
+        }
+        return $product->get_stock_status();
+    }
+endif;
