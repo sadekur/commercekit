@@ -80,28 +80,33 @@ const Features = () => {
     const setAll = (val) =>
         setValues(Object.fromEntries(FEATURES.map((f) => [f.name, val])));
 
-    const handleSave = (e) => {
-        e.preventDefault();
-        setIsSaving(true);
-        setSaveStatus(null);
-
+    const persistSettings = (currentValues) => {
         const payload = Object.fromEntries(
-            Object.entries(values).map(([k, v]) => [k, v ? "on" : "off"])
+            Object.entries(currentValues).map(([k, v]) => [k, v ? "on" : "off"])
         );
-
-        axios
+        return axios
             .post(
                 `${COMMERCEKIT.apiurl}/post-settings`,
                 { settings: payload },
                 { headers: { "Content-Type": "application/json", "X-WP-Nonce": COMMERCEKIT.nonce } }
             )
             .then(() => {
-                setSaveStatus("success");
                 if (!window.COMMERCEKIT.settings_data) window.COMMERCEKIT.settings_data = {};
                 Object.assign(window.COMMERCEKIT.settings_data, payload);
                 window.dispatchEvent(
                     new CustomEvent("commerceKitSettingsUpdated", { detail: payload })
                 );
+                return payload;
+            });
+    };
+
+    const handleSave = (e) => {
+        e.preventDefault();
+        setIsSaving(true);
+        setSaveStatus(null);
+        persistSettings(values)
+            .then(() => {
+                setSaveStatus("success");
                 setTimeout(() => setSaveStatus(null), 3000);
             })
             .catch((err) => {
@@ -110,6 +115,19 @@ const Features = () => {
                 setTimeout(() => setSaveStatus(null), 3000);
             })
             .finally(() => setIsSaving(false));
+    };
+
+    const handleConfigure = (configHash) => {
+        setIsSaving(true);
+        setSaveStatus(null);
+        persistSettings(values)
+            .then(() => { window.location.hash = configHash; })
+            .catch((err) => {
+                console.error("Error saving before configure:", err);
+                setSaveStatus("error");
+                setIsSaving(false);
+                setTimeout(() => setSaveStatus(null), 3000);
+            });
     };
 
     return (

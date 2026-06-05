@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Requirements
 
-PHP 7.2+, WordPress 5.9+, WooCommerce 5.0+.
+PHP 7.4+ (enforced by `composer.json`; plugin header also declares 7.2 as the minimum), WordPress 5.9+, WooCommerce 5.0+.
 
 ## Build Commands
 
@@ -45,17 +45,26 @@ PSR-4 via Composer:
 
 ### Core Classes (instantiated in `init_plugin()`)
 
-| Class | Purpose |
-|---|---|
-| `Assets` | Enqueues all scripts/styles for admin, frontend, and blocks |
-| `Email` | Email-related hooks |
-| `API` | Registers all REST routes under `commerce-kit/v1` |
-| `Common\Init` | Injects shared modal HTML into `<head>` |
-| `Blocks` | Registers Gutenberg blocks conditionally from `commerce_kit_block_settings` option |
-| `Features` | Loads feature plugins conditionally from `commerce_kit_settings` option |
-| `Helper` | Shared utility hooks |
-| `Admin` | Admin-only; instantiates `Admin\Menu` |
-| `Ajax` | Only instantiated when `DOING_AJAX` is true |
+| Class | File | Purpose |
+|---|---|---|
+| `Common\Assets` | `app/Common/Assets.php` | Enqueues all scripts/styles for admin, frontend, and blocks |
+| `Email` | `app/Email.php` | Email-related hooks |
+| `Common\API` | `app/Common/API.php` | Registers all REST routes under `commerce-kit/v1` |
+| `Common\Init` | `app/Common/Init.php` | Injects shared modal HTML into `<head>` |
+| `Blocks` | `app/Blocks.php` | Registers Gutenberg blocks conditionally from `commerce_kit_block_settings` option |
+| `Features` | `app/Features.php` | Loads feature plugins conditionally from `commerce_kit_settings` option |
+| `Helper` | `app/Helper.php` | Shared utility hooks |
+| `Ajax` | `app/Ajax.php` | Only instantiated when `DOING_AJAX` is true |
+| `Admin\Menu` | `app/Admin/Menu.php` | Admin-only; registers admin menu and all submenus |
+
+> Note: `app/API.php` and `app/Assets.php` are stub files left as redirect comments — actual code is in `app/Common/`.
+
+### Utility Helper
+
+`classes/Helper/Utility.php` provides static helpers:
+- `Utility::pri($data)` — debug dump (admin-only, safe to leave in code; wraps output in `<pre>`)
+- `Utility::get_option($menu, $submenu, $key)` — reads from `commercekit-{menu}-{submenu}` option key
+- `Utility::format_date($date)` — formats using WordPress date settings
 
 ### WordPress Options Reference
 
@@ -64,7 +73,7 @@ PSR-4 via Composer:
 | `commerce_kit_settings` | Feature enable/disable toggles (`'on'`/`'off'`) |
 | `commerce_kit_block_settings` | Block enable/disable toggles |
 | `commerce_kit_stock_threshold` | Stock threshold config (merged with defaults from `commercekit_get_stock_settings()`) |
-| `commercekit-tips-settings` | WooCommerce tips UI settings |
+| `commercekit-tips-settings` | WooCommerce tips UI settings; stores flat array with `tcwt_*` keys (e.g. `tcwt_cart`, `tcwt_checkout`, `tcwt_btncolor`, `tcwt_btntext`, `tcwt_textcolor`, `tcwt_note`) |
 | `commerce_kit_buy_button_settings` | Buy button config (merged with defaults from `commercekit_get_buy_button_settings()`) |
 
 ### Features System
@@ -85,7 +94,7 @@ Current features and implementation status:
 
 ### Admin Menu
 
-`app/Admin/Menu.php` registers the admin menu via `admin_menu`. All feature submenus are **always registered unconditionally** so their `<li>` elements exist in the DOM on every admin page. `Assets.php` computes a `hiddenHashes` array (hashes of disabled features) and passes it via the `COMMERCEKIT` global; `assets/js/admin.js` reads it and hides those `<li>` elements on `DOMContentLoaded`. On the CommerceKit page itself, the React SPA additionally re-syncs sidebar visibility whenever features are saved — enabling a feature shows its submenu immediately, disabling one hides it immediately, both without a page reload.
+`app/Admin/Menu.php` registers the admin menu via `admin_menu`. All feature submenus are **always registered unconditionally** so their `<li>` elements exist in the DOM on every admin page. `app/Common/Assets.php` computes a `hiddenHashes` array (hashes of disabled features) and passes it via the `COMMERCEKIT` global; `assets/js/admin.js` reads it and hides those `<li>` elements on `DOMContentLoaded`. On the CommerceKit page itself, the React SPA additionally re-syncs sidebar visibility whenever features are saved — enabling a feature shows its submenu immediately, disabling one hides it immediately, both without a page reload.
 
 Submenu pages use a hash-suffixed slug (e.g. `commerce-kit#/stock-threshold`) and all render the same `<div id="commerce_kit_render"></div>` — the SPA takes over from there.
 
@@ -97,7 +106,7 @@ Current blocks: `accordion`, `category-products-slider`, `generic-faq`, `variant
 
 ### REST API
 
-Namespace: `commerce-kit/v1`. All routes registered in `app/API.php`. Handler classes live in `app/API/`.
+Namespace: `commerce-kit/v1`. All routes registered in `app/Common/API.php`. Handler classes live in `app/API/`.
 
 Current endpoints:
 - `GET /get-settings`, `POST /post-settings` — plugin feature toggles
@@ -109,13 +118,13 @@ Current endpoints:
 
 ### JavaScript / React SPA
 
-Webpack entry points:
+Webpack entry points (defined in `webpack.config.js`):
 - `spa/admin/App.jsx` → `build/admin.build.js` — Admin React SPA
 - `blocks/App.jsx` → `build/block.build.js` — Gutenberg block editor JS
 - `spa/public/src/App.jsx` → `build/public.build.js` — Frontend React app (currently a stub)
 - `assets/css/tailwind.css` → `build/tailwind.build.js`
 
-**Externals** (loaded from WordPress, not bundled): `react`, `react-dom`, `@wordpress/blocks`, `@wordpress/block-editor`, `@wordpress/element`. Other `@wordpress/*` packages (e.g. `api-fetch`, `components`) are **not** externals — if used they will be bundled.
+**Externals** (loaded from WordPress globals, not bundled): `react` → `React`, `react-dom` → `ReactDOM`, `@wordpress/blocks` → `wp.blocks`, `@wordpress/block-editor` → `wp.blockEditor`, `@wordpress/element` → `wp.element`. Other `@wordpress/*` packages (e.g. `api-fetch`, `components`) are **not** externals — if used they will be bundled.
 
 The admin SPA mounts on `#commerce_kit_render` and uses **hash-based routing**. `spa/admin/App.jsx` switches on `window.location.hash`:
 - `""` or `"/"` → `Dashboard` (Feature / Blocks / Settings tabs)
@@ -130,15 +139,15 @@ Tailwind scans `app/**/*.php` and `spa/**/src/**/*.jsx`.
 Five files must change together when adding a new submenu page:
 
 1. **`app/Admin/Menu.php`** — add `add_submenu_page()` with slug `commerce-kit#/<your-hash>`
-2. **`app/Assets.php`** — add the feature key → hash mapping to `$feature_hashes` so disabled submenus are hidden via `hiddenHashes`
+2. **`app/Common/Assets.php`** — add the feature key → hash mapping to `$feature_hashes` so disabled submenus are hidden via `hiddenHashes`
 3. **`spa/admin/App.jsx`** — add the feature key → anchor CSS selector to `FEATURE_SUBMENUS` (controls live show/hide on the CommerceKit page), and add a `case "/<your-hash>"` to `renderPage()`
 4. **`spa/admin/pages/features/<your-slug>/page.jsx`** — create the page component
-5. **`app/API.php`** + **`app/API/<Handler>.php`** — register and implement the REST endpoints the page needs
+5. **`app/Common/API.php`** + **`app/API/<Handler>.php`** — register and implement the REST endpoints the page needs
 
 ### Sidebar Submenu Visibility
 
 Two mechanisms work together:
-- **On every admin page**: `assets/js/admin.js` reads `COMMERCEKIT.hiddenHashes` (set by `Assets.php`) and hides disabled submenu items on `DOMContentLoaded`.
+- **On every admin page**: `assets/js/admin.js` reads `COMMERCEKIT.hiddenHashes` (set by `app/Common/Assets.php`) and hides disabled submenu items on `DOMContentLoaded`.
 - **On the CommerceKit page**: `App.jsx` reads `window.COMMERCEKIT.settings_data` on mount to show/hide submenus. When features are saved, `Feature.jsx` dispatches a `commerceKitSettingsUpdated` custom event; `App.jsx` listens and re-syncs visibility without a page reload.
 
 ### Shared Admin Components
