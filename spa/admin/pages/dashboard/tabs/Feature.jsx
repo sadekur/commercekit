@@ -224,10 +224,11 @@ const Features = () => {
                                     {enabled && feature.configHash ? (
                                         <button
                                             type="button"
-                                            onClick={() => { window.location.hash = feature.configHash; }}
-                                            className="px-2.5 py-1 text-[11px] font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer"
+                                            disabled={isSaving}
+                                            onClick={() => handleConfigure(feature.configHash)}
+                                            className={`px-2.5 py-1 text-[11px] font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-lg transition-colors ${isSaving ? "opacity-50 cursor-wait" : "hover:bg-blue-100 cursor-pointer"}`}
                                         >
-                                            Configure →
+                                            {isSaving ? "Saving…" : "Configure →"}
                                         </button>
                                     ) : (
                                         <span />
