@@ -154,6 +154,7 @@ endif;
 /**
  * Check if current page is cart or checkout and uses WC Blocks.
  */
+if ( ! function_exists( 'is_blocks_page' ) ) :
 function is_blocks_page(): bool {
         $page_id = 0;
         if ( is_cart() ) {
