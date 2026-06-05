@@ -30,7 +30,9 @@ CommerceKit is a WooCommerce enhancement plugin that adds dynamic pricing, buy-n
 1. Go to **WordPress Admin → CommerceKit → Dashboard**
 2. Click the **Feature** tab
 3. Toggle on any feature you want to activate
-4. Click **Save Settings** — the page reloads and the feature is live
+4. Either:
+   - Click **Save Settings** to save all toggle changes at once, or
+   - Click **Configure →** on a feature card — this automatically saves all current toggle states and takes you directly to that feature's settings page
 
 Features are independent of each other. Enabling one has no effect on others. Once a feature is enabled, its dedicated settings page (if any) appears in the **CommerceKit** submenu.
 
@@ -240,7 +242,8 @@ Displays a tip/donation input form on the cart and/or checkout page. Shoppers ca
 |---|---|
 | **Add on Cart Page** | Show the tip form above the cart contents |
 | **Add on Checkout Page** | Show the tip form above the payment section |
-| **Button Color** | Background color of the submit button |
+| **Donation Note** | Show a note alongside the tip form |
+| **Button Background Color** | Background color of the submit button |
 | **Button Text** | Label shown on the submit button |
 | **Button Text Color** | Text color of the submit button |
 
