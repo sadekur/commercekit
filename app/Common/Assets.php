@@ -66,6 +66,25 @@ class Assets {
             'is_blocks'  => commercekit_is_blocks_page(),
         ];
 
+        // Tips feature assets — only on cart/checkout pages when the feature is enabled.
+        if ( ( $ck_settings['woocommerce-tips'] ?? '' ) === 'on' && ( is_cart() || is_checkout() ) ) {
+            wp_enqueue_style(
+                'ck-tips-style',
+                COMMERCE_KIT_URL . 'features/woocommerce-tips/tips.css',
+                [],
+                filemtime( COMMERCE_KIT_PATH . 'features/woocommerce-tips/tips.css' )
+            );
+            wp_enqueue_script(
+                'ck-tips-script',
+                COMMERCE_KIT_URL . 'features/woocommerce-tips/tips.js',
+                [ 'commerce-kit-frontend-script' ],
+                filemtime( COMMERCE_KIT_PATH . 'features/woocommerce-tips/tips.js' ),
+                true
+            );
+            // Separate nonce for tip AJAX actions — verified with check_ajax_referer('ck_tips_nonce').
+            $ck_data['tips_nonce'] = wp_create_nonce( 'ck_tips_nonce' );
+        }
+
         if ( ( $ck_settings['buy-button-for-woocommerce'] ?? '' ) === 'on' ) {
             $bb = commercekit_get_buy_button_settings();
 
