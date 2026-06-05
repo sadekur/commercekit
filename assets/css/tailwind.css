@@ -12,7 +12,7 @@
   #wpwrap h6 {
     font-size: inherit;
     font-weight: inherit;
-    margin: inherit;
+    /* margin: inherit; */
     color: inherit;
   }
 }
