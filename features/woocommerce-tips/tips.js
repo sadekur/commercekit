@@ -22,7 +22,7 @@
     function removeTip() {
         $.post(COMMERCEKIT.ajaxurl, {
             action: 'ck_remove_tip',
-            nonce:  CK_TIPS.nonce,
+            nonce:  COMMERCEKIT.nonce,
         }).done(function (res) {
             if (res.success) { refreshTotals(); }
         });
