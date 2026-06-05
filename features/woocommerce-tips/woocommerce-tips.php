@@ -145,6 +145,11 @@ class WoocommerceTips {
      * On classic checkout pages this filter never fires.
      */
     public function inject_for_blocks_checkout( string $content ): string {
+        // The thank-you page uses the same checkout block — skip it there.
+        if ( is_wc_endpoint_url( 'order-received' ) ) {
+            return $content;
+        }
+
         ob_start();
         $this->render_tip_form();
         $form = ob_get_clean();
