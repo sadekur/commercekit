@@ -8,7 +8,7 @@
     function setTip(data) {
         $.post(COMMERCEKIT.ajaxurl, {
             action: 'ck_set_tip',
-            nonce:  COMMERCEKIT.nonce,
+            nonce:  COMMERCEKIT.tips_nonce,
             type:   data.type,
             rate:   data.rate   || 0,
             amount: data.amount || 0,
@@ -20,7 +20,7 @@
     function removeTip() {
         $.post(COMMERCEKIT.ajaxurl, {
             action: 'ck_remove_tip',
-            nonce:  COMMERCEKIT.nonce,
+            nonce:  COMMERCEKIT.tips_nonce,
         }).done(function (res) {
             if (res.success) { refreshTotals(); }
         });
