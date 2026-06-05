@@ -72,23 +72,6 @@ class WoocommerceTips {
         ] );
     }
 
-    private function is_blocks_page(): bool {
-        $page_id = 0;
-        if ( is_cart() ) {
-            $page_id = wc_get_page_id( 'cart' );
-        } elseif ( is_checkout() ) {
-            $page_id = wc_get_page_id( 'checkout' );
-        }
-        if ( ! $page_id ) {
-            return false;
-        }
-        $post = get_post( $page_id );
-        return $post && (
-            has_block( 'woocommerce/cart',     $post ) ||
-            has_block( 'woocommerce/checkout', $post )
-        );
-    }
-
     public function render_tip_form(): void {
         $s       = $this->settings;
         $rates   = array_filter( array_map( 'trim', explode( ',', $s['tcwt_rates'] ) ) );
