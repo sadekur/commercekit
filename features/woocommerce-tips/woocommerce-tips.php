@@ -68,25 +68,7 @@ class WoocommerceTips {
         wp_localize_script( 'ck-tips-script', 'CK_TIPS', [
             'ajaxurl'   => admin_url( 'admin-ajax.php' ),
             'nonce'     => wp_create_nonce( 'ck_tips_nonce' ),
-            'is_blocks' => $this->is_blocks_page(),
         ] );
-    }
-
-    private function is_blocks_page(): bool {
-        $page_id = 0;
-        if ( is_cart() ) {
-            $page_id = wc_get_page_id( 'cart' );
-        } elseif ( is_checkout() ) {
-            $page_id = wc_get_page_id( 'checkout' );
-        }
-        if ( ! $page_id ) {
-            return false;
-        }
-        $post = get_post( $page_id );
-        return $post && (
-            has_block( 'woocommerce/cart',     $post ) ||
-            has_block( 'woocommerce/checkout', $post )
-        );
     }
 
     public function render_tip_form(): void {
