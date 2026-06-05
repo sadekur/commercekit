@@ -2,8 +2,8 @@
     'use strict';
 
     var isCheckout = $('body').hasClass('woocommerce-checkout');
-    // CK_TIPS.is_blocks is set by PHP: true when cart/checkout page uses WC Blocks.
-    var isBlocks   = (typeof CK_TIPS !== 'undefined' && CK_TIPS.is_blocks);
+    // COMMERCEKIT.is_blocks is set by PHP: true when cart/checkout page uses WC Blocks.
+    var isBlocks   = (typeof COMMERCEKIT !== 'undefined' && COMMERCEKIT.is_blocks);
 
     function setTip(data) {
         $.post(COMMERCEKIT.ajaxurl, {
