@@ -130,12 +130,13 @@ if ( ! function_exists( 'commercekit_is_product_in_cart' ) ) :
     }
 endif;
 
-if ( ! function_exists( 'commercekit_get_product_stock_status' ) ) :
-    function commercekit_get_product_stock_status( $product_id ) {
-        $product = wc_get_product( $product_id );
-        if ( ! $product ) {
-            return 'unknown';
-        }
-        return $product->get_stock_status();
+if ( ! function_exists( 'commercekit_get_load_tip_settings' ) ) :
+    function commercekit_get_load_settings() {
+        $defaults = [
+            'load_css' => 'yes',
+            'load_js' => 'yes'
+        ];
+        $saved = get_option( 'commerce_kit_load_settings', [] );
+        return array_merge( $defaults, $saved );
     }
 endif;
