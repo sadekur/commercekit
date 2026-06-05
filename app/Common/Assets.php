@@ -82,7 +82,8 @@ class Assets {
                 true
             );
             // Separate nonce for tip AJAX actions — verified with check_ajax_referer('ck_tips_nonce').
-            $ck_data['tips_nonce'] = wp_create_nonce( 'ck_tips_nonce' );
+            $ck_data['tips_nonce']      = wp_create_nonce( 'ck_tips_nonce' );
+            $ck_data['currency_symbol'] = get_woocommerce_currency_symbol();
         }
 
         if ( ( $ck_settings['buy-button-for-woocommerce'] ?? '' ) === 'on' ) {
