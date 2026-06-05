@@ -2,6 +2,8 @@
     'use strict';
 
     var isCheckout = $('body').hasClass('woocommerce-checkout');
+    // CK_TIPS.is_blocks is set by PHP: true when cart/checkout page uses WC Blocks.
+    var isBlocks   = (typeof CK_TIPS !== 'undefined' && CK_TIPS.is_blocks);
 
     // ── AJAX helpers ─────────────────────────────────────────────────────────
 
@@ -26,20 +28,27 @@
         });
     }
 
-    // On cart: wc_fragment_refresh updates both .ck-tips-wrapper and .cart_totals
-    // (registered via woocommerce_add_to_cart_fragments in the PHP class).
-    // On checkout: update_checkout re-renders the full order review section.
     function refreshTotals() {
+        if (isBlocks) {
+            // WC Blocks manages cart state via its own Store API.
+            // A full reload is required to re-render the PHP-injected tip form
+            // and for the Blocks totals to pick up the updated session fee.
+            window.location.reload();
+            return;
+        }
+
         if (isCheckout) {
+            // Classic checkout: re-render the order review section.
             $(document.body).trigger('update_checkout');
         } else {
+            // Classic cart: wc_fragment_refresh updates .ck-tips-wrapper and
+            // .cart_totals (both registered via woocommerce_add_to_cart_fragments).
             $(document.body).trigger('wc_fragment_refresh');
         }
     }
 
-    // ── Event handlers (delegated for post-fragment-refresh DOM) ─────────────
+    // ── Event handlers (delegated so they survive fragment/reload DOM changes) ─
 
-    // Preset rate buttons (percent / fixed / cash)
     $(document).on('click', '.ck-tip-btn:not(.ck-tip-custom-trigger)', function () {
         setTip({
             type: $(this).data('type'),
@@ -47,12 +56,10 @@
         });
     });
 
-    // Custom tip button — toggle the input row
     $(document).on('click', '.ck-tip-custom-trigger', function () {
         $('.ck-custom-tip-row').slideToggle(150);
     });
 
-    // Apply custom tip amount
     $(document).on('click', '.ck-apply-custom', function () {
         var amount = parseFloat($('.ck-custom-tip-input').val());
         if (!amount || amount <= 0) { return; }
@@ -60,7 +67,6 @@
         $('.ck-custom-tip-row').slideUp(150);
     });
 
-    // Remove tip
     $(document).on('click', '.ck-remove-tip', function () {
         removeTip();
     });
