@@ -8,7 +8,7 @@
     // ── AJAX helpers ─────────────────────────────────────────────────────────
 
     function setTip(data) {
-        $.post(CK_TIPS.ajaxurl, {
+        $.post(COMMERCEKIT.ajaxurl, {
             action: 'ck_set_tip',
             nonce:  CK_TIPS.nonce,
             type:   data.type,
