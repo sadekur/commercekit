@@ -63,6 +63,7 @@ class Assets {
             'resturl'  => untrailingslashit( rest_url( 'commerce-kit/v1' ) ),
             'nonce'    => wp_create_nonce( 'commerce-kit' ),
             'error'    => __( 'Something went wrong', 'commerce-kit' ),
+            'is_blocks'           => commercekit_is_blocks_page(),
         ];
 
         if ( ( $ck_settings['buy-button-for-woocommerce'] ?? '' ) === 'on' ) {
