@@ -73,7 +73,6 @@ class Assets {
                 'is_ajax'             => $bb['ajax_add_to_cart'],
                 'button_text'         => $bb['button_text'] ?: 'Buy Now',
                 'i18n_select_options' => __( 'Please select product options before clicking Buy Now.', 'commerce-kit' ),
-                'is_blocks'           => commercekit_is_blocks_page(),
             ];
 
             wp_enqueue_script(
