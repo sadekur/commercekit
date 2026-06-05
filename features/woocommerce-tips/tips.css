@@ -1,0 +1,75 @@
+.ck-tips-wrapper {
+    margin: 1.5em 0;
+}
+
+.ck-tips-title {
+    font-size: 1.3em;
+    font-weight: normal;
+    margin: 0 0 0.75em;
+}
+
+.ck-tips-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.ck-tip-btn {
+    padding: 0.5em 1em;
+    background: #fff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 0.875em;
+    line-height: 1.4;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.ck-tip-btn:hover {
+    background: #f5f5f5;
+}
+
+.ck-tip-btn.ck-tip-active {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+}
+
+.ck-custom-tip-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.ck-custom-tip-input {
+    width: 120px;
+    padding: 0.4em 0.6em;
+    border: 1px solid #ccc;
+    font-size: 0.875em;
+}
+
+.ck-apply-custom {
+    padding: 0.4em 0.9em;
+    background: #fff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 0.875em;
+}
+
+.ck-apply-custom:hover {
+    background: #f5f5f5;
+}
+
+.ck-remove-tip {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 0.4em 0.9em;
+    background: #fff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 0.875em;
+}
+
+.ck-remove-tip:hover {
+    background: #f5f5f5;
+}
