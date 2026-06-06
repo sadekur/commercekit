@@ -5,6 +5,7 @@ import { WarningIcon } from "../../../common/Svgs";
 import Toggle from "../../../common/Toggle";
 import FancyInput from "./components/FancyInput";
 import SettingRow from "./components/SettingRow";
+import SegmentedControl from "./components/SegmentedControl";
 
 /* ─── unchanged data helpers ─────────────────────────────────────────────── */
 
