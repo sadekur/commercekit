@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { WarningIcon } from "../../../common/Svgs";
 import TabPageSkeleton from "../../../common/Skeletons/TabPageSkeleton";
-import SectionHeader from "../../../common/SectionHeader";
+import { WarningIcon } from "../../../common/Svgs";
 import Toggle from "../../../common/Toggle";
 import RadioGroup from "../../../common/RadioGroup";
 import SettingRow from "../../../common/SettingRow";
 import ColorField from "../../../common/ColorField";
 import SmallNumberInput from "../../../common/SmallNumberInput";
 import DimensionFields from "../../../common/DimensionFields";
-import SaveRow from "../../../common/SaveRow";
+import FancyInput from "../../../common/FancyInput";
+import Card from "../../../common/Card";
+import CardHead from "../../../common/CardHead";
 
 const DEFAULTS = {
     enable_single:           true,
@@ -36,13 +37,13 @@ const DEFAULTS = {
 
 
 const BuyButtonSettings = () => {
-    const [isLoading, setIsLoading]               = useState(true);
-    const [isTabLoading, setIsTabLoading]         = useState(false);
-    const [isSaving, setIsSaving]                 = useState(false);
-    const [saveStatus, setSaveStatus]             = useState(null);
+    const [isLoading,       setIsLoading]       = useState(true);
+    const [isTabLoading,    setIsTabLoading]    = useState(false);
+    const [isSaving,        setIsSaving]        = useState(false);
+    const [saveStatus,      setSaveStatus]      = useState(null);
     const [isFeatureEnabled, setIsFeatureEnabled] = useState(false);
-    const [activeTab, setActiveTab]               = useState("general");
-    const [formData, setFormData]                 = useState(DEFAULTS);
+    const [activeTab,       setActiveTab]       = useState("general");
+    const [formData,        setFormData]        = useState(DEFAULTS);
 
     const handleTabChange = (tabId) => {
         if (tabId === activeTab) return;
@@ -159,17 +160,20 @@ const BuyButtonSettings = () => {
     if (!isFeatureEnabled) {
         return (
             <div className="max-w-2xl">
-                <div className="mt-6 flex gap-4 p-6 bg-yellow-50 border border-yellow-300 border-l-4 border-l-yellow-500 rounded-xl">
-                    <WarningIcon className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+                <div className="mt-6 flex gap-4 p-5 bg-amber-50 border border-amber-200 border-l-4 border-l-amber-500 rounded-xl">
+                    <div className="w-8 h-8 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0">
+                        <WarningIcon className="w-4 h-4 text-amber-700" />
+                    </div>
                     <div>
-                        <p className="m-0 text-[15px] font-bold text-yellow-900">Feature Not Enabled</p>
-                        <p className="mt-1.5 mb-4 m-0 text-[13px] text-yellow-800 leading-relaxed">
+                        <p className="m-0 text-[14px] font-semibold text-amber-900">Feature Not Enabled</p>
+                        <p className="mt-1.5 mb-4 m-0 text-[13px] text-amber-800 leading-relaxed">
                             The Buy Button feature is currently disabled. Please enable{" "}
                             <strong>"Buy Button for WooCommerce"</strong> from the Features page first.
                         </p>
                         <button
                             onClick={() => (window.location.hash = "")}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[13px] font-semibold rounded-lg transition-colors duration-150 cursor-pointer border-none"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800
+                                       text-white text-[13px] font-semibold rounded-lg border-none cursor-pointer transition-colors duration-150"
                         >
                             Go to Features Page →
                         </button>
@@ -184,21 +188,31 @@ const BuyButtonSettings = () => {
     return (
         <div className="max-w-3xl">
 
-            {/* ── Save toast ── */}
+            {/* ── page title bar ── */}
+            <div className="flex items-center justify-between mb-5">
+                <div>
+                    <h2 className="m-0 text-[18px] font-bold text-gray-900 tracking-tight">Buy Button Settings</h2>
+                    <p className="m-0 mt-0.5 text-[12px] text-gray-400">Configure Buy Now buttons across your store.</p>
+                </div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[11px] font-semibold text-emerald-700">Feature active</span>
+                </div>
+            </div>
+
+            {/* ── save status toast ── */}
             {saveStatus && (
-                <div
-                    className={`flex items-center gap-2.5 px-4 py-2.5 mb-4 rounded-xl text-[13px] font-semibold border ${
-                        saveStatus === "success"
-                            ? "bg-green-50 text-green-700 border-green-200"
-                            : "bg-red-50 text-red-600 border-red-200"
-                    }`}
-                >
-                    <span className="text-base leading-none">
+                <div className={`flex items-center gap-3 px-4 py-3 mb-4 rounded-xl text-[13px] font-semibold border transition-all duration-300 ${
+                    saveStatus === "success"
+                        ? "bg-green-50 text-green-700 border-green-200"
+                        : "bg-red-50 text-red-600 border-red-200"
+                }`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] flex-shrink-0 font-bold ${
+                        saveStatus === "success" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-700"
+                    }`}>
                         {saveStatus === "success" ? "✓" : "✕"}
-                    </span>
-                    {saveStatus === "success"
-                        ? "Settings saved successfully."
-                        : "Error saving settings. Please try again."}
+                    </div>
+                    {saveStatus === "success" ? "Settings saved successfully." : "Error saving settings. Please try again."}
                 </div>
             )}
 
@@ -223,21 +237,24 @@ const BuyButtonSettings = () => {
                 ))}
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4">
+            <form onSubmit={handleSave} className="space-y-3">
 
                 {/* ══════════════ TAB SWITCHING SKELETON ══════════════ */}
-                {isTabLoading && <TabPageSkeleton showTabs={false} />}
+                {isTabLoading && <TabPageSkeleton showTabs={false} cardCount={2} rowsPerCard={2} />}
 
                 {/* ══════════════ GENERAL TAB ══════════════ */}
                 {!isTabLoading && activeTab === "general" && (
                     <>
+
                         {/* Enable Button On */}
-                        <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-                            <SectionHeader
+                        <Card>
+                            <CardHead
                                 icon="✅"
+                                iconBg="bg-blue-50"
                                 title="Enable Button On"
                                 description="Choose where the Buy Now button appears in your store"
-                                color="blue"
+                                badge="Visibility"
+                                badgeColor="blue"
                             />
                             <SettingRow
                                 label="Single Product Page"
@@ -251,22 +268,24 @@ const BuyButtonSettings = () => {
                             <SettingRow
                                 label="Shop / Archive Page"
                                 description="Show Buy Now button on shop and category listing pages."
-                                border={false}
+                                last
                             >
                                 <Toggle
                                     checked={formData.enable_archive}
                                     onChange={(e) => set("enable_archive", e.target.checked)}
                                 />
                             </SettingRow>
-                        </div>
+                        </Card>
 
                         {/* Button Position */}
-                        <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-                            <SectionHeader
+                        <Card>
+                            <CardHead
                                 icon="📍"
+                                iconBg="bg-amber-50"
                                 title="Button Position"
                                 description="Control where the button appears relative to Add to Cart"
-                                color="amber"
+                                badge="Layout"
+                                badgeColor="amber"
                             />
                             <SettingRow
                                 label="Position on Single Product Page"
@@ -284,7 +303,7 @@ const BuyButtonSettings = () => {
                             <SettingRow
                                 label="Position on Shop / Archive Page"
                                 description="Applies to simple products only. Variable products link to the product page."
-                                border={false}
+                                last
                             >
                                 <RadioGroup
                                     value={formData.button_position_archive}
@@ -295,19 +314,21 @@ const BuyButtonSettings = () => {
                                     ]}
                                 />
                             </SettingRow>
-                        </div>
+                        </Card>
 
                         {/* Redirect Location */}
-                        <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-                            <SectionHeader
+                        <Card>
+                            <CardHead
                                 icon="🔀"
+                                iconBg="bg-green-50"
                                 title="Redirect Location"
                                 description="Where should the customer go after clicking Buy Now?"
-                                color="green"
+                                badge="Destination"
+                                badgeColor="green"
                             />
                             <SettingRow
                                 label="Redirect to"
-                                border={formData.redirect_location !== "custom"}
+                                last={formData.redirect_location !== "custom"}
                             >
                                 <RadioGroup
                                     value={formData.redirect_location}
@@ -321,32 +342,33 @@ const BuyButtonSettings = () => {
                             </SettingRow>
 
                             {formData.redirect_location === "custom" && (
-                                <SettingRow label="Custom Redirect URL" border={false}>
-                                    <input
+                                <SettingRow label="Custom Redirect URL" last>
+                                    <FancyInput
                                         type="url"
                                         value={formData.custom_redirect_url}
                                         onChange={(e) => set("custom_redirect_url", e.target.value)}
                                         placeholder="https://example.com/checkout"
-                                        className="w-64 px-3 py-1.5 text-[13px] text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-150"
                                     />
                                 </SettingRow>
                             )}
-                        </div>
+                        </Card>
 
                         {/* Button Settings */}
-                        <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-                            <SectionHeader
+                        <Card>
+                            <CardHead
                                 icon="⚙️"
+                                iconBg="bg-blue-50"
                                 title="Button Settings"
                                 description="General behaviour and appearance options"
-                                color="blue"
+                                badge="Behaviour"
+                                badgeColor="blue"
                             />
                             <SettingRow label="Button Text" description="Text displayed on the Buy Now button.">
-                                <input
+                                <FancyInput
                                     type="text"
                                     value={formData.button_text}
                                     onChange={(e) => set("button_text", e.target.value)}
-                                    className="w-40 px-3 py-1.5 text-[13px] text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-150"
+                                    placeholder="Buy Now"
                                 />
                             </SettingRow>
                             <SettingRow
@@ -358,7 +380,10 @@ const BuyButtonSettings = () => {
                                     min="1"
                                     value={formData.default_shop_quantity}
                                     onChange={(e) => set("default_shop_quantity", Math.max(1, parseInt(e.target.value) || 1))}
-                                    className="w-20 px-3 py-1.5 text-[13px] text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-150 font-mono"
+                                    className="w-20 px-3 py-1.5 text-[13px] text-gray-800 bg-gray-50 border border-gray-200 rounded-lg
+                                               hover:border-blue-400 hover:bg-white
+                                               focus:!outline-none focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 focus:!bg-white
+                                               transition-all duration-150 font-mono"
                                 />
                             </SettingRow>
                             <SettingRow
@@ -382,29 +407,33 @@ const BuyButtonSettings = () => {
                             <SettingRow
                                 label="Hide WooCommerce Add to Cart Button"
                                 description="Hide the default WooCommerce Add to Cart button on single product and shop pages."
-                                border={false}
+                                last
                             >
                                 <Toggle
                                     checked={formData.hide_add_to_cart}
                                     onChange={(e) => set("hide_add_to_cart", e.target.checked)}
                                 />
                             </SettingRow>
-                        </div>
+                        </Card>
+
                     </>
                 )}
 
                 {/* ══════════════ BUTTON STYLES TAB ══════════════ */}
                 {!isTabLoading && activeTab === "button_styles" && (
                     <>
+
                         {/* Style mode */}
-                        <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-                            <SectionHeader
+                        <Card>
+                            <CardHead
                                 icon="🎨"
+                                iconBg="bg-amber-50"
                                 title="Buy Now Button Styles"
                                 description="Use theme default styles or define custom CSS values"
-                                color="amber"
+                                badge="Appearance"
+                                badgeColor="amber"
                             />
-                            <SettingRow label="Button Styles" border={isCustomStyle}>
+                            <SettingRow label="Button Styles" last={!isCustomStyle}>
                                 <RadioGroup
                                     value={formData.button_style}
                                     onChange={(v) => set("button_style", v)}
@@ -462,7 +491,7 @@ const BuyButtonSettings = () => {
                                             onChange={(v) => set("button_margin", v)}
                                         />
                                     </SettingRow>
-                                    <SettingRow label="Padding" description="Set padding values in px (top / right / bottom / left)." border={false}>
+                                    <SettingRow label="Padding" description="Set padding values in px (top / right / bottom / left)." last>
                                         <DimensionFields
                                             value={formData.button_padding}
                                             onChange={(v) => set("button_padding", v)}
@@ -470,17 +499,19 @@ const BuyButtonSettings = () => {
                                     </SettingRow>
                                 </>
                             )}
-                        </div>
+                        </Card>
 
                         {/* Live preview */}
-                        <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-                            <div className="px-6 py-3.5 bg-gray-50 border-b border-gray-100">
-                                <p className="m-0 text-[13px] font-bold text-gray-800">👁 Button Preview</p>
-                                <p className="m-0 mt-0.5 text-[11px] text-gray-500">
-                                    Reflects custom style values. Theme styles are not shown here.
-                                </p>
-                            </div>
-                            <div className="px-6 py-5">
+                        <Card>
+                            <CardHead
+                                icon="👁"
+                                iconBg="bg-gray-50"
+                                title="Button Preview"
+                                description="Reflects custom style values. Theme styles are not shown here."
+                                badge="Preview"
+                                badgeColor="blue"
+                            />
+                            <div className="px-5 py-4">
                                 <button
                                     type="button"
                                     className="button alt wc-buy-now-btn cursor-default"
@@ -497,11 +528,43 @@ const BuyButtonSettings = () => {
                                     {formData.button_text || "Buy Now"}
                                 </button>
                             </div>
-                        </div>
+                        </Card>
+
                     </>
                 )}
 
-                {!isTabLoading && <SaveRow isSaving={isSaving} />}
+                {/* ── Save bar ── */}
+                {!isTabLoading && (
+                    <div className="flex items-center gap-3 pt-1 pb-2">
+                        <button
+                            type="submit"
+                            disabled={isSaving}
+                            className={`inline-flex items-center gap-2 px-6 py-2.5 text-white text-[13px] font-semibold rounded-lg border-none transition-all duration-150 ${
+                                isSaving
+                                    ? "bg-gray-300 cursor-not-allowed"
+                                    : "bg-blue-600 hover:bg-blue-700 active:scale-95 cursor-pointer shadow-sm shadow-blue-200 hover:shadow-md hover:shadow-blue-200"
+                            }`}
+                        >
+                            {isSaving ? (
+                                <>
+                                    <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                                        <path d="M12 2a10 10 0 0 1 10 10" />
+                                    </svg>
+                                    Saving…
+                                </>
+                            ) : (
+                                <>
+                                    <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                    </svg>
+                                    Save Changes
+                                </>
+                            )}
+                        </button>
+                        <span className="text-[11px] text-gray-400">Changes are applied immediately after saving.</span>
+                    </div>
+                )}
+
             </form>
         </div>
     );
