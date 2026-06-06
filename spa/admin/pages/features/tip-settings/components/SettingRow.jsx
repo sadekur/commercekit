@@ -12,3 +12,4 @@ const SettingRow = ({ label, description, hint, last, children }) => (
         <div className="flex-shrink-0">{children}</div>
     </div>
 );
+export default SettingRow;
