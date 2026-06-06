@@ -42,124 +42,78 @@ const toApi = (f) => ({
     tcwt_clear:    f.tcwt_clear    ? "yes" : "no",
 });
 
-/* ─── design sub-components ──────────────────────────────────────────────── */
+/* ─── design-only sub-components (pure Tailwind) ─────────────────────────── */
 
 /** Coloured pill badge */
 const Badge = ({ children, color = "blue" }) => {
-    const styles = {
-        blue:  { background: "#E6F1FB", color: "#185FA5", border: "0.5px solid #B5D4F4" },
-        amber: { background: "#FAEEDA", color: "#854F0B", border: "0.5px solid #FAC775" },
+    const cls = {
+        blue:  "bg-blue-50 text-blue-700 border border-blue-200",
+        amber: "bg-amber-50 text-amber-700 border border-amber-200",
     };
     return (
-        <span style={{
-            display: "inline-flex", alignItems: "center",
-            padding: "3px 10px", borderRadius: "100px",
-            fontSize: "10px", fontWeight: 500,
-            ...styles[color],
-        }}>
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide ${cls[color]}`}>
             {children}
         </span>
     );
 };
 
-/** Card section wrapper */
+/** Card wrapper */
 const Card = ({ children }) => (
-    <div style={{
-        background: "var(--color-background-primary, #fff)",
-        border: "0.5px solid var(--color-border-tertiary, rgba(0,0,0,.12))",
-        borderRadius: 12,
-        overflow: "hidden",
-        marginBottom: 12,
-        transition: "box-shadow .2s",
-    }}>
+    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-3 transition-shadow duration-200 hover:shadow-md">
         {children}
     </div>
 );
 
 /** Card header */
 const CardHead = ({ icon, iconBg, title, description, badge, badgeColor }) => (
-    <div style={{
-        display: "flex", alignItems: "center", gap: 10,
-        padding: "13px 20px",
-        borderBottom: "0.5px solid var(--color-border-tertiary, rgba(0,0,0,.12))",
-    }}>
-        <div style={{
-            width: 32, height: 32, borderRadius: 8, flexShrink: 0,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 15, background: iconBg,
-        }}>
+    <div className="flex items-center gap-3 px-5 py-3.5 border-b border-gray-100">
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0 ${iconBg}`}>
             {icon}
         </div>
-        <div style={{ flex: 1 }}>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: "var(--color-text-primary)" }}>{title}</p>
-            {description && <p style={{ margin: "2px 0 0", fontSize: 11, color: "var(--color-text-tertiary)" }}>{description}</p>}
+        <div className="flex-1 min-w-0">
+            <p className="m-0 text-[13px] font-semibold text-gray-900 leading-tight">{title}</p>
+            {description && (
+                <p className="m-0 mt-0.5 text-[11px] text-gray-400 leading-tight">{description}</p>
+            )}
         </div>
         {badge && <Badge color={badgeColor}>{badge}</Badge>}
     </div>
 );
 
-/** Individual setting row */
+/** Setting row */
 const SettingRow = ({ label, description, hint, last, children }) => (
-    <div style={{
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "13px 20px",
-        borderBottom: last ? "none" : "0.5px solid var(--color-border-tertiary, rgba(0,0,0,.12))",
-        transition: "background .12s",
-    }}
-        onMouseEnter={e => e.currentTarget.style.background = "var(--color-background-secondary,#f7f7f7)"}
-        onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-    >
-        <div style={{ paddingRight: 24, minWidth: 0 }}>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: "var(--color-text-primary)" }}>{label}</p>
-            {description && <p style={{ margin: "2px 0 0", fontSize: 11, color: "var(--color-text-tertiary)" }}>{description}</p>}
-            {hint && <p style={{ margin: "2px 0 0", fontSize: 11, color: "var(--color-text-tertiary)" }}>{hint}</p>}
+    <div className={`flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-colors duration-100 ${!last ? "border-b border-gray-100" : ""}`}>
+        <div className="pr-6 min-w-0">
+            <p className="m-0 text-[13px] font-semibold text-gray-800 leading-tight">{label}</p>
+            {description && (
+                <p className="m-0 mt-1 text-[11px] text-gray-400 leading-relaxed">{description}</p>
+            )}
+            {hint && <p className="m-0 mt-0.5 text-[11px] text-gray-400">{hint}</p>}
         </div>
-        <div style={{ flexShrink: 0 }}>{children}</div>
+        <div className="flex-shrink-0">{children}</div>
     </div>
 );
 
 /**
- * Styled text / number input
- * Drop-in replacement: same props as <input>, same value/onChange API.
+ * Fancy text input — pure Tailwind, same props as <input>.
  */
-const FancyInput = ({ style, ...props }) => {
-    const [focused, setFocused] = useState(false);
-    return (
-        <input
-            {...props}
-            onFocus={e => { setFocused(true); props.onFocus?.(e); }}
-            onBlur={e => { setFocused(false); props.onBlur?.(e); }}
-            style={{
-                width: 200, height: 38,
-                padding: "0 13px",
-                fontSize: 13, fontFamily: "inherit",
-                color: "var(--color-text-primary)",
-                background: focused
-                    ? "var(--color-background-primary, #fff)"
-                    : "var(--color-background-secondary, #f5f5f5)",
-                border: `1.5px solid ${focused ? "#378ADD" : "var(--color-border-secondary, rgba(0,0,0,.22))"}`,
-                borderRadius: 10,
-                outline: "none",
-                boxShadow: focused ? "0 0 0 3px rgba(55,138,221,.15)" : "none",
-                transition: "border-color .15s, background .15s, box-shadow .15s",
-                ...style,
-            }}
-        />
-    );
-};
+const FancyInput = (props) => (
+    <input
+        {...props}
+        className="w-48 h-9 px-3 text-[13px] text-gray-800 bg-gray-50 border border-gray-200 rounded-lg
+                   placeholder:text-gray-400
+                   hover:border-blue-400 hover:bg-white
+                   focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:bg-white
+                   transition-all duration-150"
+    />
+);
 
 /**
- * Segmented control used for "Tip Type" — replaces the plain <select>.
- * Passes the same onChange({ target: { value } }) shape so the parent set() call is unchanged.
+ * Segmented control — replaces the Tip Type <select> for a binary choice.
+ * Fires onChange({ target: { value } }) so the parent set() call is identical.
  */
 const SegmentedControl = ({ value, onChange, options }) => (
-    <div style={{
-        display: "inline-flex",
-        border: "1.5px solid var(--color-border-secondary, rgba(0,0,0,.22))",
-        borderRadius: 10,
-        overflow: "hidden",
-        background: "var(--color-background-secondary, #f5f5f5)",
-    }}>
+    <div className="inline-flex border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
         {options.map((opt) => {
             const active = value === opt.value;
             return (
@@ -167,14 +121,11 @@ const SegmentedControl = ({ value, onChange, options }) => (
                     key={opt.value}
                     type="button"
                     onClick={() => onChange({ target: { value: opt.value } })}
-                    style={{
-                        padding: "7px 16px",
-                        fontSize: 12, fontWeight: 500, fontFamily: "inherit",
-                        border: "none", cursor: "pointer",
-                        transition: "background .12s, color .12s",
-                        background: active ? "#378ADD" : "transparent",
-                        color: active ? "#fff" : "var(--color-text-secondary)",
-                    }}
+                    className={`px-4 py-1.5 text-[12px] font-semibold transition-all duration-150 border-none cursor-pointer
+                        ${active
+                            ? "bg-blue-600 text-white shadow-sm"
+                            : "bg-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                        }`}
                 >
                     {opt.label}
                 </button>
@@ -184,48 +135,31 @@ const SegmentedControl = ({ value, onChange, options }) => (
 );
 
 /**
- * Styled <select> dropdown — same props/value/onChange as native <select>.
+ * Fancy select dropdown — pure Tailwind, custom chevron, same props as <select>.
  */
-const FancySelect = ({ children, style, ...props }) => {
-    const [focused, setFocused] = useState(false);
-    return (
-        <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
-            <select
-                {...props}
-                onFocus={e => { setFocused(true); props.onFocus?.(e); }}
-                onBlur={e => { setFocused(false); props.onBlur?.(e); }}
-                style={{
-                    appearance: "none", WebkitAppearance: "none",
-                    width: 200, height: 38,
-                    padding: "0 36px 0 13px",
-                    fontSize: 13, fontFamily: "inherit",
-                    color: "var(--color-text-primary)",
-                    background: focused
-                        ? "var(--color-background-primary, #fff)"
-                        : "var(--color-background-secondary, #f5f5f5)",
-                    border: `1.5px solid ${focused ? "#378ADD" : "var(--color-border-secondary, rgba(0,0,0,.22))"}`,
-                    borderRadius: 10,
-                    outline: "none",
-                    boxShadow: focused ? "0 0 0 3px rgba(55,138,221,.15)" : "none",
-                    cursor: "pointer",
-                    transition: "border-color .15s, background .15s, box-shadow .15s",
-                    ...style,
-                }}
-            >
-                {children}
-            </select>
-            {/* custom chevron */}
-            <svg
-                style={{ position: "absolute", right: 11, pointerEvents: "none", flexShrink: 0 }}
-                width="14" height="14" viewBox="0 0 24 24"
-                fill="none" stroke="var(--color-text-tertiary)" strokeWidth="2.2"
-                strokeLinecap="round" strokeLinejoin="round"
-            >
-                <polyline points="6 9 12 15 18 9" />
-            </svg>
-        </div>
-    );
-};
+const FancySelect = ({ children, ...props }) => (
+    <div className="relative inline-flex items-center">
+        <select
+            {...props}
+            className="w-48 h-9 pl-3 pr-8 text-[13px] text-gray-800 bg-gray-50 border border-gray-200 rounded-lg
+                       appearance-none cursor-pointer
+                       hover:border-blue-400 hover:bg-white
+                       focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:bg-white
+                       transition-all duration-150"
+        >
+            {children}
+        </select>
+        {/* custom chevron */}
+        <svg
+            className="absolute right-2.5 pointer-events-none text-gray-400"
+            width="13" height="13" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" strokeWidth="2.5"
+            strokeLinecap="round" strokeLinejoin="round"
+        >
+            <polyline points="6 9 12 15 18 9" />
+        </svg>
+    </div>
+);
 
 /* ─── main component ─────────────────────────────────────────────────────── */
 
@@ -291,34 +225,24 @@ const TipSettings = () => {
 
     if (isLoading) return <TabPageSkeleton showTabs={false} cardCount={3} rowsPerCard={3} />;
 
+    /* ── feature disabled ── */
     if (!isFeatureEnabled) {
         return (
             <div className="max-w-2xl">
-                <div style={{
-                    marginTop: 24, display: "flex", gap: 14, padding: 20,
-                    background: "#FAEEDA", border: "0.5px solid #FAC775",
-                    borderLeft: "4px solid #BA7517", borderRadius: 12,
-                }}>
-                    <div style={{
-                        width: 34, height: 34, borderRadius: "50%", flexShrink: 0,
-                        background: "#FAC775", display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                        <WarningIcon className="w-4 h-4" style={{ color: "#854F0B" }} />
+                <div className="mt-6 flex gap-4 p-5 bg-amber-50 border border-amber-200 border-l-4 border-l-amber-500 rounded-xl">
+                    <div className="w-8 h-8 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0">
+                        <WarningIcon className="w-4 h-4 text-amber-700" />
                     </div>
                     <div>
-                        <p style={{ margin: 0, fontSize: 14, fontWeight: 500, color: "#412402" }}>Feature Not Enabled</p>
-                        <p style={{ margin: "6px 0 14px", fontSize: 13, color: "#633806", lineHeight: 1.6 }}>
+                        <p className="m-0 text-[14px] font-semibold text-amber-900">Feature Not Enabled</p>
+                        <p className="mt-1.5 mb-4 m-0 text-[13px] text-amber-800 leading-relaxed">
                             The WooCommerce Tips feature is currently disabled. Please enable{" "}
                             <strong>"WooCommerce Tip"</strong> from the Features page first.
                         </p>
                         <button
                             onClick={() => (window.location.hash = "")}
-                            style={{
-                                display: "inline-flex", alignItems: "center", gap: 6,
-                                padding: "8px 16px", background: "#185FA5", color: "#fff",
-                                fontSize: 13, fontWeight: 500, fontFamily: "inherit",
-                                border: "none", borderRadius: 10, cursor: "pointer",
-                            }}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800
+                                       text-white text-[13px] font-semibold rounded-lg border-none cursor-pointer transition-colors duration-150"
                         >
                             Go to Features Page →
                         </button>
@@ -329,64 +253,47 @@ const TipSettings = () => {
     }
 
     return (
-        <div style={{ maxWidth: 680 }}>
+        <div className="max-w-2xl">
 
             {/* ── page title bar ── */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+            <div className="flex items-center justify-between mb-5">
                 <div>
-                    <h2 style={{ margin: 0, fontSize: 18, fontWeight: 500, color: "var(--color-text-primary)" }}>
-                        Tip Settings
-                    </h2>
-                    <p style={{ margin: "3px 0 0", fontSize: 12, color: "var(--color-text-tertiary)" }}>
-                        Configure how customers leave tips in your store.
-                    </p>
+                    <h2 className="m-0 text-[18px] font-bold text-gray-900 tracking-tight">Tip Settings</h2>
+                    <p className="m-0 mt-0.5 text-[12px] text-gray-400">Configure how customers leave tips in your store.</p>
                 </div>
-                <div style={{
-                    display: "inline-flex", alignItems: "center", gap: 6,
-                    padding: "5px 12px", borderRadius: 100,
-                    background: "#E1F5EE", border: "0.5px solid #0F6E56",
-                }}>
-                    <span style={{
-                        width: 7, height: 7, borderRadius: "50%", background: "#1D9E75",
-                        animation: "ck-pulse 2s infinite",
-                    }} />
-                    <style>{`@keyframes ck-pulse{0%,100%{opacity:1}50%{opacity:.4}}`}</style>
-                    <span style={{ fontSize: 11, fontWeight: 500, color: "#0F6E56" }}>Feature active</span>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[11px] font-semibold text-emerald-700">Feature active</span>
                 </div>
             </div>
 
             {/* ── save status toast ── */}
             {saveStatus && (
-                <div style={{
-                    display: "flex", alignItems: "center", gap: 10,
-                    padding: "10px 16px", marginBottom: 16, borderRadius: 10,
-                    fontSize: 13, fontWeight: 500,
-                    ...(saveStatus === "success"
-                        ? { background: "#EAF3DE", color: "#3B6D11", border: "0.5px solid #C0DD97" }
-                        : { background: "#FCEBEB", color: "#A32D2D", border: "0.5px solid #F7C1C1" }),
-                }}>
-                    <div style={{
-                        width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
-                        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12,
-                        background: saveStatus === "success" ? "#C0DD97" : "#F7C1C1",
-                    }}>
+                <div className={`flex items-center gap-3 px-4 py-3 mb-4 rounded-xl text-[13px] font-semibold border transition-all duration-300 ${
+                    saveStatus === "success"
+                        ? "bg-green-50 text-green-700 border-green-200"
+                        : "bg-red-50 text-red-600 border-red-200"
+                }`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] flex-shrink-0 font-bold ${
+                        saveStatus === "success" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-700"
+                    }`}>
                         {saveStatus === "success" ? "✓" : "✕"}
                     </div>
-                    {saveStatus === "success"
-                        ? "Settings saved successfully."
-                        : "Error saving settings. Please try again."}
+                    {saveStatus === "success" ? "Settings saved successfully." : "Error saving settings. Please try again."}
                 </div>
             )}
 
-            <form onSubmit={handleSave}>
+            <form onSubmit={handleSave} className="space-y-3">
 
                 {/* ── Display Settings ── */}
                 <Card>
                     <CardHead
-                        icon="📍" iconBg="#E6F1FB"
+                        icon="📍"
+                        iconBg="bg-blue-50"
                         title="Display Settings"
                         description="Choose where the tip form appears in your store"
-                        badge="Visibility" badgeColor="blue"
+                        badge="Visibility"
+                        badgeColor="blue"
                     />
                     <SettingRow label="Show on Cart Page" description="Displays the tip form after the cart product table.">
                         <Toggle checked={formData.tcwt_cart} onChange={(e) => set("tcwt_cart", e.target.checked)} />
@@ -399,10 +306,12 @@ const TipSettings = () => {
                 {/* ── Tip Configuration ── */}
                 <Card>
                     <CardHead
-                        icon="⚙️" iconBg="#E6F1FB"
+                        icon="⚙️"
+                        iconBg="bg-blue-50"
                         title="Tip Configuration"
                         description="Set how tips are calculated and displayed"
-                        badge="Core Setup" badgeColor="blue"
+                        badge="Core Setup"
+                        badgeColor="blue"
                     />
 
                     <SettingRow label="Form Title" description="Heading shown above the tip buttons.">
@@ -414,7 +323,7 @@ const TipSettings = () => {
                         />
                     </SettingRow>
 
-                    {/* Segmented control replaces the plain <select> for tip type */}
+                    {/* Segmented control for binary tip type choice */}
                     <SettingRow label="Tip Type" description="How tip rates are calculated.">
                         <SegmentedControl
                             value={formData.tcwt_type}
@@ -429,7 +338,13 @@ const TipSettings = () => {
                     <SettingRow
                         label="Tip Rates"
                         description="Comma-separated values shown as tip buttons."
-                        hint={<>e.g. <code style={{ fontSize: 11, background: "var(--color-background-secondary)", padding: "1px 5px", borderRadius: 4 }}>5,10,15,20,25,30</code></>}
+                        hint={
+                            <span>e.g.{" "}
+                                <code className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
+                                    5,10,15,20,25,30
+                                </code>
+                            </span>
+                        }
                     >
                         <FancyInput
                             type="text"
@@ -447,10 +362,12 @@ const TipSettings = () => {
                 {/* ── Options ── */}
                 <Card>
                     <CardHead
-                        icon="🔧" iconBg="#FAEEDA"
+                        icon="🔧"
+                        iconBg="bg-amber-50"
                         title="Options"
                         description="Additional tip form behaviour"
-                        badge="Behaviour" badgeColor="amber"
+                        badge="Behaviour"
+                        badgeColor="amber"
                     />
 
                     <SettingRow label="Enable Custom Tip" description="Lets customers enter any tip amount.">
@@ -467,41 +384,33 @@ const TipSettings = () => {
                 </Card>
 
                 {/* ── Save bar ── */}
-                <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 6, paddingBottom: 8 }}>
+                <div className="flex items-center gap-3 pt-1 pb-2">
                     <button
                         type="submit"
                         disabled={isSaving}
-                        style={{
-                            display: "inline-flex", alignItems: "center", gap: 7,
-                            padding: "9px 22px",
-                            fontSize: 13, fontWeight: 500, fontFamily: "inherit",
-                            color: "#fff", border: "none", borderRadius: 10, cursor: isSaving ? "not-allowed" : "pointer",
-                            background: isSaving ? "var(--color-border-secondary)" : "#185FA5",
-                            transition: "background .15s",
-                        }}
-                        onMouseEnter={e => { if (!isSaving) e.currentTarget.style.background = "#0C447C"; }}
-                        onMouseLeave={e => { if (!isSaving) e.currentTarget.style.background = "#185FA5"; }}
+                        className={`inline-flex items-center gap-2 px-6 py-2.5 text-white text-[13px] font-semibold rounded-lg border-none transition-all duration-150 ${
+                            isSaving
+                                ? "bg-gray-300 cursor-not-allowed"
+                                : "bg-blue-600 hover:bg-blue-700 active:scale-95 cursor-pointer shadow-sm shadow-blue-200 hover:shadow-md hover:shadow-blue-200"
+                        }`}
                     >
                         {isSaving ? (
                             <>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                                    <path d="M12 2a10 10 0 0 1 10 10" style={{ animation: "ck-spin 1s linear infinite" }} />
-                                    <style>{`@keyframes ck-spin{to{transform:rotate(360deg)}}`}</style>
+                                <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                                    <path d="M12 2a10 10 0 0 1 10 10" />
                                 </svg>
                                 Saving…
                             </>
                         ) : (
                             <>
-                                <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                                <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
                                 </svg>
                                 Save Changes
                             </>
                         )}
                     </button>
-                    <span style={{ fontSize: 11, color: "var(--color-text-tertiary)" }}>
-                        Changes are applied immediately after saving.
-                    </span>
+                    <span className="text-[11px] text-gray-400">Changes are applied immediately after saving.</span>
                 </div>
 
             </form>
