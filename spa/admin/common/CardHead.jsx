@@ -13,3 +13,5 @@ const CardHead = ({ icon, iconBg, title, description, badge, badgeColor }) => (
         {badge && <Badge color={badgeColor}>{badge}</Badge>}
     </div>
 );
+
+export default CardHead
