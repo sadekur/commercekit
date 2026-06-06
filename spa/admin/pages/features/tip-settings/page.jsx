@@ -6,6 +6,8 @@ import Toggle from "../../../common/Toggle";
 import FancyInput from "./components/FancyInput";
 import SettingRow from "./components/SettingRow";
 import SegmentedControl from "./components/SegmentedControl";
+import Card from "../../../common/Card";
+import CardHead from "../../../common/CardHead";
 
 const DEFAULTS = {
     tcwt_cart:     false,
