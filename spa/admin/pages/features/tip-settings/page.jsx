@@ -4,6 +4,7 @@ import TabPageSkeleton from "../../../common/Skeletons/TabPageSkeleton";
 import { WarningIcon } from "../../../common/Svgs";
 import Toggle from "../../../common/Toggle";
 import FancyInput from "./components/FancyInput";
+import SettingRow from "./components/SettingRow";
 
 /* ─── unchanged data helpers ─────────────────────────────────────────────── */
 
