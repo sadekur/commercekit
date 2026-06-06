@@ -14,7 +14,7 @@ class BuyButtonForWoocommerce {
         // single product page form submit + archive link
         $this->action( 'template_redirect', [ $this, 'buy_now_button_submit' ] );
 
-        // AJAX handlers (variable products always, simple products when Ajax is on)
+        // variable products always, simple products when Ajax is on
         $this->action( 'wp_ajax_ck_buy_button_add_to_cart',        [ $this, 'ajax_add_to_cart' ] );
         $this->action( 'wp_ajax_nopriv_ck_buy_button_add_to_cart', [ $this, 'ajax_add_to_cart' ] );
 
