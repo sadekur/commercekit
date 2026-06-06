@@ -3,6 +3,7 @@ import axios from "axios";
 import TabPageSkeleton from "../../../common/Skeletons/TabPageSkeleton";
 import { WarningIcon } from "../../../common/Svgs";
 import Toggle from "../../../common/Toggle";
+import FancyInput from "./components/FancyInput";
 
 /* ─── unchanged data helpers ─────────────────────────────────────────────── */
 
