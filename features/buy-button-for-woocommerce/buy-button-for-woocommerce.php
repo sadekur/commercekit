@@ -11,7 +11,7 @@ class BuyButtonForWoocommerce {
     public function __construct() {
         $this->settings = commercekit_get_buy_button_settings();
 
-        // Non-AJAX: single product page form submit + archive link
+        // single product page form submit + archive link
         $this->action( 'template_redirect', [ $this, 'buy_now_button_submit' ] );
 
         // AJAX handlers (variable products always, simple products when Ajax is on)
