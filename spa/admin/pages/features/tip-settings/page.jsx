@@ -108,33 +108,6 @@ const SegmentedControl = ({ value, onChange, options }) => (
     </div>
 );
 
-/**
- * Fancy select dropdown — pure Tailwind, custom chevron, same props as <select>.
- */
-const FancySelect = ({ children, ...props }) => (
-    <div className="relative inline-flex items-center">
-        <select
-            {...props}
-            className="w-48 h-9 pl-3 pr-8 text-[13px] text-gray-800 bg-gray-50 border border-gray-200 rounded-lg
-                       appearance-none cursor-pointer
-                       hover:border-blue-400 hover:bg-white
-                       focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:bg-white
-                       transition-all duration-150"
-        >
-            {children}
-        </select>
-        {/* custom chevron */}
-        <svg
-            className="absolute right-2.5 pointer-events-none text-gray-400"
-            width="13" height="13" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" strokeWidth="2.5"
-            strokeLinecap="round" strokeLinejoin="round"
-        >
-            <polyline points="6 9 12 15 18 9" />
-        </svg>
-    </div>
-);
-
 const TipSettings = () => {
     const [isLoading,        setIsLoading]        = useState(true);
     const [isSaving,         setIsSaving]         = useState(false);
