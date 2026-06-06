@@ -12,6 +12,8 @@ import FancyInput from "../../../common/FancyInput";
 import Card from "../../../common/Card";
 import CardHead from "../../../common/CardHead";
 
+/* ─── unchanged data helpers ─────────────────────────────────────────────── */
+
 const DEFAULTS = {
     enable_single:           true,
     enable_archive:          true,
@@ -35,15 +37,79 @@ const DEFAULTS = {
     button_padding:          { top: "", right: "", bottom: "", left: "" },
 };
 
+/* ─── design-only sub-components (pure Tailwind) ─────────────────────────── */
+
+/** Coloured pill badge */
+const Badge = ({ children, color = "blue" }) => {
+    const cls = {
+        blue:   "bg-blue-50 text-blue-700 border border-blue-200",
+        amber:  "bg-amber-50 text-amber-700 border border-amber-200",
+        green:  "bg-green-50 text-green-700 border border-green-200",
+        gray:   "bg-gray-100 text-gray-500 border border-gray-200",
+    };
+    return (
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide ${cls[color] || cls.blue}`}>
+            {children}
+        </span>
+    );
+};
+
+/** Tab button */
+const TabBtn = ({ active, onClick, icon, label, count }) => (
+    <button
+        type="button"
+        onClick={onClick}
+        className={`relative flex items-center gap-2 px-5 py-2.5 text-[13px] font-semibold border-b-2 transition-all duration-150 bg-transparent cursor-pointer whitespace-nowrap ${
+            active
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-400 hover:text-gray-600 hover:border-gray-200"
+        }`}
+    >
+        <span>{icon}</span>
+        {label}
+        {count !== undefined && (
+            <span className={`inline-flex items-center justify-center w-4 h-4 rounded-full text-[9px] font-bold ${
+                active ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-400"
+            }`}>
+                {count}
+            </span>
+        )}
+    </button>
+);
+
+/** Quantity stepper — replaces the plain number <input> for Default Shop Quantity */
+const QuantityStepper = ({ value, onChange }) => (
+    <div className="inline-flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50 h-9">
+        <button
+            type="button"
+            onClick={() => onChange(Math.max(1, value - 1))}
+            className="w-8 h-full flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors duration-100 border-none bg-transparent cursor-pointer text-lg leading-none select-none"
+        >
+            −
+        </button>
+        <span className="w-10 text-center text-[13px] font-semibold text-gray-800 border-x border-gray-200 h-full flex items-center justify-center font-mono">
+            {value}
+        </span>
+        <button
+            type="button"
+            onClick={() => onChange(value + 1)}
+            className="w-8 h-full flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors duration-100 border-none bg-transparent cursor-pointer text-lg leading-none select-none"
+        >
+            +
+        </button>
+    </div>
+);
+
+/* ─── main component ─────────────────────────────────────────────────────── */
 
 const BuyButtonSettings = () => {
-    const [isLoading,       setIsLoading]       = useState(true);
-    const [isTabLoading,    setIsTabLoading]    = useState(false);
-    const [isSaving,        setIsSaving]        = useState(false);
-    const [saveStatus,      setSaveStatus]      = useState(null);
+    const [isLoading,        setIsLoading]        = useState(true);
+    const [isTabLoading,     setIsTabLoading]     = useState(false);
+    const [isSaving,         setIsSaving]         = useState(false);
+    const [saveStatus,       setSaveStatus]       = useState(null);
     const [isFeatureEnabled, setIsFeatureEnabled] = useState(false);
-    const [activeTab,       setActiveTab]       = useState("general");
-    const [formData,        setFormData]        = useState(DEFAULTS);
+    const [activeTab,        setActiveTab]        = useState("general");
+    const [formData,         setFormData]         = useState(DEFAULTS);
 
     const handleTabChange = (tabId) => {
         if (tabId === activeTab) return;
@@ -102,8 +168,8 @@ const BuyButtonSettings = () => {
         }
 
         const onSettingsUpdated = (e) => {
-            const updated  = e.detail || {};
-            const enabled  = updated["buy-button-for-woocommerce"] === "on";
+            const updated = e.detail || {};
+            const enabled = updated["buy-button-for-woocommerce"] === "on";
             setIsFeatureEnabled(enabled);
             if (enabled) loadSettings();
         };
@@ -157,6 +223,7 @@ const BuyButtonSettings = () => {
 
     if (isLoading) return <TabPageSkeleton />;
 
+    /* ── feature disabled ── */
     if (!isFeatureEnabled) {
         return (
             <div className="max-w-2xl">
@@ -186,7 +253,7 @@ const BuyButtonSettings = () => {
     const isCustomStyle = formData.button_style === "custom";
 
     return (
-        <div className="max-w-3xl">
+        <div className="max-w-2xl">
 
             {/* ── page title bar ── */}
             <div className="flex items-center justify-between mb-5">
@@ -217,35 +284,30 @@ const BuyButtonSettings = () => {
             )}
 
             {/* ── Tabs ── */}
-            <div className="flex border-b border-gray-200 mb-4">
-                {[
-                    { id: "general",       label: "General" },
-                    { id: "button_styles", label: "Button Styles" },
-                ].map((tab) => (
-                    <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => handleTabChange(tab.id)}
-                        className={`px-5 py-2.5 text-[13px] font-semibold border-b-2 transition-colors duration-150 bg-transparent cursor-pointer ${
-                            activeTab === tab.id
-                                ? "border-blue-600 text-blue-600"
-                                : "border-transparent text-gray-500 hover:text-gray-700"
-                        }`}
-                    >
-                        {tab.label}
-                    </button>
-                ))}
+            <div className="flex border-b border-gray-200 mb-4 gap-1">
+                <TabBtn
+                    active={activeTab === "general"}
+                    onClick={() => handleTabChange("general")}
+                    icon="⚙️"
+                    label="General"
+                    count={5}
+                />
+                <TabBtn
+                    active={activeTab === "button_styles"}
+                    onClick={() => handleTabChange("button_styles")}
+                    icon="🎨"
+                    label="Button Styles"
+                />
             </div>
 
             <form onSubmit={handleSave} className="space-y-3">
 
-                {/* ══════════════ TAB SWITCHING SKELETON ══════════════ */}
+                {/* ══ Tab loading skeleton ══ */}
                 {isTabLoading && <TabPageSkeleton showTabs={false} cardCount={2} rowsPerCard={2} />}
 
                 {/* ══════════════ GENERAL TAB ══════════════ */}
                 {!isTabLoading && activeTab === "general" && (
                     <>
-
                         {/* Enable Button On */}
                         <Card>
                             <CardHead
@@ -375,15 +437,9 @@ const BuyButtonSettings = () => {
                                 label="Default Shop Quantity"
                                 description="Quantity added to cart when Buy Now is clicked on the shop page."
                             >
-                                <input
-                                    type="number"
-                                    min="1"
+                                <QuantityStepper
                                     value={formData.default_shop_quantity}
-                                    onChange={(e) => set("default_shop_quantity", Math.max(1, parseInt(e.target.value) || 1))}
-                                    className="w-20 px-3 py-1.5 text-[13px] text-gray-800 bg-gray-50 border border-gray-200 rounded-lg
-                                               hover:border-blue-400 hover:bg-white
-                                               focus:!outline-none focus:!border-blue-500 focus:!ring-2 focus:!ring-blue-100 focus:!bg-white
-                                               transition-all duration-150 font-mono"
+                                    onChange={(v) => set("default_shop_quantity", Math.max(1, v))}
                                 />
                             </SettingRow>
                             <SettingRow
@@ -397,7 +453,7 @@ const BuyButtonSettings = () => {
                             </SettingRow>
                             <SettingRow
                                 label="Ajax Add to Cart"
-                                description="Use AJAX for simple products on the single product page (variable products always use AJAX)."
+                                description="Use AJAX for simple products on the single product page."
                             >
                                 <Toggle
                                     checked={formData.ajax_add_to_cart}
@@ -405,8 +461,8 @@ const BuyButtonSettings = () => {
                                 />
                             </SettingRow>
                             <SettingRow
-                                label="Hide WooCommerce Add to Cart Button"
-                                description="Hide the default WooCommerce Add to Cart button on single product and shop pages."
+                                label="Hide Add to Cart Button"
+                                description="Hide the default WooCommerce Add to Cart button on product and shop pages."
                                 last
                             >
                                 <Toggle
@@ -415,14 +471,12 @@ const BuyButtonSettings = () => {
                                 />
                             </SettingRow>
                         </Card>
-
                     </>
                 )}
 
                 {/* ══════════════ BUTTON STYLES TAB ══════════════ */}
                 {!isTabLoading && activeTab === "button_styles" && (
                     <>
-
                         {/* Style mode */}
                         <Card>
                             <CardHead
@@ -505,16 +559,16 @@ const BuyButtonSettings = () => {
                         <Card>
                             <CardHead
                                 icon="👁"
-                                iconBg="bg-gray-50"
+                                iconBg="bg-gray-100"
                                 title="Button Preview"
                                 description="Reflects custom style values. Theme styles are not shown here."
                                 badge="Preview"
-                                badgeColor="blue"
+                                badgeColor="gray"
                             />
-                            <div className="px-5 py-4">
+                            <div className="px-5 py-5 bg-gray-50 flex items-center justify-center min-h-[80px]">
                                 <button
                                     type="button"
-                                    className="button alt wc-buy-now-btn cursor-default"
+                                    className="button alt wc-buy-now-btn cursor-default px-6 py-2.5 text-[13px] font-semibold rounded-lg"
                                     style={isCustomStyle ? {
                                         color:           formData.button_text_color       || undefined,
                                         backgroundColor: formData.button_background_color || undefined,
@@ -529,7 +583,6 @@ const BuyButtonSettings = () => {
                                 </button>
                             </div>
                         </Card>
-
                     </>
                 )}
 
