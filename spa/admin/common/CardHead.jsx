@@ -1,3 +1,5 @@
+import Badge from "./Badge";
+
 /** Card header */
 const CardHead = ({ icon, iconBg, title, description, badge, badgeColor }) => (
     <div className="flex items-center gap-3 px-5 py-3.5 border-b border-gray-100">
