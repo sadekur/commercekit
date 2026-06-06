@@ -4,8 +4,6 @@
     var isCheckout = $('body').hasClass('woocommerce-checkout');
     var isBlocks   = !!(typeof COMMERCEKIT !== 'undefined' && COMMERCEKIT.is_blocks);
 
-    // ── AJAX helpers ─────────────────────────────────────────────────────────
-
     function setTip(data) {
         $.post(COMMERCEKIT.ajaxurl, {
             action: 'ck_set_tip',
