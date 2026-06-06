@@ -58,13 +58,6 @@ const Badge = ({ children, color = "blue" }) => {
     );
 };
 
-/** Card wrapper */
-const Card = ({ children }) => (
-    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-3 transition-shadow duration-200 hover:shadow-md">
-        {children}
-    </div>
-);
-
 
 const TipSettings = () => {
     const [isLoading,        setIsLoading]        = useState(true);
