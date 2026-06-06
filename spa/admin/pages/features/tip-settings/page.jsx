@@ -135,8 +135,6 @@ const FancySelect = ({ children, ...props }) => (
     </div>
 );
 
-/* ─── main component ─────────────────────────────────────────────────────── */
-
 const TipSettings = () => {
     const [isLoading,        setIsLoading]        = useState(true);
     const [isSaving,         setIsSaving]         = useState(false);
