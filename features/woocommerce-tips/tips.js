@@ -69,7 +69,7 @@
         $('.ck-remove-tip').hide();
     }
 
-    // ── Totals refresh ───────────────────────────────────────────────────────
+    // ── Totals refresh
 
     function refreshTotals() {
         if (isBlocks) {
