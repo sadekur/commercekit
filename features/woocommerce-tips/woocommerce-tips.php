@@ -16,7 +16,6 @@ class WoocommerceTips {
             $this->action( 'woocommerce_after_cart_table', [ $this, 'render_tip_form' ] );
 
             // WooCommerce Blocks cart: filter fires on block render, we prepend before the block
-            // so the form sits outside React's root and won't be wiped during hydration.
             $this->filter( 'render_block_woocommerce/cart', [ $this, 'inject_for_blocks_cart' ] );
 
             $this->filter( 'woocommerce_add_to_cart_fragments', [ $this, 'cart_fragments' ] );
