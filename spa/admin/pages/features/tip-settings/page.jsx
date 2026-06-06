@@ -7,8 +7,6 @@ import FancyInput from "./components/FancyInput";
 import SettingRow from "./components/SettingRow";
 import SegmentedControl from "./components/SegmentedControl";
 
-/* ─── unchanged data helpers ─────────────────────────────────────────────── */
-
 const DEFAULTS = {
     tcwt_cart:     false,
     tcwt_checkout: false,
