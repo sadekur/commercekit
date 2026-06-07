@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SettingSkeleton from "../../../common/Skeletons/SettingSkalaton";
-import { SaveButtonIcon, WarningIcon } from "../../../common/Svgs";
+import { SaveButtonIcon, SaveChangesIcon, WarningIcon } from "../../../common/Svgs";
 import SectionHeader from "../../../common/SectionHeader";
 import NumberField from "../../../common/NumberField";
 import Toggle from "../../../common/Toggle";
@@ -319,14 +319,20 @@ const StockThreshold = () => {
           >
             {isSaving ? (
               <>
-                <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                  <path d="M12 2a10 10 0 0 1 10 10" />
-                </svg>
+                {SaveButtonIcon}
                 Saving…
               </>
             ) : (
               <>
-                <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                {SaveChangesIcon}
+                Save Changes
+              </>
+            )}
+          </button>
+          <span className="text-[11px] text-gray-400">Changes are applied immediately after saving.</span>
+        </div>
+      </form>
+
                   <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
                 </svg>
                 Save Changes
