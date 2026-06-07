@@ -12,6 +12,7 @@ import FancyInput from "../../../common/FancyInput";
 import Card from "../../../common/Card";
 import CardHead from "../../../common/CardHead";
 import QuantityStepper from "../../../common/QuantityStepper";
+import TabBtn from "../../../common/TabBtn";
 
 const DEFAULTS = {
     enable_single:           true,
