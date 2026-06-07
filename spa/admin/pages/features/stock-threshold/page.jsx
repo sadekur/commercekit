@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SettingSkeleton from "../../../common/Skeletons/SettingSkalaton";
-import { SaveButtonIcon, SaveChangesIcon, WarningIcon } from "../../../common/Svgs";
+import { SaveButtonIcon, WarningIcon } from "../../../common/Svgs";
 import SectionHeader from "../../../common/SectionHeader";
 import NumberField from "../../../common/NumberField";
 import Toggle from "../../../common/Toggle";
 
+/* ─── all logic identical to original ───────────────────────────────────── */
 
 const StockThreshold = () => {
-  const [isLoading, setIsLoading]               = useState(true);
-  const [isSaving, setIsSaving]                 = useState(false);
-  const [saveStatus, setSaveStatus]             = useState(null);
+  const [isLoading,        setIsLoading]        = useState(true);
+  const [isSaving,         setIsSaving]         = useState(false);
+  const [saveStatus,       setSaveStatus]       = useState(null);
   const [isFeatureEnabled, setIsFeatureEnabled] = useState(false);
-  const [showHowItWorks, setShowHowItWorks]     = useState(false);
+  const [showHowItWorks,   setShowHowItWorks]   = useState(false);
 
   const [formData, setFormData] = useState({
-    low_threshold:    5,
-    low_increase:     40,
-    medium_threshold: 20,
-    medium_increase:  20,
-    high_threshold:   100,
-    high_decrease:    15,
-    enable_message:   false,
+    low_threshold:           5,
+    low_increase:            40,
+    medium_threshold:        20,
+    medium_increase:         20,
+    high_threshold:          100,
+    high_decrease:           15,
+    enable_message:          false,
     low_customer_message:    "Low stock - high demand item",
     medium_customer_message: "Medium stock - price adjusted",
     high_customer_message:   "High stock - clearance price",
@@ -32,16 +33,16 @@ const StockThreshold = () => {
 
   const applyResponse = (data) =>
     setFormData({
-      low_threshold:    data.low_threshold,
-      low_increase:     data.low_increase,
-      medium_threshold: data.medium_threshold,
-      medium_increase:  data.medium_increase,
-      high_threshold:   data.high_threshold,
-      high_decrease:    data.high_decrease,
-      enable_message:   data.enable_message === "on",
-      low_customer_message:    data.low_customer_message || "Low stock - high demand item",
+      low_threshold:           data.low_threshold,
+      low_increase:            data.low_increase,
+      medium_threshold:        data.medium_threshold,
+      medium_increase:         data.medium_increase,
+      high_threshold:          data.high_threshold,
+      high_decrease:           data.high_decrease,
+      enable_message:          data.enable_message === "on",
+      low_customer_message:    data.low_customer_message    || "Low stock - high demand item",
       medium_customer_message: data.medium_customer_message || "Medium stock - price adjusted",
-      high_customer_message:   data.high_customer_message || "High stock - clearance price",
+      high_customer_message:   data.high_customer_message   || "High stock - clearance price",
     });
 
   const checkFeatureAndLoad = () => {
@@ -89,10 +90,7 @@ const StockThreshold = () => {
     axios
       .post(
         url,
-        {
-          ...formData,
-          enable_message: formData.enable_message ? "on" : "off",
-        },
+        { ...formData, enable_message: formData.enable_message ? "on" : "off" },
         { headers: { "Content-Type": "application/json", "X-WP-Nonce": COMMERCEKIT.nonce } }
       )
       .then(() => {
@@ -114,17 +112,20 @@ const StockThreshold = () => {
   if (!isFeatureEnabled) {
     return (
       <div className="max-w-2xl">
-        <div className="mt-6 flex gap-4 p-6 bg-yellow-50 border border-yellow-300 border-l-4 border-l-yellow-500 rounded-xl">
-          <WarningIcon className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+        <div className="mt-6 flex gap-4 p-5 bg-amber-50 border border-amber-200 border-l-4 border-l-amber-500 rounded-xl">
+          <div className="w-8 h-8 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0">
+            <WarningIcon className="w-4 h-4 text-amber-700" />
+          </div>
           <div>
-            <p className="m-0 text-[15px] font-bold text-yellow-900">Feature Not Enabled</p>
-            <p className="mt-1.5 mb-4 m-0 text-[13px] text-yellow-800 leading-relaxed">
+            <p className="m-0 text-[14px] font-semibold text-amber-900">Feature Not Enabled</p>
+            <p className="mt-1.5 mb-4 m-0 text-[13px] text-amber-800 leading-relaxed">
               The Stock Threshold feature is currently disabled. Please enable{" "}
               <strong>"Stock Threshold for WooCommerce"</strong> from the Features page first.
             </p>
             <button
               onClick={() => (window.location.hash = "")}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[13px] font-semibold rounded-lg transition-colors duration-150 cursor-pointer border-none"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800
+                         text-white text-[13px] font-semibold rounded-lg border-none cursor-pointer transition-colors duration-150"
             >
               Go to Features Page →
             </button>
@@ -136,43 +137,54 @@ const StockThreshold = () => {
 
   /* ── main render ── */
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-2xl">
+
+      {/* ── page title bar ── */}
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h2 className="m-0 text-[18px] font-bold text-gray-900 tracking-tight">Stock Threshold</h2>
+          <p className="m-0 mt-0.5 text-[12px] text-gray-400">Automatically adjust prices based on inventory levels.</p>
+        </div>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[11px] font-semibold text-emerald-700">Feature active</span>
+        </div>
+      </div>
 
       {/* ── Save toast ── */}
       {saveStatus && (
-        <div
-          className={`flex items-center gap-2.5 px-4 py-2.5 mb-4 rounded-xl text-[13px] font-semibold border ${
-            saveStatus === "success"
-              ? "bg-green-50 text-green-700 border-green-200"
-              : "bg-red-50 text-red-600 border-red-200"
-          }`}
-        >
-          <span className="text-base leading-none">
+        <div className={`flex items-center gap-3 px-4 py-3 mb-4 rounded-xl text-[13px] font-semibold border transition-all duration-300 ${
+          saveStatus === "success"
+            ? "bg-green-50 text-green-700 border-green-200"
+            : "bg-red-50 text-red-600 border-red-200"
+        }`}>
+          <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] flex-shrink-0 font-bold ${
+            saveStatus === "success" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-700"
+          }`}>
             {saveStatus === "success" ? "✓" : "✕"}
-          </span>
-          {saveStatus === "success"
-            ? "Settings saved successfully."
-            : "Error saving settings. Please try again."}
+          </div>
+          {saveStatus === "success" ? "Settings saved successfully." : "Error saving settings. Please try again."}
         </div>
       )}
 
-      <form onSubmit={handleSave} className="space-y-4">
+      <form onSubmit={handleSave} className="space-y-3">
 
         {/* ── Pricing rules card ── */}
-        <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
+        <div className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-md transition-shadow duration-200">
+
           {/* Low Stock */}
           <SectionHeader
             icon="🔴"
             title="Low Stock Rules"
             description="Increase price when inventory is scarce"
-            headerClass="bg-red-50 border-red-100"
-            pillClass="text-red-600 bg-red-50 border-red-200"
+            color="red"
           />
           <NumberField
             label="Low Stock Threshold"
             value={formData.low_threshold}
             onChange={(e) => handleChange("low_threshold", parseInt(e.target.value) || 0)}
             helper="Items at or below this count = low stock"
+            accent="red"
           />
           <NumberField
             label="Price Increase"
@@ -180,6 +192,7 @@ const StockThreshold = () => {
             onChange={(e) => handleChange("low_increase", parseFloat(e.target.value) || 0)}
             suffix="%"
             helper="% added to base price when stock is low"
+            accent="red"
           />
 
           {/* Medium Stock */}
@@ -187,14 +200,14 @@ const StockThreshold = () => {
             icon="🟡"
             title="Medium Stock Rules"
             description="Slight increase for moderate inventory levels"
-            headerClass="bg-amber-50 border-amber-100"
-            pillClass="text-amber-600 bg-amber-50 border-amber-200"
+            color="amber"
           />
           <NumberField
             label="Medium Stock Threshold"
             value={formData.medium_threshold}
             onChange={(e) => handleChange("medium_threshold", parseInt(e.target.value) || 0)}
             helper="Items at or below this count = medium stock"
+            accent="amber"
           />
           <NumberField
             label="Price Increase"
@@ -202,6 +215,7 @@ const StockThreshold = () => {
             onChange={(e) => handleChange("medium_increase", parseFloat(e.target.value) || 0)}
             suffix="%"
             helper="% added to base price when stock is medium"
+            accent="amber"
           />
 
           {/* High Stock */}
@@ -209,14 +223,14 @@ const StockThreshold = () => {
             icon="🟢"
             title="High Stock Rules"
             description="Decrease price to move excess inventory faster"
-            headerClass="bg-green-50 border-green-100"
-            pillClass="text-green-600 bg-green-50 border-green-200"
+            color="green"
           />
           <NumberField
             label="High Stock Threshold"
             value={formData.high_threshold}
             onChange={(e) => handleChange("high_threshold", parseInt(e.target.value) || 0)}
             helper="Items at or above this count = high stock"
+            accent="green"
           />
           <NumberField
             label="Price Decrease"
@@ -224,157 +238,191 @@ const StockThreshold = () => {
             onChange={(e) => handleChange("high_decrease", parseFloat(e.target.value) || 0)}
             suffix="%"
             helper="% subtracted from base price when stock is high"
+            accent="green"
+            last
           />
         </div>
 
-        {/* ── Customer message card ── */}
-        <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-          {/* Header row */}
-          <div className="flex items-center justify-between px-6 py-3.5 bg-gray-50 border-b border-gray-100">
-            <div>
-              <p className="m-0 text-[13px] font-bold text-gray-800">💬 Customer Messages</p>
-              <p className="m-0 mt-0.5 text-[11px] text-gray-500">
-                Notify shoppers when pricing has been adjusted (per stock level)
-              </p>
+        {/* ── Customer messages card ── */}
+        <div className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-md transition-shadow duration-200">
+
+          {/* Header row with toggle */}
+          <div className="flex items-center justify-between px-5 py-3.5 bg-gray-50 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-sm flex-shrink-0">
+                💬
+              </div>
+              <div>
+                <p className="m-0 text-[13px] font-semibold text-gray-900 leading-tight">Customer Messages</p>
+                <p className="m-0 mt-0.5 text-[11px] text-gray-400">Notify shoppers when pricing has been adjusted</p>
+              </div>
             </div>
-            <Toggle
-              checked={formData.enable_message}
-              onChange={(e) => handleChange("enable_message", e.target.checked)}
-            />
+            <div className="flex items-center gap-2.5">
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
+                formData.enable_message
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                  : "bg-gray-100 text-gray-400 border-gray-200"
+              }`}>
+                {formData.enable_message ? "On" : "Off"}
+              </span>
+              <Toggle
+                checked={formData.enable_message}
+                onChange={(e) => handleChange("enable_message", e.target.checked)}
+              />
+            </div>
           </div>
 
-          {/* Textarea body */}
-          <div
-            className={`px-6 py-4 transition-opacity duration-200 ${
-              formData.enable_message
-                ? "opacity-100 pointer-events-auto"
-                : "opacity-40 pointer-events-none"
-            }`}
-          >
-            {/* Low Stock Message */}
-            <div className="mb-4">
-              <label className="block mb-2 text-[11px] font-semibold text-red-600 uppercase tracking-wider">
-                🔴 Low Stock Message
+          {/* Message textareas */}
+          <div className={`p-5 flex flex-col gap-4 transition-opacity duration-200 ${
+            formData.enable_message ? "opacity-100 pointer-events-auto" : "opacity-40 pointer-events-none"
+          }`}>
+
+            {/* Low */}
+            <div>
+              <label className="flex items-center gap-1.5 mb-2 text-[11px] font-semibold text-red-600 uppercase tracking-wider">
+                <span>🔴</span> Low Stock Message
               </label>
               <textarea
                 value={formData.low_customer_message}
                 onChange={(e) => handleChange("low_customer_message", e.target.value)}
                 rows={2}
-                className="w-full px-3.5 py-2.5 text-[13px] text-gray-800 bg-red-50 border border-red-200 rounded-lg resize-none font-sans leading-relaxed focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors duration-150"
+                className="w-full px-3.5 py-2.5 text-[13px] text-gray-800 bg-red-50 border border-red-200 rounded-lg
+                           resize-none leading-relaxed
+                           hover:border-red-300
+                           focus:outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100
+                           transition-all duration-150"
               />
             </div>
 
-            {/* Medium Stock Message */}
-            <div className="mb-4">
-              <label className="block mb-2 text-[11px] font-semibold text-amber-600 uppercase tracking-wider">
-                🟡 Medium Stock Message
+            {/* Medium */}
+            <div>
+              <label className="flex items-center gap-1.5 mb-2 text-[11px] font-semibold text-amber-600 uppercase tracking-wider">
+                <span>🟡</span> Medium Stock Message
               </label>
               <textarea
                 value={formData.medium_customer_message}
                 onChange={(e) => handleChange("medium_customer_message", e.target.value)}
                 rows={2}
-                className="w-full px-3.5 py-2.5 text-[13px] text-gray-800 bg-amber-50 border border-amber-200 rounded-lg resize-none font-sans leading-relaxed focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors duration-150"
+                className="w-full px-3.5 py-2.5 text-[13px] text-gray-800 bg-amber-50 border border-amber-200 rounded-lg
+                           resize-none leading-relaxed
+                           hover:border-amber-300
+                           focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100
+                           transition-all duration-150"
               />
             </div>
 
-            {/* High Stock Message */}
+            {/* High */}
             <div>
-              <label className="block mb-2 text-[11px] font-semibold text-green-600 uppercase tracking-wider">
-                🟢 High Stock Message
+              <label className="flex items-center gap-1.5 mb-2 text-[11px] font-semibold text-green-600 uppercase tracking-wider">
+                <span>🟢</span> High Stock Message
               </label>
               <textarea
                 value={formData.high_customer_message}
                 onChange={(e) => handleChange("high_customer_message", e.target.value)}
                 rows={2}
-                className="w-full px-3.5 py-2.5 text-[13px] text-gray-800 bg-green-50 border border-green-200 rounded-lg resize-none font-sans leading-relaxed focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors duration-150"
+                className="w-full px-3.5 py-2.5 text-[13px] text-gray-800 bg-green-50 border border-green-200 rounded-lg
+                           resize-none leading-relaxed
+                           hover:border-green-300
+                           focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100
+                           transition-all duration-150"
               />
             </div>
-            <p className="m-0 mt-3 text-[11px] text-gray-400">
-              Each message shows when its corresponding stock level triggers price adjustment on product pages.
+
+            <p className="m-0 text-[11px] text-gray-400 leading-relaxed">
+              Each message shows when its stock level triggers a price adjustment on product pages.
             </p>
           </div>
         </div>
 
-        {/* ── Save button row ── */}
-        <div className="flex items-center gap-3 pt-1">
+        {/* ── Save bar ── */}
+        <div className="flex items-center gap-3 pt-1 pb-2">
           <button
             type="submit"
             disabled={isSaving}
-            className={`inline-flex items-center gap-2 px-6 py-2.5 text-white text-[13px] font-bold rounded-lg border-none transition-all duration-200 ${
+            className={`inline-flex items-center gap-2 px-6 py-2.5 text-white text-[13px] font-semibold rounded-lg border-none transition-all duration-150 ${
               isSaving
-                ? "bg-gray-400 cursor-not-allowed shadow-none"
-                : "bg-blue-600 hover:bg-blue-700 cursor-pointer shadow-md shadow-blue-200"
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 active:scale-95 cursor-pointer shadow-sm shadow-blue-200 hover:shadow-md hover:shadow-blue-200"
             }`}
           >
             {isSaving ? (
               <>
-                {SaveButtonIcon}
+                <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                  <path d="M12 2a10 10 0 0 1 10 10" />
+                </svg>
                 Saving…
               </>
             ) : (
               <>
+                <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                </svg>
                 Save Changes
               </>
             )}
           </button>
-          <span className="text-xs text-gray-400">Changes are applied immediately after saving.</span>
+          <span className="text-[11px] text-gray-400">Changes are applied immediately after saving.</span>
         </div>
       </form>
 
       {/* ── How It Works accordion ── */}
-      <div className="mt-6 bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 max-w-lg">
+      <div className="mt-4 bg-white rounded-xl overflow-hidden border border-gray-200">
         <button
           type="button"
           onClick={() => setShowHowItWorks(!showHowItWorks)}
-          className="w-full flex items-center justify-between px-5 py-3.5 bg-transparent border-none cursor-pointer text-[13px] font-bold text-gray-700 hover:bg-gray-50 transition-colors duration-150 focus:outline-none"
+          className="w-full flex items-center justify-between px-5 py-3.5 bg-transparent border-none cursor-pointer
+                     hover:bg-gray-50 transition-colors duration-150 focus:outline-none"
         >
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2 text-[13px] font-semibold text-gray-700">
             <span>📖</span>
             How It Works
           </span>
           <svg
             className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${showHowItWorks ? "rotate-180" : "rotate-0"}`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" strokeWidth="2.5"
+            strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"
           >
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </button>
 
         {showHowItWorks && (
-          <div className="px-5 pb-5 flex flex-col gap-2">
+          <div className="px-5 pb-5 flex flex-col gap-2 border-t border-gray-100">
+            <p className="m-0 pt-4 pb-1 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Pricing Logic</p>
             {[
               {
                 icon: "🔴",
+                label: "Low",
                 text: "Stock ≤ Low Threshold → price increases by Low %",
-                className: "bg-red-50 border-red-100 text-red-800",
+                cls: "bg-red-50 border-red-100 text-red-800",
+                badge: "bg-red-100 text-red-600",
               },
               {
                 icon: "🟡",
+                label: "Medium",
                 text: "Stock ≤ Medium Threshold → price increases by Medium %",
-                className: "bg-amber-50 border-amber-100 text-amber-800",
+                cls: "bg-amber-50 border-amber-100 text-amber-800",
+                badge: "bg-amber-100 text-amber-700",
               },
               {
                 icon: "🟢",
+                label: "High",
                 text: "Stock ≥ High Threshold → price decreases by High %",
-                className: "bg-green-50 border-green-100 text-green-800",
+                cls: "bg-green-50 border-green-100 text-green-800",
+                badge: "bg-green-100 text-green-700",
               },
               {
                 icon: "⚪",
+                label: "Normal",
                 text: "Otherwise → normal base price applies",
-                className: "bg-gray-50 border-gray-100 text-gray-600",
+                cls: "bg-gray-50 border-gray-100 text-gray-600",
+                badge: "bg-gray-100 text-gray-500",
               },
-            ].map(({ icon, text, className }) => (
-              <div
-                key={text}
-                className={`flex items-start gap-2.5 px-3 py-2.5 rounded-lg border text-[12px] leading-relaxed ${className}`}
-              >
-                <span className="flex-shrink-0 leading-relaxed">{icon}</span>
-                <span>{text}</span>
+            ].map(({ icon, label, text, cls, badge }) => (
+              <div key={label} className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg border text-[12px] leading-relaxed ${cls}`}>
+                <span className="flex-shrink-0 text-base">{icon}</span>
+                <span className={`flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full ${badge}`}>{label}</span>
+                <span className="leading-snug">{text}</span>
               </div>
             ))}
           </div>
