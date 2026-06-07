@@ -12,8 +12,6 @@ import FancyInput from "../../../common/FancyInput";
 import Card from "../../../common/Card";
 import CardHead from "../../../common/CardHead";
 
-/* ─── unchanged data helpers ─────────────────────────────────────────────── */
-
 const DEFAULTS = {
     enable_single:           true,
     enable_archive:          true,
