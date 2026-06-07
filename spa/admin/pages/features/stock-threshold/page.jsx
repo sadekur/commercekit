@@ -396,7 +396,6 @@ const StockThreshold = () => {
           </div>
         )}
       </div>
-
     </div>
   );
 };
