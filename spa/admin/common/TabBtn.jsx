@@ -19,3 +19,5 @@ const TabBtn = ({ active, onClick, icon, label, count }) => (
         )}
     </button>
 );
+
+export default TabBtn;
