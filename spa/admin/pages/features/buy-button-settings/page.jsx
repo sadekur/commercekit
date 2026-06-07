@@ -37,12 +37,6 @@ const DEFAULTS = {
     button_padding:          { top: "", right: "", bottom: "", left: "" },
 };
 
-/** Tab button */
-
-
-/** Quantity stepper — replaces the plain number <input> for Default Shop Quantity */
-
-
 const BuyButtonSettings = () => {
     const [isLoading,        setIsLoading]        = useState(true);
     const [isTabLoading,     setIsTabLoading]     = useState(false);
