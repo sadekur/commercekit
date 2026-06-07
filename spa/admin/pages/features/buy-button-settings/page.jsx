@@ -95,8 +95,6 @@ const QuantityStepper = ({ value, onChange }) => (
     </div>
 );
 
-/* ─── main component ─────────────────────────────────────────────────────── */
-
 const BuyButtonSettings = () => {
     const [isLoading,        setIsLoading]        = useState(true);
     const [isTabLoading,     setIsTabLoading]     = useState(false);
