@@ -333,16 +333,6 @@ const StockThreshold = () => {
         </div>
       </form>
 
-                  <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
-                </svg>
-                Save Changes
-              </>
-            )}
-          </button>
-          <span className="text-[11px] text-gray-400">Changes are applied immediately after saving.</span>
-        </div>
-      </form>
-
       {/* ── How It Works accordion ── */}
       <div className="mt-4 bg-white rounded-xl overflow-hidden border border-gray-200">
         <button
