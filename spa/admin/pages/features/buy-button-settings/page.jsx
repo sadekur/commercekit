@@ -35,9 +35,6 @@ const DEFAULTS = {
     button_padding:          { top: "", right: "", bottom: "", left: "" },
 };
 
-/* ─── design-only sub-components (pure Tailwind) ─────────────────────────── */
-
-/** Coloured pill badge */
 const Badge = ({ children, color = "blue" }) => {
     const cls = {
         blue:   "bg-blue-50 text-blue-700 border border-blue-200",
