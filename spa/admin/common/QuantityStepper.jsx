@@ -19,3 +19,5 @@ const QuantityStepper = ({ value, onChange }) => (
         </button>
     </div>
 );
+
+export default QuantityStepper;
