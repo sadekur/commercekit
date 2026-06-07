@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import TabPageSkeleton from "../../../common/Skeletons/TabPageSkeleton";
-import { WarningIcon } from "../../../common/Svgs";
+import { SaveButtonIcon, WarningIcon } from "../../../common/Svgs";
 import Toggle from "../../../common/Toggle";
 import SettingRow from "../../../common/SettingRow";
 import FancyInput from "../../../common/FancyInput";
@@ -278,9 +278,7 @@ const TipSettings = () => {
                     >
                         {isSaving ? (
                             <>
-                                <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                                    <path d="M12 2a10 10 0 0 1 10 10" />
-                                </svg>
+                               {SaveButtonIcon}
                                 Saving…
                             </>
                         ) : (
