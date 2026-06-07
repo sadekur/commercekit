@@ -157,34 +157,6 @@ const BuyButtonSettings = () => {
     };
 
     if (isLoading) return <TabPageSkeleton />;
-
-    /* ── feature disabled ── */
-    if (!isFeatureEnabled) {
-        return (
-            <div className="max-w-2xl">
-                <div className="mt-6 flex gap-4 p-5 bg-amber-50 border border-amber-200 border-l-4 border-l-amber-500 rounded-xl">
-                    <div className="w-8 h-8 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0">
-                        <WarningIcon className="w-4 h-4 text-amber-700" />
-                    </div>
-                    <div>
-                        <p className="m-0 text-[14px] font-semibold text-amber-900">Feature Not Enabled</p>
-                        <p className="mt-1.5 mb-4 m-0 text-[13px] text-amber-800 leading-relaxed">
-                            The Buy Button feature is currently disabled. Please enable{" "}
-                            <strong>"Buy Button for WooCommerce"</strong> from the Features page first.
-                        </p>
-                        <button
-                            onClick={() => (window.location.hash = "")}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800
-                                       text-white text-[13px] font-semibold rounded-lg border-none cursor-pointer transition-colors duration-150"
-                        >
-                            Go to Features Page →
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     const isCustomStyle = formData.button_style === "custom";
 
     return (
