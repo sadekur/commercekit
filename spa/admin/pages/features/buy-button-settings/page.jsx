@@ -298,8 +298,6 @@ const BuyButtonSettings = () => {
                                 />
                             </SettingRow>
                         </Card>
-
-                        {/* Button Position */}
                         <Card>
                             <CardHead
                                 icon="📍"
