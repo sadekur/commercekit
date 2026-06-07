@@ -11,6 +11,7 @@ import DimensionFields from "../../../common/DimensionFields";
 import FancyInput from "../../../common/FancyInput";
 import Card from "../../../common/Card";
 import CardHead from "../../../common/CardHead";
+import QuantityStepper from "../../../common/QuantityStepper";
 
 const DEFAULTS = {
     enable_single:           true,
