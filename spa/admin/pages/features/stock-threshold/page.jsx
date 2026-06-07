@@ -6,8 +6,6 @@ import SectionHeader from "../../../common/SectionHeader";
 import NumberField from "../../../common/NumberField";
 import Toggle from "../../../common/Toggle";
 
-/* ─── all logic identical to original ───────────────────────────────────── */
-
 const StockThreshold = () => {
   const [isLoading,        setIsLoading]        = useState(true);
   const [isSaving,         setIsSaving]         = useState(false);
