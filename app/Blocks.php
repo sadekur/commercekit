@@ -21,31 +21,23 @@ class Blocks {
     }
 
     public function blocks_register() {
-        $blocks_dir     = COMMERCE_KIT_PATH . 'blocks/';
-        $categories     = glob( $blocks_dir ); // Fetch directories
-        $block_settings = get_option('commerce_kit_block_settings');
-        $block_settings = maybe_unserialize($block_settings);
+        foreach ( self::get_active_blocks() as $block_name ) {
+            register_block_type( COMMERCE_KIT_PATH . 'blocks/' . $block_name );
+        }
+    }
 
-        $active_blocks = [];
+    public static function get_active_blocks(): array {
+        $block_settings = maybe_unserialize( get_option( 'commerce_kit_block_settings', [] ) );
+        $active_blocks  = [];
 
-        foreach ($categories as $category) {
-            $category_name = basename( $category );
-            $blocks = glob( rtrim( $category, '/' ) . '/*', GLOB_ONLYDIR );
-
-            foreach ( $blocks as $block ) {
-
-                $block_name = basename($block);
-                $block_option_key = "{$block_name}";
-
-                if ( isset( $block_settings[$block_option_key] ) && $block_settings[$block_option_key] === 'on' ) {
-                    $active_blocks[] = $block_name;
-                    register_block_type( $block );
-                }
+        foreach ( glob( COMMERCE_KIT_PATH . 'blocks/*', GLOB_ONLYDIR ) ?: [] as $block_path ) {
+            $block_name = basename( $block_path );
+            if ( isset( $block_settings[ $block_name ] ) && $block_settings[ $block_name ] === 'on' ) {
+                $active_blocks[] = $block_name;
             }
         }
 
-        // Pass the list of active blocks to JavaScript
-        wp_localize_script( 'commerce-kit-block-script', 'activeBlocks', $active_blocks );
+        return $active_blocks;
     }
 
     /**
