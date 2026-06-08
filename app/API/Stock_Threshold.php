@@ -57,7 +57,7 @@ class Stock_Threshold {
             ]);
         }
 
-        $stock_settings = commercekit_get_stock_settings();
+        $stock_settings = StockSettings::get();
 
         if ( $stock_settings['enable_message'] !== 'on' ) {
             return rest_ensure_response([
