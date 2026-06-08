@@ -18,20 +18,6 @@ const BLOCKS = [
         description: "A sliding product carousel filtered by a WooCommerce category. Shows product image, name, short description, and price. Supports autoplay and prev/next navigation.",
         status: "complete",
     },
-    {
-        name: "generic-faq",
-        icon: "❓",
-        label: "Generic FAQ",
-        description: "FAQ block for pages and posts. Currently renders two hardcoded placeholder items — editable attributes and live content are not yet implemented.",
-        status: "soon",
-    },
-    {
-        name: "variant-faq",
-        icon: "🔀",
-        label: "Variant FAQ",
-        description: "Variant-specific FAQ block intended for per-variation questions. Currently renders the same hardcoded placeholder as the Generic FAQ block.",
-        status: "soon",
-    },
 ];
 
 const STATUS = {
