@@ -366,5 +366,3 @@ Displays a horizontal sliding carousel of WooCommerce products from a single cat
 | WooCommerce Product Barcode | Feature | 🚧 Not implemented |
 | Accordion | Block | ✅ Complete |
 | Category Products Slider | Block | ✅ Complete |
-| FAQs | Block | 🚧 Hardcoded placeholder only |
-| Variant FAQs | Block | 🚧 Hardcoded placeholder only |
