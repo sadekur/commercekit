@@ -1,7 +1,7 @@
 <?php
 namespace CommerceKit\Commerce\API;
 
-use CommerceKit\Commerce\Classes\Helper\Utility;
+use CommerceKit\Commerce\Models\StockSettings;
 
 class Stock_Threshold {
 
