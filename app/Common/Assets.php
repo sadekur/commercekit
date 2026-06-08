@@ -89,7 +89,7 @@ class Assets {
         }
 
         if ( ( $ck_settings['buy-button-for-woocommerce'] ?? '' ) === 'on' ) {
-            $bb = commercekit_get_buy_button_settings();
+            $bb = BuyButtonSettings::get();
 
             $ck_data['buy_button'] = [
                 'nonce'               => wp_create_nonce( 'ck_buy_button_nonce' ),
