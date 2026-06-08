@@ -1,15 +1,13 @@
 <?php
 namespace CommerceKit\Commerce\Features;
 
-use CommerceKit\Commerce\Classes\Trait\Hookable;
+use CommerceKit\Commerce\Classes\Base\Feature;
+use CommerceKit\Commerce\Models\BuyButtonSettings;
 
-class BuyButtonForWoocommerce {
-    use Hookable;
-
-    protected $settings = [];
+class BuyButtonForWoocommerce extends Feature {
 
     public function __construct() {
-        $this->settings = commercekit_get_buy_button_settings();
+        $this->settings = BuyButtonSettings::get();
 
         // single product page form submit + archive link
         $this->action( 'template_redirect', [ $this, 'buy_now_button_submit' ] );
