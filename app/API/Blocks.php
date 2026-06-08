@@ -13,8 +13,6 @@ class Blocks {
 
     public function get_block_register() {
         $defaults = [
-            'generic-faq'              => 'off',
-            'variant-faq'              => 'off',
             'accordion'                => 'off',
             'category-products-slider' => 'off',
         ];
