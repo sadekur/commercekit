@@ -19,7 +19,7 @@
 			"CommerceKit\\Commerce\\Support\\": "support/"
 		},
 		"files": [
-			"includes/functions.php"
+			"support/functions.php"
 		]
 	}
 }
