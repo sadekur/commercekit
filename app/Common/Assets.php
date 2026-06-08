@@ -39,7 +39,7 @@ class Assets {
             true
         );
         wp_localize_script( 'commerce-kit-block-script', 'COMMERCEKIT', [
-            'activeBlocks' => commerce_kit_get_active_blocks(),
+            'activeBlocks' => Blocks::get_active_blocks(),
         ] );
         $this->enqueue_common_assets();
     }
