@@ -83,7 +83,6 @@ final class COMMERCE_KIT{
 		new CommerceKit\Commerce\Common\Init();
 		new CommerceKit\Commerce\Blocks();
 		new CommerceKit\Commerce\Features();
-		new CommerceKit\Commerce\Helper();
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			new CommerceKit\Commerce\Ajax();
