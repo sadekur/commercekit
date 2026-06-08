@@ -1,35 +1,21 @@
 <?php
 namespace CommerceKit\Commerce\API;
 
-class Tips {
+use CommerceKit\Commerce\Models\TipSettings;
 
-    private function defaults(): array {
-        return [
-            'tcwt_cart'     => 'off',
-            'tcwt_checkout' => 'off',
-            'tcwt_taxable'  => 'off',
-            'tcwt_title'    => 'Send us a tip',
-            'tcwt_type'     => 'percent',
-            'tcwt_rates'    => '5,10,15,20,25,30',
-            'tcwt_custom'   => 'yes',
-            'tcwt_cash'     => 'yes',
-            'tcwt_clear'    => 'yes',
-        ];
-    }
+class Tips {
 
     public function tips_permission(): bool {
         return current_user_can( 'manage_options' );
     }
 
     public function commerce_kit_get_tips(): \WP_REST_Response {
-        $saved    = get_option( 'commercekit-tips-settings', [] );
-        $settings = array_merge( $this->defaults(), is_array( $saved ) ? $saved : [] );
-        return rest_ensure_response( $settings );
+        return rest_ensure_response( TipSettings::get() );
     }
 
     public function commerce_kit_save_tips( \WP_REST_Request $request ): \WP_REST_Response {
         $body     = $request->get_json_params() ?? [];
-        $defaults = $this->defaults();
+        $defaults = TipSettings::get();
         $settings = [];
 
         // on/off fields
