@@ -16,7 +16,7 @@
 	"autoload": {
 		"psr-4": {
 			"CommerceKit\\Commerce\\": "app/",
-			"CommerceKit\\Commerce\\Classes\\": "classes/"
+			"CommerceKit\\Commerce\\Support\\": "support/"
 		},
 		"files": [
 			"includes/functions.php"
