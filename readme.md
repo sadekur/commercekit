@@ -18,8 +18,6 @@ CommerceKit is a WooCommerce enhancement plugin that adds dynamic pricing, buy-n
 - [Gutenberg Blocks](#gutenberg-blocks)
   - [Accordion Block](#1-accordion-block) ✅ Complete
   - [Category Products Slider](#2-category-products-slider-block) ✅ Complete
-  - [FAQs Block](#3-faqs-block) 🚧 Incomplete
-  - [Variant FAQs Block](#4-variant-faqs-block) 🚧 Incomplete
 
 ---
 
@@ -354,22 +352,6 @@ Displays a horizontal sliding carousel of WooCommerce products from a single cat
 - **Prev / Next** arrow buttons on the left and right edges navigate one slide at a time
 - With autoplay on, slides advance automatically; hovering over the slider pauses autoplay
 - If the Category ID is not set, or no published products exist in that category, a placeholder message is shown instead
-
----
-
-### 3. FAQs Block
-
-**Status:** 🚧 Incomplete — no editable attributes; displays hardcoded placeholder questions only
-
-The block can be inserted into pages but shows two hardcoded demo FAQ items ("What is CommerceKit?" / "How to use this FAQ?"). The questions and answers are not editable from the editor and there are no customization options. Do not use on a live site yet.
-
----
-
-### 4. Variant FAQs Block
-
-**Status:** 🚧 Incomplete — identical to FAQs block; intended for variant-specific FAQs but not yet implemented
-
-The block renders the same hardcoded placeholder content as the FAQs block. The distinction between "generic" and "variant" FAQs has not been built out yet. Do not use on a live site.
 
 ---
 
