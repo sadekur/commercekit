@@ -2,7 +2,7 @@
 
 namespace CommerceKit\Commerce\Admin;
 
-use CommerceKit\Commerce\Support\Trait\Hookable;
+use CommerceKit\Commerce\Support\Traits\Hookable;
 
 class Menu {
     use Hookable;

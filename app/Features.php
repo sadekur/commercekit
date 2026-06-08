@@ -1,6 +1,6 @@
 <?php
 namespace CommerceKit\Commerce;
-use CommerceKit\Commerce\Support\Trait\Hookable;
+use CommerceKit\Commerce\Support\Traits\Hookable;
 
 class Features {
     use Hookable;
