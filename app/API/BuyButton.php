@@ -14,12 +14,12 @@ class BuyButton {
     }
 
     public function get_settings() {
-        return rest_ensure_response( commercekit_get_buy_button_settings() );
+        return rest_ensure_response( BuyButtonSettings::get() );
     }
 
     public function save_settings( \WP_REST_Request $request ) {
         $body     = $request->get_json_params() ?? [];
-        $defaults = commercekit_get_buy_button_settings();
+        $defaults = BuyButtonSettings::get();
         $settings = [];
 
         // Plain string / toggle fields
