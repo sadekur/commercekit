@@ -15,7 +15,7 @@ npm run start    # Webpack dev server on port 9000 (not used in WordPress contex
 composer install # Install PHP dependencies (PSR-4 autoloader)
 ```
 
-No test suite configured.
+No test suite configured. `build/` is gitignored — run `npm run build` before testing any JS changes.
 
 ## Architecture Overview
 
@@ -102,7 +102,7 @@ Submenu pages use a hash-suffixed slug (e.g. `commerce-kit#/stock-threshold`) an
 
 Gutenberg blocks live in `blocks/<block-name>/` with `block.json`, `index.js`, `edit.js`, `render.php`. Blocks register only when their key is `'on'` in `commerce_kit_block_settings`. All block editor JS compiles from `blocks/App.jsx` → `build/block.build.js`.
 
-Current blocks: `accordion`, `category-products-slider`, `generic-faq`, `variant-faq`. The `generic-faq` and `variant-faq` blocks are hardcoded placeholder stubs — not yet functional.
+Current blocks: `accordion`, `category-products-slider`, `generic-faq`, `variant-faq`. The `generic-faq` and `variant-faq` blocks are hardcoded placeholder stubs — not yet functional. `blocks/App.jsx` reads `window.COMMERCEKIT.activeBlocks` (an array of enabled block names) and only imports/registers the enabled ones.
 
 ### REST API
 
@@ -132,7 +132,7 @@ The admin SPA mounts on `#commerce_kit_render` and uses **hash-based routing**. 
 - `"/commerce-kit-tip-settings"` → `TipSettings` page
 - `"/buy-button-settings"` → `BuyButtonSettings` page
 
-Tailwind scans `app/**/*.php` and `spa/**/src/**/*.jsx`.
+Tailwind scans: `app/**/*.php`, `views/**/*.html`, `spa/public/src/**/*.jsx`, `spa/admin/**/*.jsx`, `spa/admin/common/**/*.jsx`.
 
 ### Adding a New Feature Page to the Admin SPA
 
@@ -155,6 +155,15 @@ Two mechanisms work together:
 All shared admin components live in `spa/admin/common/`: `CommonHeader`, `SectionHeader`, `Skeletons/`, `Svgs`, `Toggle`, `Pill`, `NumberField`, `CheckboxField`, `InputRow`, `FieldRow`, `SettingRow`, `SaveRow`, `RadioGroup`, `ColorField`, `DimensionFields`, `SmallNumberInput`.
 
 Page components live in `spa/admin/pages/` — dashboard tabs in `pages/dashboard/tabs/`, feature pages in `pages/features/<slug>/page.jsx`.
+
+### Nonces
+
+| Context | Value | Used by |
+|---|---|---|
+| Admin REST | `wp_create_nonce('wp_rest')` | `COMMERCEKIT.nonce` (admin SPA) |
+| Frontend AJAX | `wp_create_nonce('commerce-kit')` | `COMMERCEKIT.nonce` (frontend) |
+| Tips AJAX | `wp_create_nonce('ck_tips_nonce')` | `tips.js` tip actions |
+| Buy Button AJAX | `wp_create_nonce('ck_buy_button_nonce')` | `buy-button.js` |
 
 ### COMMERCEKIT JS Global
 
@@ -213,4 +222,4 @@ The tips feature adds preset-rate and custom-amount buttons to the cart and chec
 
 **AJAX actions:** `ck_set_tip` and `ck_remove_tip` (both public + logged-in), nonce `ck_tips_nonce`.
 
-**Known bug in current file:** `woocommerce-tips.php` line 12 calls `commercekit_get_load_tip_settings()` which does not exist — the private `load_settings()` method was accidentally removed during editing. This causes a PHP fatal error that prevents all hooks from registering. Fix: replace the call with `$this->load_settings()` and restore the method body (reads `commercekit-tips-settings` option, merges with defaults array).
+**Settings loader:** `woocommerce-tips.php` calls `commercekit_get_load_tip_settings()` (a global helper defined in `includes/functions.php:136`) in the constructor. This function reads the `commercekit-tips-settings` option and merges with defaults.
