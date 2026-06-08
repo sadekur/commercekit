@@ -1,17 +1,16 @@
 <?php
 namespace CommerceKit\Commerce\Features;
 
-use CommerceKit\Commerce\Classes\Trait\Hookable;
+use CommerceKit\Commerce\Classes\Base\Feature;
+use CommerceKit\Commerce\Models\StockSettings;
 
-class StockThresholdForWc {
-    use Hookable;
+class StockThresholdForWc extends Feature {
 
-    protected $stock_settings      = [];
-    protected $adjusted_cart_items = [];   // product_id => true, set by adjust_cart_item_prices
-    protected $original_cart_prices = [];  // product_id => raw price, prevents compound re-adjustment
+    protected $adjusted_cart_items  = [];
+    protected $original_cart_prices = [];
 
     public function __construct() {
-        $this->stock_settings = commercekit_get_stock_settings();
+        $this->settings = StockSettings::get();
 
         $this->action( 'woocommerce_single_product_summary',    [ $this, 'display_stock_message' ], 25 );
         $this->action( 'woocommerce_before_calculate_totals',   [ $this, 'adjust_cart_item_prices' ], 10, 1 );
@@ -26,7 +25,7 @@ class StockThresholdForWc {
      * Core threshold math — shared by all price-adjustment methods.
      */
     private function apply_threshold( $price, $stock_quantity ) {
-        $s = $this->stock_settings;
+        $s = $this->settings;
 
         if ( $stock_quantity <= $s['low_threshold'] ) {
             return $price * ( 1 + $s['low_increase'] / 100 );
@@ -45,7 +44,7 @@ class StockThresholdForWc {
      * Resolve the customer-facing message for a given stock quantity.
      */
     private function get_stock_message( $stock_quantity ) {
-        $s = $this->stock_settings;
+        $s = $this->settings;
 
         if ( $stock_quantity <= $s['low_threshold'] ) {
             return $s['low_customer_message'] ?? '';
@@ -172,7 +171,7 @@ class StockThresholdForWc {
      * Filter: woocommerce_get_variation_prices_hash
      */
     public function add_settings_to_prices_hash( $hash, $product, $for_display ) {
-        $hash[] = md5( serialize( $this->stock_settings ) );
+        $hash[] = md5( serialize( $this->settings ) );
         return $hash;
     }
 
@@ -189,7 +188,7 @@ class StockThresholdForWc {
             return;
         }
 
-        if ( $this->stock_settings['enable_message'] !== 'on' ) {
+        if ( $this->settings['enable_message'] !== 'on' ) {
             return;
         }
 
@@ -227,7 +226,7 @@ class StockThresholdForWc {
             return $name;
         }
 
-        if ( $this->stock_settings['enable_message'] !== 'on' ) {
+        if ( $this->settings['enable_message'] !== 'on' ) {
             return $name;
         }
 
@@ -266,7 +265,7 @@ class StockThresholdForWc {
             return;
         }
 
-        if ( $this->stock_settings['enable_message'] !== 'on' ) {
+        if ( $this->settings['enable_message'] !== 'on' ) {
             return;
         }
 
