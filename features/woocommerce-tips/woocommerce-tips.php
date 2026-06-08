@@ -1,15 +1,13 @@
 <?php
 namespace CommerceKit\Commerce\Features;
 
-use CommerceKit\Commerce\Classes\Trait\Hookable;
+use CommerceKit\Commerce\Classes\Base\Feature;
+use CommerceKit\Commerce\Models\TipSettings;
 
-class WoocommerceTips {
-    use Hookable;
-
-    private array $settings;
+class WoocommerceTips extends Feature {
 
     public function __construct() {
-        $this->settings = commercekit_get_load_tip_settings();
+        $this->settings = TipSettings::get();
 
         if ( $this->settings['tcwt_cart'] === 'on' ) {
             // Classic cart template hook (fires when theme uses woocommerce/cart.php shortcode)
