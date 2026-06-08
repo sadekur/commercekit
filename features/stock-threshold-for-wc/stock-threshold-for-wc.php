@@ -1,7 +1,7 @@
 <?php
 namespace CommerceKit\Commerce\Features;
 
-use CommerceKit\Commerce\Classes\Base\Feature;
+use CommerceKit\Commerce\Support\Base\Feature;
 use CommerceKit\Commerce\Models\StockSettings;
 
 class StockThresholdForWc extends Feature {

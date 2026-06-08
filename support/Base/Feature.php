@@ -1,7 +1,7 @@
 <?php
-namespace CommerceKit\Commerce\Classes\Base;
+namespace CommerceKit\Commerce\Support\Base;
 
-use CommerceKit\Commerce\Classes\Trait\Hookable;
+use CommerceKit\Commerce\Support\Trait\Hookable;
 
 abstract class Feature {
     use Hookable;

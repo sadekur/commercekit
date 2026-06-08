@@ -1,5 +1,5 @@
 <?php
-namespace CommerceKit\Commerce\Classes\Trait;
+namespace CommerceKit\Commerce\Support\Trait;
 
 trait Hookable {
     public $namespace = 'commerce-kit/v1'; // Define the default namespace

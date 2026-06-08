@@ -1,5 +1,5 @@
 <?php
-namespace CommerceKit\Commerce\Classes\Helper;
+namespace CommerceKit\Commerce\Support\Helper;
 
 defined( 'ABSPATH' ) || exit;
 

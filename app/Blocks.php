@@ -1,7 +1,7 @@
 <?php
 namespace CommerceKit\Commerce;
 
-use CommerceKit\Commerce\Classes\Trait\Hookable;
+use CommerceKit\Commerce\Support\Trait\Hookable;
 
 class Blocks {
     use Hookable;

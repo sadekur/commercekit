@@ -1,7 +1,7 @@
 <?php
 namespace CommerceKit\Commerce\Common;
 
-use CommerceKit\Commerce\Classes\Trait\Hookable;
+use CommerceKit\Commerce\Support\Trait\Hookable;
 use CommerceKit\Commerce\API\Stock_Threshold as Stock;
 use CommerceKit\Commerce\API\Settings;
 use CommerceKit\Commerce\API\Blocks;
