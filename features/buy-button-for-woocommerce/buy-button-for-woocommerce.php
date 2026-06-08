@@ -265,6 +265,20 @@ class BuyButtonForWoocommerce extends Feature {
         }
     }
 
+    private function redirect_location( int $product_id ): string {
+        $location   = $this->settings['redirect_location']   ?? 'checkout';
+        $custom_url = $this->settings['custom_redirect_url'] ?? '';
+
+        switch ( $location ) {
+            case 'cart':
+                return wc_get_cart_url();
+            case 'custom':
+                return ! empty( $custom_url ) ? esc_url_raw( $custom_url ) : wc_get_checkout_url();
+            default:
+                return wc_get_checkout_url();
+        }
+    }
+
     // Backward-compatible shortcode [buy_button id="123"]
     public function shortcode_buy_button( $atts ) {
         if ( empty( $atts['id'] ) ) {
