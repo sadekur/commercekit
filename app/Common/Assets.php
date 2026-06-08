@@ -2,6 +2,8 @@
 namespace CommerceKit\Commerce\Common;
 
 use CommerceKit\Commerce\Classes\Trait\Hookable;
+use CommerceKit\Commerce\Blocks;
+use CommerceKit\Commerce\Models\BuyButtonSettings;
 
 class Assets {
     use Hookable;
