@@ -1,6 +1,8 @@
 <?php
 namespace CommerceKit\Commerce\API;
 
+use CommerceKit\Commerce\Models\BuyButtonSettings;
+
 class BuyButton {
 
     public function get_settings_permission() {
