@@ -34,14 +34,65 @@ Defined in `commercekit.php`:
 
 PSR-4 via Composer:
 - `CommerceKit\Commerce\` → `app/`
-- `CommerceKit\Commerce\Classes\` → `classes/`
-- Global helpers → `includes/functions.php` (autoloaded via `composer.json` `files`)
+- `CommerceKit\Commerce\Support\` → `support/`
+- Global helpers → `support/functions.php` (autoloaded via `composer.json` `files`)
 
-### Hookable Trait
+`app/Models/` resolves as `CommerceKit\Commerce\Models\` automatically under the `app/` root mapping.
 
-`classes/Trait/Hookable.php` provides `$this->action()`, `$this->filter()`, `$this->add_shortcode()`, and `$this->register_route()`. Every class that needs WordPress hooks or REST routes must `use Hookable` — never call `add_action`/`add_filter`/`register_rest_route` directly.
+### Directory Structure
+
+```
+app/
+├── Admin/          Controllers: admin menu
+├── API/            Controllers: REST endpoint handlers
+├── Common/         Core infrastructure (Assets, API router, Init)
+├── Models/         Data layer — settings loaders
+│   ├── StockSettings.php
+│   ├── BuyButtonSettings.php
+│   └── TipSettings.php
+├── Ajax.php        AJAX handler (instantiated only when DOING_AJAX)
+├── Blocks.php      Block registration + static get_active_blocks()
+├── Email.php       Email hooks
+└── Features.php    Feature loader
+
+support/
+├── Base/
+│   └── Feature.php     Abstract base class for all feature classes
+├── Helper/
+│   └── Utility.php     Static utilities: pri(), get_option(), format_date(), get_template()
+├── Traits/
+│   └── Hookable.php    Hook registration trait
+└── functions.php       Global helpers: commercekit_is_product_in_cart(), commercekit_is_blocks_page()
+
+features/           Feature plugins (loaded on demand)
+blocks/             Gutenberg block source (block.json, index.js, edit.js, render.php)
+spa/                React SPA source
+assets/             Static CSS/JS (not webpack-compiled)
+```
+
+### Support Layer
+
+**`support/Traits/Hookable.php`** (`CommerceKit\Commerce\Support\Traits\Hookable`) provides `$this->action()`, `$this->filter()`, `$this->add_shortcode()`, and `$this->register_route()`. Never call `add_action`/`add_filter`/`register_rest_route` directly.
 
 **Known bug in `register_route()`:** the `permission_callback` key has a trailing space (`'permission_callback '`) when remapped from `'permission'`, so the `permission` shorthand silently fails. Always use `permission_callback` directly in the `$args` array.
+
+**`support/Base/Feature.php`** (`CommerceKit\Commerce\Support\Base\Feature`) is an abstract class that all feature classes extend. It uses `Hookable` and declares `protected array $settings = []`. Feature classes never need to declare `use Hookable` or a `$settings` property themselves.
+
+**`support/Helper/Utility.php`** (`CommerceKit\Commerce\Support\Helper\Utility`) provides static helpers:
+- `Utility::pri($data)` — debug dump (admin-only, safe to leave in code)
+- `Utility::get_option($menu, $submenu, $key)` — reads from `commercekit-{menu}-{submenu}` option key
+- `Utility::format_date($date)` — formats using WordPress date settings
+- `Utility::get_template($template_name, $path, $data)` — loads a PHP template from `app/settings/`
+
+### Models
+
+Settings loaders live in `app/Models/` as classes with a single `static get(): array` method that reads the option, merges with defaults, and returns the result. Always use the Model — never call `get_option()` directly for these settings.
+
+| Class | Option key |
+|---|---|
+| `Models\StockSettings::get()` | `commerce_kit_stock_threshold` |
+| `Models\BuyButtonSettings::get()` | `commerce_kit_buy_button_settings` |
+| `Models\TipSettings::get()` | `commercekit-tips-settings` |
 
 ### Core Classes (instantiated in `init_plugin()`)
 
@@ -51,20 +102,10 @@ PSR-4 via Composer:
 | `Email` | `app/Email.php` | Email-related hooks |
 | `Common\API` | `app/Common/API.php` | Registers all REST routes under `commerce-kit/v1` |
 | `Common\Init` | `app/Common/Init.php` | Injects shared modal HTML into `<head>` |
-| `Blocks` | `app/Blocks.php` | Registers Gutenberg blocks conditionally from `commerce_kit_block_settings` option |
+| `Blocks` | `app/Blocks.php` | Registers Gutenberg blocks; provides `static get_active_blocks()` |
 | `Features` | `app/Features.php` | Loads feature plugins conditionally from `commerce_kit_settings` option |
-| `Helper` | `app/Helper.php` | Shared utility hooks |
 | `Ajax` | `app/Ajax.php` | Only instantiated when `DOING_AJAX` is true |
 | `Admin\Menu` | `app/Admin/Menu.php` | Admin-only; registers admin menu and all submenus |
-
-> Note: `app/API.php` and `app/Assets.php` are stub files left as redirect comments — actual code is in `app/Common/`.
-
-### Utility Helper
-
-`classes/Helper/Utility.php` provides static helpers:
-- `Utility::pri($data)` — debug dump (admin-only, safe to leave in code; wraps output in `<pre>`)
-- `Utility::get_option($menu, $submenu, $key)` — reads from `commercekit-{menu}-{submenu}` option key
-- `Utility::format_date($date)` — formats using WordPress date settings
 
 ### WordPress Options Reference
 
@@ -72,15 +113,17 @@ PSR-4 via Composer:
 |---|---|
 | `commerce_kit_settings` | Feature enable/disable toggles (`'on'`/`'off'`) |
 | `commerce_kit_block_settings` | Block enable/disable toggles |
-| `commerce_kit_stock_threshold` | Stock threshold config (merged with defaults from `commercekit_get_stock_settings()`) |
-| `commercekit-tips-settings` | WooCommerce tips settings; flat array with `tcwt_*` keys: `tcwt_cart`, `tcwt_checkout`, `tcwt_taxable`, `tcwt_title`, `tcwt_type` (`percent`/`fixed`), `tcwt_rates` (comma-separated), `tcwt_custom`, `tcwt_cash`, `tcwt_clear` (all `on`/`off` or `yes`/`no`) |
-| `commerce_kit_buy_button_settings` | Buy button config (merged with defaults from `commercekit_get_buy_button_settings()`) |
+| `commerce_kit_stock_threshold` | Stock threshold config — read via `StockSettings::get()` |
+| `commercekit-tips-settings` | WooCommerce tips settings — read via `TipSettings::get()` |
+| `commerce_kit_buy_button_settings` | Buy button config — read via `BuyButtonSettings::get()` |
 
 ### Features System
 
 Features live in `features/<kebab-name>/<kebab-name>.php` and are loaded by `app/Features.php` on the `init` hook only when the matching key is `'on'` in `commerce_kit_settings`. The class name is derived by converting the **directory name** (not the settings key) to PascalCase — these differ for `woocommerce-product-barcode` (directory) vs `woocommerce-product_barcode` (settings key).
 
 **The feature class constructor is only called when the feature is enabled** — no guard needed inside the class itself.
+
+Every feature class extends `CommerceKit\Commerce\Support\Base\Feature` (which provides `Hookable` and `$this->settings`). Load settings from the corresponding Model in the constructor.
 
 Current features and implementation status:
 
@@ -102,7 +145,9 @@ Submenu pages use a hash-suffixed slug (e.g. `commerce-kit#/stock-threshold`) an
 
 Gutenberg blocks live in `blocks/<block-name>/` with `block.json`, `index.js`, `edit.js`, `render.php`. Blocks register only when their key is `'on'` in `commerce_kit_block_settings`. All block editor JS compiles from `blocks/App.jsx` → `build/block.build.js`.
 
-Current blocks: `accordion`, `category-products-slider`, `generic-faq`, `variant-faq`. The `generic-faq` and `variant-faq` blocks are hardcoded placeholder stubs — not yet functional. `blocks/App.jsx` reads `window.COMMERCEKIT.activeBlocks` (an array of enabled block names) and only imports/registers the enabled ones.
+Current blocks: `accordion`, `category-products-slider` (both complete).
+
+`blocks/App.jsx` reads `window.COMMERCEKIT.activeBlocks` (an array of enabled block names set by `Blocks::get_active_blocks()`) and only imports/registers the enabled ones. `app/Blocks.php` provides the static `get_active_blocks(): array` method used by both PHP block registration and JS localization.
 
 ### REST API
 
@@ -143,6 +188,8 @@ Five files must change together when adding a new submenu page:
 3. **`spa/admin/App.jsx`** — add the feature key → anchor CSS selector to `FEATURE_SUBMENUS` (controls live show/hide on the CommerceKit page), and add a `case "/<your-hash>"` to `renderPage()`
 4. **`spa/admin/pages/features/<your-slug>/page.jsx`** — create the page component
 5. **`app/Common/API.php`** + **`app/API/<Handler>.php`** — register and implement the REST endpoints the page needs
+
+Also create `app/Models/<FeatureName>Settings.php` for the settings defaults/loader and add the feature class in `features/` extending `Feature` base.
 
 ### Sidebar Submenu Visibility
 
@@ -222,4 +269,4 @@ The tips feature adds preset-rate and custom-amount buttons to the cart and chec
 
 **AJAX actions:** `ck_set_tip` and `ck_remove_tip` (both public + logged-in), nonce `ck_tips_nonce`.
 
-**Settings loader:** `woocommerce-tips.php` calls `commercekit_get_load_tip_settings()` (a global helper defined in `includes/functions.php:136`) in the constructor. This function reads the `commercekit-tips-settings` option and merges with defaults.
+**Settings:** loaded via `TipSettings::get()` (`app/Models/TipSettings.php`) in the constructor.
