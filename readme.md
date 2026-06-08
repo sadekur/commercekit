@@ -1,6 +1,6 @@
 # CommerceKit — User Documentation
 
-CommerceKit is a WooCommerce enhancement plugin that adds dynamic pricing, buy-now shortcuts, customer tips, product FAQs, and Gutenberg blocks to your WooCommerce store.
+CommerceKit is a WooCommerce enhancement plugin that adds dynamic pricing, buy-now shortcuts, customer tips, and Gutenberg blocks to your WooCommerce store.
 
 **Requirements:** WordPress 5.9+, WooCommerce 5.0+, PHP 7.4+
 
