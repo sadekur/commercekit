@@ -151,7 +151,7 @@ class BuyButtonForWoocommerce extends Feature {
         $redirect_url = add_query_arg( [
             'wc-quick-buy-now' => $product_id,
             'quantity'         => $quantity,
-        ], commercekit_buy_button_redirect_location( $product_id, $this->settings ) );
+        ], $this->redirect_location( $product_id ) );
 
         printf(
             '<a href="%s" class="button wc-buy-now-btn wc-buy-now-btn-archive" data-product_id="%d" data-quantity="%d" data-wc-buy-now="true" data-product_type="simple">%s</a>',
@@ -204,7 +204,7 @@ class BuyButtonForWoocommerce extends Feature {
             }
         }
 
-        wp_safe_redirect( commercekit_buy_button_redirect_location( $product_id, $this->settings ) );
+        wp_safe_redirect( $this->redirect_location( $product_id ) );
         exit;
     }
 
@@ -258,7 +258,7 @@ class BuyButtonForWoocommerce extends Feature {
 
         if ( $added ) {
             wp_send_json_success( [
-                'redirect_url' => commercekit_buy_button_redirect_location( $product_id, $this->settings ),
+                'redirect_url' => $this->redirect_location( $product_id ),
             ] );
         } else {
             wp_send_json_error( [ 'message' => __( 'Failed to add product to cart.', 'commerce-kit' ) ] );
