@@ -19,6 +19,11 @@ $col_desktop       = max( 1, intval( $attributes['colDesktop']  ?? 3 ) );
 $col_laptop        = max( 1, intval( $attributes['colLaptop']   ?? 2 ) );
 $col_tablet        = max( 1, intval( $attributes['colTablet']   ?? 2 ) );
 $col_mobile        = max( 1, intval( $attributes['colMobile']   ?? 1 ) );
+
+// Slider (1-col) layout forces a single slide visible at all breakpoints.
+if ( 'slider' === $layout ) {
+	$col_large = $col_desktop = $col_laptop = $col_tablet = $col_mobile = 1;
+}
 $space_between     = intval( $attributes['spaceBetween']        ?? 20 );
 $filter_type       = $attributes['filterType']        ?? 'all';
 $specific_cats     = $attributes['specificCategories'] ?? '';
