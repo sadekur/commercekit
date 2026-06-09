@@ -625,50 +625,140 @@ const Edit = ({ attributes, setAttributes }) => {
 
 			{/* ─── Editor canvas preview ──────────────────────────────────── */}
 			<div className="ck-csl-editor-preview">
+
 				{showSectionTitle && sectionTitleText && (
 					<h3 className="ck-csl-editor-title">{sectionTitleText}</h3>
 				)}
-				<div className="ck-csl-editor-cards" style={{ display: 'flex', gap: spaceBetween + 'px', overflow: 'hidden' }}>
-					{previewCards.map((_, i) => (
-						<div key={i} className="ck-csl-editor-card" style={{ flex: `0 0 calc(${100 / previewCount}% - ${spaceBetween * (previewCount - 1) / previewCount}px)` }}>
-							{showThumbnail && (
-								<div className="ck-csl-editor-thumb" style={{
-									borderRadius: thumbnailShape === 'circle' ? '50%' : thumbnailShape === 'rounded' ? '8px' : '0',
-									background: `hsl(${i * 47 + 200}, 40%, 88%)`,
-									aspectRatio: '1',
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-									color: '#999',
-									fontSize: 13,
-									marginBottom: 8,
-									overflow: 'hidden',
-								}}>
-									<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+
+				{isLoading && (
+					<div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '20px 0', color: '#888' }}>
+						<Spinner />
+						<span style={{ fontSize: 13 }}>{__('Loading categories…', 'commerce-kit')}</span>
+					</div>
+				)}
+
+				{!isLoading && fetchError && (
+					<div style={{ padding: '12px 16px', background: '#fff3cd', border: '1px solid #ffc107', borderRadius: 4, fontSize: 13, color: '#856404' }}>
+						{__('Could not load categories. Make sure WooCommerce is active and you are logged in as an administrator.', 'commerce-kit')}
+					</div>
+				)}
+
+				{!isLoading && !fetchError && categories.length === 0 && (
+					<div style={{ padding: '12px 16px', background: '#f0f0f0', borderRadius: 4, fontSize: 13, color: '#555' }}>
+						{__('No categories found with the current settings.', 'commerce-kit')}
+					</div>
+				)}
+
+				{!isLoading && !fetchError && previewCats.length > 0 && (
+					<div
+						className="ck-csl-editor-cards"
+						style={{ display: 'flex', gap: spaceBetween + 'px', overflow: 'hidden', alignItems: 'stretch' }}
+					>
+						{previewCats.map((cat) => {
+							const thumbSrc  = cat.image && cat.image.src ? cat.image.src : null;
+							const thumbAlt  = cat.image && cat.image.alt ? cat.image.alt : cat.name;
+							const cardWidth = `calc(${100 / previewCount}% - ${spaceBetween * (previewCount - 1) / previewCount}px)`;
+							const desc      = cat.description ? cat.description.replace(/<[^>]+>/g, '') : '';
+
+							return (
+								<div
+									key={cat.id}
+									className="ck-csl-editor-card"
+									style={{ flex: `0 0 ${cardWidth}`, minWidth: 0, display: 'flex', flexDirection: 'column' }}
+								>
+									{/* Thumbnail */}
+									{showThumbnail && (
+										<div style={{
+											overflow: 'hidden',
+											borderRadius: thumbBr,
+											border: showThumbBorder ? `${thumbBorderWidth}px ${thumbBorderStyle} ${thumbBorderColor}` : 'none',
+											boxShadow: showBoxShadow ? `${boxShadowH}px ${boxShadowV}px ${boxShadowBlur}px ${boxShadowSpread}px ${boxShadowColor}` : 'none',
+											padding: thumbInnerPad ? thumbInnerPad + 'px' : 0,
+											marginBottom: thumbMarginBottom ? thumbMarginBottom + 'px' : 0,
+											background: '#f0f0f0',
+											lineHeight: 0,
+											filter: imageMode === 'grayscale' ? 'grayscale(100%)' : 'none',
+										}}>
+											{thumbSrc ? (
+												<img
+													src={thumbSrc}
+													alt={thumbAlt}
+													style={{ width: '100%', height: 'auto', display: 'block', borderRadius: thumbBr }}
+												/>
+											) : (
+												<div style={{ aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb' }}>
+													<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+												</div>
+											)}
+										</div>
+									)}
+
+									{/* Details */}
+									<div style={{
+										flex: 1,
+										padding: `${contentPadTop}px ${contentPadRight}px ${contentPadBottom}px ${contentPadLeft}px`,
+									}}>
+										{showCatName && (
+											<div style={{
+												fontWeight: catNameFontWeight,
+												fontSize: catNameFontSize,
+												color: catNameColor,
+												marginTop: catNameMarginTop,
+												lineHeight: 1.3,
+											}}>
+												{cat.name}
+												{showProductCount && productCountPos === 'beside' && (
+													<span style={{ fontSize: countFontSize, color: countColor, marginLeft: 4 }}>
+														{productCountBefore}{cat.count}{productCountAfter}
+													</span>
+												)}
+											</div>
+										)}
+
+										{showProductCount && productCountPos === 'under' && (
+											<div style={{ fontSize: countFontSize, color: countColor, marginTop: 4 }}>
+												{productCountBefore}{cat.count}{productCountAfter}
+											</div>
+										)}
+
+										{showCustomText && customText && (
+											<div style={{ fontSize: 13, color: '#555', marginTop: 6 }}>{customText}</div>
+										)}
+
+										{showDescription && (
+											<div style={{ fontSize: descFontSize, color: descColor, marginTop: descMarginTop, lineHeight: 1.5 }}>
+												{desc || <em style={{ color: '#bbb' }}>{__('(no description)', 'commerce-kit')}</em>}
+											</div>
+										)}
+
+										{showShopNow && (
+											<div style={{ textAlign: shopNowAlignment, marginTop: shopNowMarginTop }}>
+												<span style={{
+													display: 'inline-block',
+													padding: '8px 18px',
+													background: shopNowBgColor,
+													color: shopNowTextColor,
+													borderRadius: shopNowBorderRadius,
+													fontSize: 13,
+													fontWeight: 600,
+													cursor: 'default',
+												}}>
+													{shopNowLabel}
+												</span>
+											</div>
+										)}
+									</div>
 								</div>
-							)}
-							<div style={{ padding: `${contentPadTop}px ${contentPadRight}px ${contentPadBottom}px ${contentPadLeft}px` }}>
-								{showCatName && (
-									<div style={{ fontWeight: catNameFontWeight, fontSize: catNameFontSize, color: catNameColor, marginBottom: 4 }}>
-										{__('Category Name', 'commerce-kit')}
-										{showProductCount && ' ' + productCountBefore + '12' + productCountAfter}
-									</div>
-								)}
-								{showDescription && <div style={{ fontSize: descFontSize, color: descColor, marginBottom: 6 }}>{__('Category description text…', 'commerce-kit')}</div>}
-								{showCustomText && customText && <div style={{ fontSize: 13, color: '#666' }}>{customText}</div>}
-								{showShopNow && (
-									<div style={{ textAlign: shopNowAlignment, marginTop: shopNowMarginTop }}>
-										<span style={{ display: 'inline-block', padding: '6px 14px', background: shopNowBgColor, color: shopNowTextColor, borderRadius: shopNowBorderRadius, fontSize: 13, fontWeight: 600 }}>
-											{shopNowLabel}
-										</span>
-									</div>
-								)}
-							</div>
-						</div>
-					))}
-				</div>
+							);
+						})}
+					</div>
+				)}
+
 				<div className="ck-csl-editor-hint">
-					{__('Front-end preview renders actual WooCommerce categories with Swiper.js.', 'commerce-kit')}
+					{categories.length > previewCount
+						? `${__('Showing', 'commerce-kit')} ${previewCount} ${__('of', 'commerce-kit')} ${categories.length} ${__('categories. Full carousel renders on the front-end.', 'commerce-kit')}`
+						: __('Front-end renders the full Swiper carousel with all configured settings.', 'commerce-kit')
+					}
 				</div>
 			</div>
 		</div>
