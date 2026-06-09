@@ -259,11 +259,19 @@ The tips feature adds preset-rate and custom-amount buttons to the cart and chec
 
 **Session storage:** The active tip is stored in `WC()->session->set('ck_tip', [...])` as an array with keys `type`, `rate`, `amount`, `label`. All methods read from and write to this session key.
 
-**Fee approach:** `woocommerce_cart_calculate_fees` reads the session and calls `$cart->add_fee($label, $amount, $taxable)`. WooCommerce automatically carries fee lines to the order, thank-you page, and admin order view — no custom order display code needed. Percent tips are **recalculated live** in `add_tip_fee()` (not just stored) so they stay accurate if cart items change after selection.
+**Tip types:** `percent` (rate is a percentage applied to cart subtotal), `fixed` (rate is a flat currency amount), `custom` (shopper-entered amount), `cash` (records preference only — no fee line added to the order).
 
-**Fragment updates (cart page):** `woocommerce_add_to_cart_fragments` registers both `.ck-tips-wrapper` (the tip form HTML) and `.cart_totals` as WC fragments. After AJAX tip selection, `wc_fragment_refresh` is triggered in JS and WC replaces both elements — no page reload needed.
+**Fee approach:** `woocommerce_cart_calculate_fees` reads the session and calls `$cart->add_fee($label, $amount, $taxable)`. The `cash` type is skipped — no fee is added. WooCommerce automatically carries fee lines to the order, thank-you page, and admin order view — no custom order display code needed. Percent tips are **recalculated live** in `add_tip_fee()` (not just stored) so they stay accurate if cart items change after selection. Taxability is controlled by `tcwt_taxable` in settings.
+
+**Classic cart/checkout hooks:** `woocommerce_after_cart_table` and `woocommerce_review_order_before_payment` render the tip form on classic (shortcode-based) pages.
+
+**WC Blocks injection:** For WooCommerce Blocks pages, `inject_for_blocks_cart` and `inject_for_blocks_checkout` hook into `render_block_woocommerce/cart` and `render_block_woocommerce/checkout` respectively. The tip form is prepended as raw HTML before the block's React root so React hydration cannot overwrite it. The checkout injector skips the order-received page via `is_wc_endpoint_url('order-received')`.
+
+**Fragment updates (classic cart page):** `woocommerce_add_to_cart_fragments` registers both `.ck-tips-wrapper` (the tip form HTML) and `.cart_totals` as WC fragments. After AJAX tip selection, `wc_fragment_refresh` is triggered in JS and WC replaces both elements — no page reload needed.
 
 **Checkout update:** On checkout, `$(document.body).trigger('update_checkout')` re-renders the full order review via WC's own AJAX, which fires `render_tip_form()` again via `woocommerce_review_order_before_payment`.
+
+**Order persistence:** `woocommerce_checkout_order_created` fires `save_tip_to_order()`, which writes the full session tip array to order meta key `_ck_tip`. When `tcwt_clear` is `'yes'`, the session is cleared on `woocommerce_thankyou`.
 
 **Standalone JS/CSS:** `features/woocommerce-tips/tips.js` and `tips.css` are not webpack-compiled. They are enqueued directly by `enqueue_assets()` on cart/checkout pages only. All event handlers in `tips.js` are delegated so they survive fragment DOM replacement.
 
