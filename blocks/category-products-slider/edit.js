@@ -130,9 +130,63 @@ const Edit = ({ attributes, setAttributes }) => {
 
 	const isOverlay = ['overlay', 'overlay_top', 'overlay_middle', 'overlay_bottom', 'overlay_box'].includes(contentPosition);
 
-	// ── Editor preview ──────────────────────────────────────────────────────
+	// ── Live category fetch ─────────────────────────────────────────────────
+	const [categories, setCategories]   = useState([]);
+	const [isLoading, setIsLoading]     = useState(true);
+	const [fetchError, setFetchError]   = useState(false);
+	const abortRef                       = useRef(null);
+
+	useEffect(() => {
+		// Cancel any pending request when attributes change
+		if (abortRef.current) abortRef.current = false;
+		const alive = { current: true };
+		abortRef.current = alive;
+
+		setIsLoading(true);
+		setFetchError(false);
+
+		const orderByMap = { term_id: 'id', name: 'name', id: 'id', count: 'count', description: 'description' };
+		const params = new URLSearchParams({
+			per_page: Math.min(Math.max(1, totalCategories), 100),
+			orderby:  orderByMap[orderBy] || 'name',
+			order:    (order || 'ASC').toLowerCase(),
+			hide_empty: hideEmpty ? 'true' : 'false',
+		});
+
+		if (filterType === 'specific' && specificCategories) {
+			const ids = specificCategories.split(',').map(s => s.trim()).filter(Boolean).join(',');
+			if (ids) params.set('include', ids);
+		}
+
+		window.wp.apiFetch({ path: `/wc/v3/products/categories?${params}` })
+			.then(data => {
+				if (!alive.current) return;
+				let result = Array.isArray(data) ? data : [];
+				if (hideCatWithoutThumb) {
+					result = result.filter(c => c.image && c.image.src);
+				}
+				if (randomize) result.sort(() => Math.random() - 0.5);
+				setCategories(result);
+				setIsLoading(false);
+			})
+			.catch(() => {
+				if (!alive.current) return;
+				setFetchError(true);
+				setIsLoading(false);
+			});
+
+		return () => { alive.current = false; };
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [totalCategories, orderBy, order, hideEmpty, filterType, specificCategories, hideCatWithoutThumb, randomize]);
+
+	// ── Preview helpers ─────────────────────────────────────────────────────
 	const previewCount = Math.min(colDesktop || 3, 4);
-	const previewCards = Array.from({ length: previewCount });
+	const previewCats  = categories.slice(0, previewCount);
+
+	const thumbBr = thumbnailShape === 'circle' ? '50%'
+	              : thumbnailShape === 'rounded' ? '8px'
+	              : thumbnailRadius > 0 ? thumbnailRadius + 'px'
+	              : '0';
 
 	return (
 		<div {...blockProps}>
