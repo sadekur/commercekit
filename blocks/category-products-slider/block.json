@@ -5,31 +5,124 @@
 	"title": "Category Products Slider",
 	"category": "commerce-kit-product",
 	"icon": "slides",
+	"description": "Display WooCommerce product categories as a beautiful carousel or slider with full styling control.",
 	"supports": {
 		"html": false
 	},
 	"attributes": {
-		"categoryId": {
-			"type": "number",
-			"default": 0
-		},
-		"title": {
-			"type": "string",
-			"default": "Category Products"
-		},
-		"productLimit": {
-			"type": "number",
-			"default": 10
-		},
-		"autoplay": {
-			"type": "boolean",
-			"default": true
-		},
-		"autoplaySpeed": {
-			"type": "number",
-			"default": 3000
-		}
+
+		"_schemaVersion": { "type": "number", "default": 2 },
+
+		"layout":              { "type": "string",  "default": "carousel" },
+		"colLarge":            { "type": "number",  "default": 4 },
+		"colDesktop":          { "type": "number",  "default": 3 },
+		"colLaptop":           { "type": "number",  "default": 2 },
+		"colTablet":           { "type": "number",  "default": 2 },
+		"colMobile":           { "type": "number",  "default": 1 },
+		"spaceBetween":        { "type": "number",  "default": 20 },
+		"filterType":          { "type": "string",  "default": "all" },
+		"specificCategories":  { "type": "string",  "default": "" },
+		"hideEmpty":           { "type": "boolean", "default": false },
+		"hideCatWithoutThumb": { "type": "boolean", "default": false },
+		"totalCategories":     { "type": "number",  "default": 12 },
+		"orderBy":             { "type": "string",  "default": "name" },
+		"order":               { "type": "string",  "default": "ASC" },
+		"randomize":           { "type": "boolean", "default": false },
+
+		"showSectionTitle":    { "type": "boolean", "default": true },
+		"sectionTitleText":    { "type": "string",  "default": "Category Showcase" },
+		"contentPosition":     { "type": "string",  "default": "below" },
+		"overlayBgColor":      { "type": "string",  "default": "rgba(0,0,0,0.5)" },
+		"overlayHoverBgColor": { "type": "string",  "default": "rgba(0,0,0,0.75)" },
+		"overlayContentVisibility": { "type": "string", "default": "always" },
+		"equalHeight":         { "type": "boolean", "default": true },
+		"contentPadTop":       { "type": "number",  "default": 15 },
+		"contentPadRight":     { "type": "number",  "default": 10 },
+		"contentPadBottom":    { "type": "number",  "default": 15 },
+		"contentPadLeft":      { "type": "number",  "default": 10 },
+
+		"showCatName":         { "type": "boolean", "default": true },
+		"showProductCount":    { "type": "boolean", "default": false },
+		"productCountPos":     { "type": "string",  "default": "beside" },
+		"productCountBefore":  { "type": "string",  "default": "(" },
+		"productCountAfter":   { "type": "string",  "default": ")" },
+		"showDescription":     { "type": "boolean", "default": false },
+		"showCustomText":      { "type": "boolean", "default": false },
+		"customText":          { "type": "string",  "default": "" },
+
+		"showShopNow":         { "type": "boolean", "default": false },
+		"shopNowLabel":        { "type": "string",  "default": "Shop Now" },
+		"shopNowBgColor":      { "type": "string",  "default": "#cc2b5e" },
+		"shopNowHoverBg":      { "type": "string",  "default": "#a02049" },
+		"shopNowTextColor":    { "type": "string",  "default": "#ffffff" },
+		"shopNowBorderRadius": { "type": "number",  "default": 3 },
+		"shopNowAlignment":    { "type": "string",  "default": "center" },
+		"shopNowTarget":       { "type": "string",  "default": "_self" },
+		"shopNowMarginTop":    { "type": "number",  "default": 10 },
+
+		"catNameColor":        { "type": "string",  "default": "#333333" },
+		"catNameFontSize":     { "type": "number",  "default": 16 },
+		"catNameFontWeight":   { "type": "string",  "default": "700" },
+		"catNameMarginTop":    { "type": "number",  "default": 10 },
+		"descColor":           { "type": "string",  "default": "#666666" },
+		"descFontSize":        { "type": "number",  "default": 14 },
+		"descMarginTop":       { "type": "number",  "default": 6 },
+		"countColor":          { "type": "string",  "default": "#888888" },
+		"countFontSize":       { "type": "number",  "default": 13 },
+
+		"showThumbnail":       { "type": "boolean", "default": true },
+		"thumbnailImgSize":    { "type": "string",  "default": "medium" },
+		"thumbnailShape":      { "type": "string",  "default": "square" },
+		"thumbnailRadius":     { "type": "number",  "default": 0 },
+		"showThumbBorder":     { "type": "boolean", "default": false },
+		"thumbBorderWidth":    { "type": "number",  "default": 1 },
+		"thumbBorderStyle":    { "type": "string",  "default": "solid" },
+		"thumbBorderColor":    { "type": "string",  "default": "#dddddd" },
+		"showBoxShadow":       { "type": "boolean", "default": false },
+		"boxShadowH":          { "type": "number",  "default": 0 },
+		"boxShadowV":          { "type": "number",  "default": 4 },
+		"boxShadowBlur":       { "type": "number",  "default": 15 },
+		"boxShadowSpread":     { "type": "number",  "default": 0 },
+		"boxShadowColor":      { "type": "string",  "default": "rgba(0,0,0,0.15)" },
+		"thumbInnerPad":       { "type": "number",  "default": 0 },
+		"thumbMarginBottom":   { "type": "number",  "default": 0 },
+		"thumbnailZoom":       { "type": "string",  "default": "none" },
+		"imageMode":           { "type": "string",  "default": "normal" },
+
+		"autoplay":            { "type": "boolean", "default": true },
+		"autoplaySpeed":       { "type": "number",  "default": 3000 },
+		"scrollSpeed":         { "type": "number",  "default": 600 },
+		"slidesToScroll":      { "type": "number",  "default": 1 },
+		"pauseOnHover":        { "type": "boolean", "default": true },
+		"infiniteLoop":        { "type": "boolean", "default": true },
+		"adaptiveHeight":      { "type": "boolean", "default": false },
+		"slideEffect":         { "type": "string",  "default": "slide" },
+		"rtlDirection":        { "type": "boolean", "default": false },
+
+		"showNavigation":      { "type": "boolean", "default": true },
+		"navIconStyle":        { "type": "number",  "default": 1 },
+		"navIconSize":         { "type": "number",  "default": 22 },
+		"navColor":            { "type": "string",  "default": "#333333" },
+		"navHoverColor":       { "type": "string",  "default": "#ffffff" },
+		"navBgColor":          { "type": "string",  "default": "#ffffff" },
+		"navHoverBgColor":     { "type": "string",  "default": "#cc2b5e" },
+		"navBorderColor":      { "type": "string",  "default": "#dddddd" },
+		"navHoverBorderColor": { "type": "string",  "default": "#cc2b5e" },
+		"navBorderRadius":     { "type": "number",  "default": 50 },
+
+		"showSliderPagination":     { "type": "boolean", "default": false },
+		"sliderPaginationType":     { "type": "string",  "default": "bullets" },
+		"paginationColor":          { "type": "string",  "default": "#cc2b5e" },
+		"paginationActiveColor":    { "type": "string",  "default": "#333333" },
+		"paginationBgColor":        { "type": "string",  "default": "transparent" },
+		"paginationActiveBgColor":  { "type": "string",  "default": "#cc2b5e" },
+
+		"touchSwipe":          { "type": "boolean", "default": true },
+		"mousewheelControl":   { "type": "boolean", "default": false },
+		"mouseDraggable":      { "type": "boolean", "default": true },
+		"freeMode":            { "type": "boolean", "default": false }
 	},
 	"editorScript": "file:./index.js",
-	"render": "file:./render.php"
+	"render": "file:./render.php",
+	"style": "file:./style.css"
 }
