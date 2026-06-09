@@ -1,22 +1,303 @@
-.commerce-kit-category-slider {
+/* ==========================================================================
+   Category Products Slider Block — Frontend & Editor Styles
+   ========================================================================== */
+
+/* ── Base Wrapper ─────────────────────────────────────────────────────────── */
+.ck-csl-wrap {
 	position: relative;
-	overflow: hidden;
+	width: 100%;
 }
 
-.commerce-kit-category-slider .slider-track {
+.ck-csl-section-title {
+	font-size: 22px;
+	font-weight: 700;
+	color: #222;
+	margin: 0 0 20px;
+	line-height: 1.3;
+}
+
+.ck-csl-empty {
+	padding: 12px 16px;
+	background: #fff3cd;
+	border: 1px solid #ffc107;
+	border-radius: 4px;
+	color: #856404;
+}
+
+/* ── Outer / Navigation wrapper ──────────────────────────────────────────── */
+.ck-csl-outer {
+	position: relative;
+}
+
+/* ── Navigation ──────────────────────────────────────────────────────────── */
+.ck-csl-nav-wrap {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	transform: translateY(-50%);
 	display: flex;
-	transition: transform 0.5s ease-in-out;
+	justify-content: space-between;
+	pointer-events: none;
+	z-index: 10;
+	padding: 0 6px;
 }
 
-.commerce-kit-category-slider .slider-slide {
+.ck-csl-nav-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	pointer-events: all;
+	transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 	flex-shrink: 0;
 }
 
-.commerce-kit-category-slider button:hover {
-	background-color: #f3f4f6;
+.ck-csl-nav-btn:focus {
+	outline: 2px solid #0073aa;
+	outline-offset: 2px;
 }
 
-.commerce-kit-category-slider button:focus {
-	outline: 2px solid #3b82f6;
-	outline-offset: 2px;
+/* Shift Swiper inward so nav buttons sit at edge without clipping */
+.ck-has-nav .ck-csl-swiper {
+	padding: 0 50px;
+}
+
+/* ── Swiper / Slides ──────────────────────────────────────────────────────── */
+.ck-csl-swiper {
+	overflow: hidden;
+}
+
+.ck-csl-slide {
+	box-sizing: border-box;
+}
+
+/* ── Card Item ────────────────────────────────────────────────────────────── */
+.ck-csl-item {
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border-radius: 4px;
+	overflow: hidden;
+	height: 100%;
+}
+
+/* Equal height forces cards to fill the full slide */
+.ck-csl-slide.ck-eq-height,
+.ck-eq-height {
+	height: 100%;
+}
+
+.ck-eq-height .ck-csl-item {
+	height: 100%;
+}
+
+/* ── Thumbnail Wrapper ───────────────────────────────────────────────────── */
+.ck-csl-thumb-wrap {
+	overflow: hidden;
+	line-height: 0;
+	position: relative;
+}
+
+.ck-csl-thumb {
+	width: 100%;
+	height: auto;
+	display: block;
+	transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.ck-csl-thumb-placeholder {
+	width: 100%;
+	aspect-ratio: 1;
+	background: #f0f0f0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #bbb;
+}
+
+/* ── Overlay ─────────────────────────────────────────────────────────────── */
+.ck-csl-overlay {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 1;
+	transition: background 0.3s ease;
+}
+
+/* ── Details ─────────────────────────────────────────────────────────────── */
+.ck-csl-details {
+	flex: 1;
+	transition: opacity 0.3s ease;
+}
+
+.ck-csl-cat-name a {
+	display: inline-block;
+	text-decoration: none;
+	line-height: 1.3;
+	transition: opacity 0.2s ease;
+}
+.ck-csl-cat-name a:hover { opacity: 0.75; }
+
+.ck-csl-product-count,
+.ck-csl-count {
+	display: inline-block;
+}
+
+.ck-csl-cat-desc {
+	line-height: 1.6;
+}
+
+.ck-csl-custom-text {
+	margin-top: 6px;
+}
+
+.ck-csl-shop-now-wrap {
+	line-height: 1;
+}
+
+/* ── Content Position: Above ─────────────────────────────────────────────── */
+.ck-csl-pos-above {
+	flex-direction: column-reverse;
+}
+
+/* ── Content Position: Left ──────────────────────────────────────────────── */
+.ck-csl-pos-left {
+	flex-direction: row;
+	align-items: stretch;
+}
+.ck-csl-pos-left .ck-csl-thumb-wrap {
+	flex: 0 0 45%;
+	max-width: 45%;
+}
+.ck-csl-pos-left .ck-csl-details {
+	flex: 1;
+}
+
+/* ── Content Position: Right ─────────────────────────────────────────────── */
+.ck-csl-pos-right {
+	flex-direction: row-reverse;
+	align-items: stretch;
+}
+.ck-csl-pos-right .ck-csl-thumb-wrap {
+	flex: 0 0 45%;
+	max-width: 45%;
+}
+.ck-csl-pos-right .ck-csl-details {
+	flex: 1;
+}
+
+/* ── Content Position: All Overlay variants ──────────────────────────────── */
+.ck-csl-pos-overlay,
+.ck-csl-pos-overlay-top,
+.ck-csl-pos-overlay-middle,
+.ck-csl-pos-overlay-bottom,
+.ck-csl-pos-overlay-box {
+	position: relative;
+}
+
+.ck-csl-pos-overlay .ck-csl-thumb-wrap,
+.ck-csl-pos-overlay-top .ck-csl-thumb-wrap,
+.ck-csl-pos-overlay-middle .ck-csl-thumb-wrap,
+.ck-csl-pos-overlay-bottom .ck-csl-thumb-wrap,
+.ck-csl-pos-overlay-box .ck-csl-thumb-wrap {
+	position: relative;
+	flex: none;
+	width: 100%;
+}
+
+.ck-csl-pos-overlay .ck-csl-details,
+.ck-csl-pos-overlay-top .ck-csl-details,
+.ck-csl-pos-overlay-middle .ck-csl-details,
+.ck-csl-pos-overlay-bottom .ck-csl-details,
+.ck-csl-pos-overlay-box .ck-csl-details {
+	position: absolute;
+	left: 0;
+	right: 0;
+	z-index: 2;
+	color: #fff;
+}
+
+/* Overlay — bottom (default) */
+.ck-csl-pos-overlay .ck-csl-details,
+.ck-csl-pos-overlay-bottom .ck-csl-details {
+	bottom: 0;
+	top: auto;
+}
+
+/* Overlay — top */
+.ck-csl-pos-overlay-top .ck-csl-details {
+	top: 0;
+	bottom: auto;
+}
+
+/* Overlay — middle */
+.ck-csl-pos-overlay-middle .ck-csl-details {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* Overlay box — full-height scrollable overlay */
+.ck-csl-pos-overlay-box .ck-csl-details {
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+/* Overlay text color default */
+.ck-csl-pos-overlay .ck-csl-cat-name a,
+.ck-csl-pos-overlay-top .ck-csl-cat-name a,
+.ck-csl-pos-overlay-middle .ck-csl-cat-name a,
+.ck-csl-pos-overlay-bottom .ck-csl-cat-name a,
+.ck-csl-pos-overlay-box .ck-csl-cat-name a {
+	color: #fff;
+}
+
+/* ── Pagination ──────────────────────────────────────────────────────────── */
+.ck-csl-pager {
+	text-align: center;
+	margin-top: 18px;
+	position: static !important;
+}
+
+.ck-csl-has-pager .ck-csl-swiper {
+	padding-bottom: 40px;
+}
+
+/* ── RTL support ─────────────────────────────────────────────────────────── */
+.ck-csl-rtl .ck-csl-nav-wrap {
+	flex-direction: row-reverse;
+}
+
+/* ── Editor Preview Styles ───────────────────────────────────────────────── */
+.ck-csl-editor-wrap {
+	padding: 4px;
+}
+
+.ck-csl-editor-title {
+	font-size: 20px;
+	font-weight: 700;
+	margin: 0 0 16px;
+	color: #222;
+}
+
+.ck-csl-editor-cards {
+	align-items: stretch;
+}
+
+.ck-csl-editor-card {
+	background: #fff;
+	border: 1px solid #e8e8e8;
+	border-radius: 4px;
+	overflow: hidden;
+	min-width: 0;
+}
+
+.ck-csl-editor-hint {
+	font-size: 11px;
+	color: #999;
+	text-align: center;
+	margin-top: 12px;
+	font-style: italic;
 }
