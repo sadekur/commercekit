@@ -180,7 +180,7 @@ const Edit = ({ attributes, setAttributes }) => {
 	}, [totalCategories, orderBy, order, hideEmpty, filterType, specificCategories, hideCatWithoutThumb, randomize]);
 
 	// ── Preview helpers ─────────────────────────────────────────────────────
-	const previewCount = Math.min(colDesktop || 3, 4);
+	const previewCount = layout === 'slider' ? 1 : Math.min(colDesktop || 3, 4);
 	const previewCats  = categories.slice(0, previewCount);
 
 	const thumbBr = thumbnailShape === 'circle' ? '50%'
