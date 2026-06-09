@@ -58,11 +58,6 @@
 	outline-offset: 2px;
 }
 
-/* Shift Swiper inward so nav buttons sit at edge without clipping */
-.ck-has-nav .ck-csl-swiper {
-	padding: 0 50px;
-}
-
 /* ── Swiper / Slides ──────────────────────────────────────────────────────── */
 .ck-csl-swiper {
 	overflow: hidden;
