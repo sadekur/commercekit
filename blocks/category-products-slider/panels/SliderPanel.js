@@ -83,7 +83,7 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 				</>
 			)}
 
-			{/* ── Pagination ────────────────────────────────────────────────── */}
+			{/* ── Pagination */}
 			<SubHeading>{__('Pagination', 'commerce-kit')}</SubHeading>
 
 			<ToggleControl label={__('Show Pagination', 'commerce-kit')} checked={showSliderPagination} onChange={set('showSliderPagination')} />
