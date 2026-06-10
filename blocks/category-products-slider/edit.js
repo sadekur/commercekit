@@ -60,7 +60,6 @@ const Edit = ({ attributes, setAttributes }) => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [totalCategories, orderBy, order, hideEmpty, filterType, specificCategories, hideCatWithoutThumb, randomize]);
 
-	// ─────────────────────────────────────────────────────────────────────────
 	return (
 		<div {...blockProps}>
 			<InspectorControls>
