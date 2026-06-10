@@ -163,7 +163,7 @@ if ( $default_cat_id > 0 ) {
 $terms = get_terms( $term_args );
 
 if ( is_wp_error( $terms ) || empty( $terms ) ) {
-	echo '<p class="ck-csl-empty">' . esc_html__( 'No product categories found.', 'commerce-kit' ) . '</p>';
+	echo '<p class="p-3 bg-amber-50 border border-amber-200 rounded text-amber-700 text-sm">' . esc_html__( 'No product categories found.', 'commerce-kit' ) . '</p>';
 	return;
 }
 
