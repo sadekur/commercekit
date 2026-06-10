@@ -23,8 +23,6 @@ class CategoryProductsSliderRender {
         $this->a = $attributes;
     }
 
-    // ── Entry point ───────────────────────────────────────────────────────────────
-
     public function render(): void {
         if ( ! class_exists( 'WooCommerce' ) ) {
             echo '<p class="p-4 bg-amber-50 border border-amber-300 rounded text-amber-800 text-sm">'
