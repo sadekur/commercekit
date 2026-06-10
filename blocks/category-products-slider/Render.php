@@ -347,7 +347,6 @@ class CategoryProductsSliderRender {
         ob_start();
         ?>
 <style id="<?php echo esc_attr( $uid ); ?>-css">
-#<?php echo esc_attr( $uid ); ?> .ck-csl-section-title { margin-bottom: 20px; }
 #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb {
     border-radius: <?php echo esc_attr( $this->thumb_br() ); ?>;
     border: <?php echo esc_attr( $this->border_css() ); ?>;
