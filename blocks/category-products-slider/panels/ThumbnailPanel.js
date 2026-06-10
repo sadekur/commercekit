@@ -66,7 +66,7 @@ const ThumbnailPanel = ({ attributes, setAttributes }) => {
 						</div>
 					)}
 
-					{/* ── Border ────────────────────────────────────────────── */}
+					{/* ── Border */}
 					<SubHeading>{__('Border', 'commerce-kit')}</SubHeading>
 					<ToggleControl label={__('Show Thumbnail Border', 'commerce-kit')} checked={showThumbBorder} onChange={set('showThumbBorder')} />
 					{showThumbBorder && (
