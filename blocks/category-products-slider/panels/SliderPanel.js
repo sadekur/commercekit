@@ -107,7 +107,7 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 				</>
 			)}
 
-			{/* ── Miscellaneous ─────────────────────────────────────────────── */}
+			{/* ── Miscellaneous */}
 			<SubHeading>{__('Miscellaneous', 'commerce-kit')}</SubHeading>
 
 			<ToggleControl label={__('Touch Swipe', 'commerce-kit')}             checked={touchSwipe}        onChange={set('touchSwipe')} />
