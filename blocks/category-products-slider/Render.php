@@ -484,7 +484,7 @@ class CategoryProductsSliderRender {
         ];
     }
 
-    // ── Small helpers ─────────────────────────────────────────────────────────────
+    // ── Small helpers
 
     private function thumb_br(): string {
         $shape  = $this->a['thumbnailShape']  ?? 'square';
