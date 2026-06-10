@@ -92,7 +92,7 @@ class CategoryProductsSliderRender {
         return $terms;
     }
 
-    // ── HTML markup ───────────────────────────────────────────────────────────────
+    // ── HTML markup
 
     private function html( array $terms ): void {
         $a   = $this->a;
