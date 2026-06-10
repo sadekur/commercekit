@@ -137,7 +137,7 @@ class CategoryProductsSliderRender {
         [ $svg_prev, $svg_next ] = $this->nav_svgs();
         $nav_size = intval( $a['navIconSize'] ?? 22 );
 
-        // ── Pre-computed class strings ────────────────────────────────────────────
+        // ── Pre-computed class strings
 
         $wrap_cls = 'ck-csl-wrap relative w-full'
             . ( $rtl        ? ' ck-csl-rtl'      : '' )
