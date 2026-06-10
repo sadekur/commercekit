@@ -112,7 +112,7 @@ const ThumbnailPanel = ({ attributes, setAttributes }) => {
 						</>
 					)}
 
-					{/* ── Effects ───────────────────────────────────────────── */}
+					{/* ── Effects */}
 					<SubHeading>{__('Effects', 'commerce-kit')}</SubHeading>
 					<SelectControl
 						label={__('Thumbnail Zoom', 'commerce-kit')}
