@@ -7,6 +7,7 @@ const BLOCKS = [
     {
         name: "accordion",
         icon: "📂",
+        iconBg: "bg-orange-50",
         label: "Accordion",
         description: "Collapsible content sections with full border, font, color, and button styling control. Sections remember their open/closed state between editor and frontend.",
         status: "complete",
@@ -14,6 +15,7 @@ const BLOCKS = [
     {
         name: "category-products-slider",
         icon: "🎠",
+        iconBg: "bg-purple-50",
         label: "Category Products Slider",
         description: "A sliding product carousel filtered by a WooCommerce category. Shows product image, name, short description, and price. Supports autoplay and prev/next navigation.",
         status: "complete",
@@ -21,8 +23,8 @@ const BLOCKS = [
 ];
 
 const STATUS = {
-    complete: { label: "Complete",    cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-    soon:     { label: "Coming Soon", cls: "bg-gray-100  text-gray-500   border-gray-200"   },
+    complete: { label: "Complete",    dot: "bg-emerald-500", cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+    soon:     { label: "Coming Soon", dot: "bg-gray-400",    cls: "bg-gray-100  text-gray-500   border-gray-200"   },
 };
 
 const initValues = () => Object.fromEntries(BLOCKS.map((b) => [b.name, false]));
@@ -82,7 +84,7 @@ const Blocks = () => {
 
     return (
         <div>
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-6">
                 <div>
                     <h2 className="m-0 text-[15px] font-bold text-gray-900">Manage Blocks</h2>
                     <p className="m-0 mt-0.5 text-[12px] text-gray-500">
@@ -90,7 +92,6 @@ const Blocks = () => {
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
-                    {/* Auto-save indicator */}
                     {saveState !== "idle" && (
                         <span
                             className={`text-[12px] font-semibold px-3 py-1.5 rounded-lg border ${
@@ -109,14 +110,14 @@ const Blocks = () => {
                     <button
                         type="button"
                         onClick={() => setAll(false)}
-                        className="px-3 py-1.5 text-[12px] font-semibold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                        className="px-3.5 py-1.5 text-[12px] font-semibold text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors cursor-pointer"
                     >
                         Disable All
                     </button>
                     <button
                         type="button"
                         onClick={() => setAll(true)}
-                        className="px-3 py-1.5 text-[12px] font-semibold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                        className="px-3.5 py-1.5 text-[12px] font-semibold text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors cursor-pointer"
                     >
                         Enable All
                     </button>
@@ -124,7 +125,7 @@ const Blocks = () => {
             </div>
 
             {/* Block grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {isLoading
                     ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
                     : BLOCKS.map((block) => {
@@ -133,36 +134,47 @@ const Blocks = () => {
                         return (
                             <div
                                 key={block.name}
-                                className={`bg-white rounded-xl border shadow-sm flex flex-col p-5 transition-shadow duration-200 hover:shadow-md ${
-                                    enabled ? "border-blue-200" : "border-gray-200"
+                                className={`relative bg-white rounded-xl border flex flex-col overflow-hidden transition-all duration-200 ${
+                                    enabled
+                                        ? "border-blue-200 shadow-sm hover:shadow-md"
+                                        : "border-gray-200 shadow-sm hover:shadow-md"
                                 }`}
                             >
-                                {/* Icon + badge */}
-                                <div className="flex items-start justify-between mb-3">
-                                    <span className="text-3xl leading-none">{block.icon}</span>
-                                    <span
-                                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border ${badge.cls}`}
-                                    >
-                                        {badge.label}
-                                    </span>
-                                </div>
+                                {/* Top accent bar */}
+                                <div className={`h-1 w-full ${enabled ? "bg-blue-500" : "bg-transparent"}`} />
 
-                                {/* Title + description */}
-                                <div className="flex-1">
-                                    <h3 className="m-0 mb-1.5 text-[14px] font-bold text-gray-900 leading-snug">
-                                        {block.label}
-                                    </h3>
-                                    <p className="m-0 text-[12px] text-gray-500 leading-relaxed line-clamp-4">
-                                        {block.description}
-                                    </p>
-                                </div>
+                                <div className="p-5 flex flex-col flex-1">
+                                    {/* Icon + badge */}
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${block.iconBg}`}>
+                                            {block.icon}
+                                        </div>
+                                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${badge.cls}`}>
+                                            <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
+                                            {badge.label}
+                                        </span>
+                                    </div>
 
-                                {/* Actions */}
-                                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-end">
-                                    <Toggle
-                                        checked={enabled}
-                                        onChange={() => handleToggle(block.name)}
-                                    />
+                                    {/* Title + description */}
+                                    <div className="flex-1">
+                                        <h3 className="m-0 mb-1.5 text-[13px] font-bold text-gray-900 leading-snug">
+                                            {block.label}
+                                        </h3>
+                                        <p className="m-0 text-[11.5px] text-gray-500 leading-relaxed line-clamp-4">
+                                            {block.description}
+                                        </p>
+                                    </div>
+
+                                    {/* Actions */}
+                                    <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                                        <span className={`text-[11.5px] font-semibold ${enabled ? "text-blue-600" : "text-gray-400"}`}>
+                                            {enabled ? "Enabled" : "Disabled"}
+                                        </span>
+                                        <Toggle
+                                            checked={enabled}
+                                            onChange={() => handleToggle(block.name)}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         );
