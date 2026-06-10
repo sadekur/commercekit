@@ -181,21 +181,6 @@ if ( $hide_no_thumb ) {
 	}
 }
 
-// ── Enqueue Swiper ────────────────────────────────────────────────────────────
-wp_enqueue_style(
-	'ck-swiper',
-	'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
-	[],
-	'11'
-);
-wp_enqueue_script(
-	'ck-swiper',
-	'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js',
-	[],
-	'11',
-	true
-);
-
 // ── Helpers ───────────────────────────────────────────────────────────────────
 $uid         = 'ck-csl-' . wp_unique_id();
 $is_overlay  = in_array( $content_position, [ 'overlay', 'overlay_top', 'overlay_middle', 'overlay_bottom', 'overlay_box' ], true );
