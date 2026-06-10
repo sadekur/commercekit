@@ -136,7 +136,7 @@ const DisplayPanel = ({ attributes, setAttributes }) => {
 				<TextControl label={__('Custom Text', 'commerce-kit')} value={customText} onChange={set('customText')} />
 			)}
 
-			{/* ── Shop Now Button ───────────────────────────────────────────── */}
+			{/* ── Shop Now Button */}
 			<SubHeading>{__('Shop Now Button', 'commerce-kit')}</SubHeading>
 
 			<ToggleControl label={__('Show Shop Now Button', 'commerce-kit')} checked={showShopNow} onChange={set('showShopNow')} />
