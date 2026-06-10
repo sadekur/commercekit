@@ -301,7 +301,7 @@ class CategoryProductsSliderRender {
         echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput
     }
 
-    // ── Per-instance dynamic CSS ──────────────────────────────────────────────────
+    // ── Per-instance dynamic CSS
 
     private function inline_styles(): void {
         $a   = $this->a;
