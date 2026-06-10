@@ -428,7 +428,7 @@ class CategoryProductsSliderRender {
         <?php
     }
 
-    // ── Swiper JS config ──────────────────────────────────────────────────────────
+    // ── Swiper JS config
 
     private function swiper_config(): array {
         $a   = $this->a;
