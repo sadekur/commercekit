@@ -95,15 +95,6 @@
 	transition: transform 0.4s ease, filter 0.3s ease;
 }
 
-.ck-csl-thumb-placeholder {
-	width: 100%;
-	aspect-ratio: 1;
-	background: #f0f0f0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #bbb;
-}
 
 /* ── Overlay ─────────────────────────────────────────────────────────────── */
 .ck-csl-overlay {
