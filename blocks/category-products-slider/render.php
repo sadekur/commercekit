@@ -176,7 +176,7 @@ if ( $hide_no_thumb ) {
 		return (bool) get_term_meta( $t->term_id, 'thumbnail_id', true );
 	} );
 	if ( empty( $terms ) ) {
-		echo '<p class="ck-csl-empty">' . esc_html__( 'No categories with thumbnails found.', 'commerce-kit' ) . '</p>';
+		echo '<p class="p-3 bg-amber-50 border border-amber-200 rounded text-amber-700 text-sm">' . esc_html__( 'No categories with thumbnails found.', 'commerce-kit' ) . '</p>';
 		return;
 	}
 }
