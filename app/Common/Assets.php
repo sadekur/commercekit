@@ -199,6 +199,10 @@ class Assets {
             null
         );
 
-        $this->enqueue_common_assets();
+        // Tailwind utilities conflict with WP admin class names (e.g. .fixed, .hidden)
+        // on non-CommerceKit pages. Only load on our own pages.
+        if ( isset( $_GET['page'] ) && $_GET['page'] === 'commerce-kit' ) {
+            $this->enqueue_common_assets();
+        }
     }
 }
