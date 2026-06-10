@@ -40,7 +40,7 @@ class CategoryProductsSliderRender {
         $this->inline_script();
     }
 
-    // ── Category query ────────────────────────────────────────────────────────────
+    // ── Category query
 
     private function get_terms(): ?array {
         $a    = $this->a;
