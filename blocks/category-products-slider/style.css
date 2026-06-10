@@ -1,14 +1,4 @@
-/* ==========================================================================
-   Category Products Slider Block — Frontend & Editor Styles
-   Only rules that cannot be expressed as Tailwind utilities in Render.php
-   live here: overlay link colors and block-editor preview styles.
-   ========================================================================== */
 
-/* ── Overlay: default link colour (white on dark overlay) ─────────────────
-   These selectors span two elements (.ck-csl-pos-* on the card → a inside
-   .ck-csl-cat-name), so they cannot be collapsed into a single element's
-   class list in PHP.
-   ────────────────────────────────────────────────────────────────────────── */
 .ck-csl-pos-overlay     .ck-csl-cat-name a,
 .ck-csl-pos-overlay-top .ck-csl-cat-name a,
 .ck-csl-pos-overlay-middle .ck-csl-cat-name a,
