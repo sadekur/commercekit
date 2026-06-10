@@ -51,6 +51,24 @@ class Assets {
     public function enqueue_frontend_assets() {
         $ck_settings = get_option( 'commerce_kit_settings', [] );
 
+        // Swiper — only on pages that actually render the Category Products Slider block.
+        if ( in_array( 'category-products-slider', Blocks::get_active_blocks(), true )
+             && has_block( 'commerce-kit/category-products-slider' ) ) {
+            wp_enqueue_style(
+                'ck-swiper',
+                'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
+                [],
+                '11'
+            );
+            wp_enqueue_script(
+                'ck-swiper',
+                'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js',
+                [],
+                '11',
+                true
+            );
+        }
+
         wp_enqueue_script(
             'commerce-kit-frontend-script',
             COMMERCE_KIT_ASSETS . '/js/frontend.js',
