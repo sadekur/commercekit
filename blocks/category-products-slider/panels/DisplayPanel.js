@@ -102,7 +102,7 @@ const DisplayPanel = ({ attributes, setAttributes }) => {
 				attributes={attributes} setAttributes={setAttributes}
 			/>
 
-			{/* ── Category Content ──────────────────────────────────────────── */}
+			{/* ── Category Content */}
 			<SubHeading>{__('Category Content', 'commerce-kit')}</SubHeading>
 
 			<ToggleControl label={__('Show Category Name', 'commerce-kit')}  checked={showCatName}      onChange={set('showCatName')} />
