@@ -26,7 +26,7 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 	return (
 		<PanelBody title={__('Slider Settings', 'commerce-kit')} initialOpen={false}>
 
-			{/* ── Slider Controls ───────────────────────────────────────────── */}
+			{/* ── Slider Controls */}
 			<SubHeading>{__('Slider Controls', 'commerce-kit')}</SubHeading>
 
 			<ToggleControl label={__('Autoplay', 'commerce-kit')} checked={autoplay} onChange={set('autoplay')} />
