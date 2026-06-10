@@ -14,7 +14,7 @@ const Edit = ({ attributes, setAttributes }) => {
 		filterType, specificCategories, hideCatWithoutThumb, randomize,
 	} = attributes;
 
-	// ── Live category fetch ───────────────────────────────────────────────────
+	// ── Live category fetch
 	const [categories, setCategories] = useState([]);
 	const [isLoading,  setIsLoading]  = useState(true);
 	const [fetchError, setFetchError] = useState(false);
