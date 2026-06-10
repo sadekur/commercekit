@@ -396,7 +396,7 @@ class CategoryProductsSliderRender {
         echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput
     }
 
-    // ── Swiper init script ────────────────────────────────────────────────────────
+    // ── Swiper init script
 
     private function inline_script(): void {
         $uid = $this->uid;
