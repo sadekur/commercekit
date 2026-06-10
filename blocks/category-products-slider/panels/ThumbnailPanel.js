@@ -37,7 +37,7 @@ const ThumbnailPanel = ({ attributes, setAttributes }) => {
 						onChange={set('thumbnailImgSize')}
 					/>
 
-					{/* ── Shape ─────────────────────────────────────────────── */}
+					{/* ── Shape */}
 					<SubHeading>{__('Shape', 'commerce-kit')}</SubHeading>
 					<ButtonGroup>
 						{[
