@@ -32,7 +32,7 @@ const DisplayPanel = ({ attributes, setAttributes }) => {
 	return (
 		<PanelBody title={__('Display Settings', 'commerce-kit')} initialOpen={false}>
 
-			{/* ── Basic Styles ──────────────────────────────────────────────── */}
+			{/* ── Basic Styles ──*/}
 			<SubHeading>{__('Basic Styles', 'commerce-kit')}</SubHeading>
 
 			<ToggleControl
