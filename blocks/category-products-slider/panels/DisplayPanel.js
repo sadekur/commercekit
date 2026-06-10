@@ -186,7 +186,7 @@ const DisplayPanel = ({ attributes, setAttributes }) => {
 				</>
 			)}
 
-			{/* ── Typography ────────────────────────────────────────────────── */}
+			{/* ── Typography */}
 			<SubHeading>{__('Typography', 'commerce-kit')}</SubHeading>
 
 			<div style={{ fontSize: '12px', color: '#757575', marginBottom: 6 }}>{__('Category Name', 'commerce-kit')}</div>
