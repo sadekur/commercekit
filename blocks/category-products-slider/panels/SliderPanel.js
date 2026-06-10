@@ -54,7 +54,7 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 			/>
 			<ToggleControl label={__('Right-to-Left Direction', 'commerce-kit')} checked={rtlDirection} onChange={set('rtlDirection')} />
 
-			{/* ── Navigation ────────────────────────────────────────────────── */}
+			{/* ── Navigation*/}
 			<SubHeading>{__('Navigation', 'commerce-kit')}</SubHeading>
 
 			<ToggleControl label={__('Show Navigation Arrows', 'commerce-kit')} checked={showNavigation} onChange={set('showNavigation')} />
