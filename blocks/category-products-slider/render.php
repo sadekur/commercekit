@@ -6,7 +6,7 @@
  */
 
 if ( ! class_exists( 'WooCommerce' ) ) {
-	echo '<p style="padding:1em;background:#fff3cd;border:1px solid #ffc107;border-radius:4px;">'
+	echo '<p class="p-4 bg-amber-50 border border-amber-300 rounded text-amber-800 text-sm">'
 		. esc_html__( 'WooCommerce is required for the Category Products Slider block.', 'commerce-kit' )
 		. '</p>';
 	return;
