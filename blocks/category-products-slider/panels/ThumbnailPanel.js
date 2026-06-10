@@ -93,7 +93,7 @@ const ThumbnailPanel = ({ attributes, setAttributes }) => {
 						</Flex>
 					)}
 
-					{/* ── Box Shadow ────────────────────────────────────────── */}
+					{/* ── Box Shadow */}
 					<SubHeading>{__('Box Shadow', 'commerce-kit')}</SubHeading>
 					<ToggleControl label={__('Enable Box Shadow', 'commerce-kit')} checked={showBoxShadow} onChange={set('showBoxShadow')} />
 					{showBoxShadow && (
