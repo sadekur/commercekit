@@ -169,7 +169,7 @@ Webpack entry points (defined in `webpack.config.js`):
 - `spa/public/src/App.jsx` → `build/public.build.js` — Frontend React app (currently a stub)
 - `assets/css/tailwind.css` → `build/tailwind.build.js`
 
-**Externals** (loaded from WordPress globals, not bundled): `react` → `React`, `react-dom` → `ReactDOM`, `@wordpress/blocks` → `wp.blocks`, `@wordpress/block-editor` → `wp.blockEditor`, `@wordpress/element` → `wp.element`. Other `@wordpress/*` packages (e.g. `api-fetch`, `components`) are **not** externals — if used they will be bundled.
+**Externals** (loaded from WordPress globals, not bundled): `react` → `React`, `react-dom` → `ReactDOM`, `@wordpress/blocks` → `wp.blocks`, `@wordpress/block-editor` → `wp.blockEditor`, `@wordpress/element` → `wp.element`, `@wordpress/components` → `wp.components`, `@wordpress/i18n` → `wp.i18n`. Other `@wordpress/*` packages (e.g. `api-fetch`) are **not** externals — if used they will be bundled.
 
 The admin SPA mounts on `#commerce_kit_render` and uses **hash-based routing**. `spa/admin/App.jsx` switches on `window.location.hash`:
 - `""` or `"/"` → `Dashboard` (Feature / Blocks / Settings tabs)
@@ -199,7 +199,7 @@ Two mechanisms work together:
 
 ### Shared Admin Components
 
-All shared admin components live in `spa/admin/common/`: `CommonHeader`, `SectionHeader`, `Skeletons/`, `Svgs`, `Toggle`, `Pill`, `NumberField`, `CheckboxField`, `InputRow`, `FieldRow`, `SettingRow`, `SaveRow`, `RadioGroup`, `ColorField`, `DimensionFields`, `SmallNumberInput`.
+All shared admin components live in `spa/admin/common/`: `CommonHeader`, `SectionHeader`, `Skeletons/`, `Svgs`, `Toggle`, `Pill`, `Badge`, `Card`, `CardHead`, `NumberField`, `CheckboxField`, `InputRow`, `FieldRow`, `SettingRow`, `SaveRow`, `RadioGroup`, `ColorField`, `DimensionFields`, `SmallNumberInput`, `FancyInput`, `QuantityStepper`, `TabBtn`.
 
 Page components live in `spa/admin/pages/` — dashboard tabs in `pages/dashboard/tabs/`, feature pages in `pages/features/<slug>/page.jsx`.
 

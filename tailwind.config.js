@@ -6,6 +6,9 @@ module.exports = {
       './spa/admin/**/*.jsx',
       './spa/admin/common/**/*.jsx',
   ],
+  corePlugins: {
+      preflight: false,
+  },
   theme: {
       extend: {},
   },
