@@ -31,17 +31,25 @@ class CategoryProductsSliderRender {
             return;
         }
 
-        $terms = $this->get_terms();
-        if ( $terms === null ) return;
+        $this->uid  = 'ck-csl-' . wp_unique_id();
+        $layout     = $this->a['layout']      ?? 'carousel';
+        $cat_type   = $this->a['categoryType'] ?? 'parent';
+        $disp_type  = $this->a['displayType'] ?? 'individualize';
+        $is_slider  = in_array( $layout, [ 'carousel', 'slider' ], true );
+        $is_cup     = ( $cat_type === 'all' && $disp_type === 'child_under_parent' );
 
-        $this->uid = 'ck-csl-' . wp_unique_id();
-        $this->html( $terms );
-        $this->inline_styles();
-
-        $layout = $this->a['layout'] ?? 'carousel';
-        if ( in_array( $layout, [ 'carousel', 'slider' ], true ) ) {
-            $this->inline_script();
+        if ( $is_cup ) {
+            $groups = $this->get_term_groups();
+            if ( $groups === null ) return;
+            $is_slider ? $this->html_cup_slider( $groups ) : $this->html_cup_static( $groups, $layout );
+        } else {
+            $terms = $this->get_terms();
+            if ( $terms === null ) return;
+            $is_slider ? $this->html_slider( $terms ) : $this->html_static( $terms, $layout );
         }
+
+        $this->inline_styles();
+        if ( $is_slider ) $this->inline_script();
     }
 
     // ── Category query
