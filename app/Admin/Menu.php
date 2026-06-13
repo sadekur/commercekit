@@ -65,6 +65,16 @@ class Menu {
         );
     }
 
+    public function suppress_notices_on_our_pages() {
+        $page = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : '';
+        if ( strpos( $page, 'commerce-kit' ) !== 0 ) {
+            return;
+        }
+        remove_all_actions( 'admin_notices' );
+        remove_all_actions( 'all_admin_notices' );
+        remove_all_actions( 'user_admin_notices' );
+    }
+
     public function admin_page_content() {
         ?>
         <div class="wrap">
