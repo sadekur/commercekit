@@ -416,9 +416,25 @@ class CategoryProductsSliderRender {
         $pager_color    = $a['paginationColor']        ?? '#cc2b5e';
         $pager_active   = $a['paginationActiveColor']  ?? '#333333';
 
+        $layout  = $a['layout'] ?? 'carousel';
+        $col_l   = max( 1, intval( $a['colLarge']   ?? 4 ) );
+        $col_d   = max( 1, intval( $a['colDesktop'] ?? 3 ) );
+        $col_p   = max( 1, intval( $a['colLaptop']  ?? 2 ) );
+        $col_t   = max( 1, intval( $a['colTablet']  ?? 2 ) );
+        $col_m   = max( 1, intval( $a['colMobile']  ?? 1 ) );
+        $gap     = intval( $a['spaceBetween'] ?? 20 );
+
         ob_start();
         ?>
 <style id="<?php echo esc_attr( $uid ); ?>-css">
+<?php if ( 'grid' === $layout ) : ?>
+#<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { display:grid; gap:<?php echo esc_attr( $gap ); ?>px; grid-template-columns:repeat(<?php echo esc_attr( $col_m ); ?>,1fr); }
+@media(min-width:480px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_t ); ?>,1fr); } }
+@media(min-width:768px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_p ); ?>,1fr); } }
+@media(min-width:1024px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_d ); ?>,1fr); } }
+@media(min-width:1280px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_l ); ?>,1fr); } }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-grid-item { min-width:0; }
+<?php endif; ?>
 #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb {
     border-radius: <?php echo esc_attr( $this->thumb_br() ); ?>;
     border: <?php echo esc_attr( $this->border_css() ); ?>;
