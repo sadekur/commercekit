@@ -7,25 +7,32 @@ import {
 import { __ } from '@wordpress/i18n';
 import ResponsiveColumns from '../components/ResponsiveColumns';
 
+const LAYOUTS = [
+	['carousel', __('Carousel', 'commerce-kit')],
+	['slider',   __('Slider', 'commerce-kit')],
+	['grid',     __('Grid', 'commerce-kit')],
+	['inline',   __('Inline', 'commerce-kit')],
+];
+
 const GeneralPanel = ({ attributes, setAttributes }) => {
 	const {
-		layout, spaceBetween,
+		layout, categoryType, spaceBetween,
 		filterType, specificCategories,
 		hideEmpty, hideCatWithoutThumb, totalCategories,
 		orderBy, order, randomize,
 	} = attributes;
 	const set = (key) => (val) => setAttributes({ [key]: val });
 
+	const isSlider = layout === 'carousel' || layout === 'slider';
+
 	return (
 		<PanelBody title={__('General Settings', 'commerce-kit')} initialOpen={true}>
 
+			{/* Layout preset */}
 			<div style={{ marginBottom: 12 }}>
-				<div style={{ fontSize: '12px', color: '#1e1e1e', marginBottom: 6 }}>{__('Layout', 'commerce-kit')}</div>
+				<div style={{ fontSize: '12px', color: '#1e1e1e', marginBottom: 6 }}>{__('Layout Preset', 'commerce-kit')}</div>
 				<ButtonGroup>
-					{[
-						['carousel', __('Carousel', 'commerce-kit')],
-						['slider',   __('Slider (1-col)', 'commerce-kit')],
-					].map(([val, label]) => (
+					{LAYOUTS.map(([val, label]) => (
 						<Button
 							key={val}
 							variant={layout === val ? 'primary' : 'secondary'}
@@ -36,9 +43,40 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 						</Button>
 					))}
 				</ButtonGroup>
+				<p style={{ fontSize: 11, color: '#757575', margin: '4px 0 0' }}>
+					{layout === 'carousel' && __('Multi-column Swiper carousel.', 'commerce-kit')}
+					{layout === 'slider'   && __('Full-width single-column slider.', 'commerce-kit')}
+					{layout === 'grid'     && __('Static responsive CSS grid — no slider.', 'commerce-kit')}
+					{layout === 'inline'   && __('Horizontal scrollable row.', 'commerce-kit')}
+				</p>
 			</div>
 
-			{'carousel' === layout && (
+			{/* Category Type */}
+			<div style={{ marginBottom: 16 }}>
+				<div style={{ fontSize: '12px', color: '#1e1e1e', marginBottom: 6 }}>{__('Category Type', 'commerce-kit')}</div>
+				<ButtonGroup>
+					{[
+						['parent', __('Parent Only', 'commerce-kit')],
+						['all',    __('Parent & Child', 'commerce-kit')],
+					].map(([val, label]) => (
+						<Button
+							key={val}
+							variant={categoryType === val ? 'primary' : 'secondary'}
+							onClick={() => setAttributes({ categoryType: val })}
+							size="small"
+						>
+							{label}
+						</Button>
+					))}
+				</ButtonGroup>
+				<p style={{ fontSize: 11, color: '#757575', margin: '4px 0 0' }}>
+					{categoryType === 'parent'
+						? __('Shows only top-level categories.', 'commerce-kit')
+						: __('Shows parent and all child categories.', 'commerce-kit')}
+				</p>
+			</div>
+
+			{isSlider && layout === 'carousel' && (
 				<ResponsiveColumns attributes={attributes} setAttributes={setAttributes} />
 			)}
 
