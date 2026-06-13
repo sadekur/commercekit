@@ -216,7 +216,7 @@ trait CslItemTrait {
                 <?php endif; ?>
 
             </div>
-        </div><!-- .ck-csl-cup-card -->
+        </div>
         <?php
     }
 }
