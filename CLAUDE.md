@@ -149,6 +149,8 @@ Current blocks: `accordion`, `category-products-slider` (both complete).
 
 `blocks/App.jsx` reads `window.COMMERCEKIT.activeBlocks` (an array of enabled block names set by `Blocks::get_active_blocks()`) and only imports/registers the enabled ones. `app/Blocks.php` provides the static `get_active_blocks(): array` method used by both PHP block registration and JS localization.
 
+**Block subdirectory convention:** Inspector Controls panels live in `panels/` (e.g. `accordion/panels/StylePanel.js`, `category-products-slider/panels/GeneralPanel.js`). Reusable sub-components live in `components/`. Both are imported by `edit.js`.
+
 ### REST API
 
 Namespace: `commerce-kit/v1`. All routes registered in `app/Common/API.php`. Handler classes live in `app/API/`.
@@ -176,6 +178,18 @@ The admin SPA mounts on `#commerce_kit_render` and uses **hash-based routing**. 
 - `"/stock-threshold"` → `StockThreshold` page
 - `"/commerce-kit-tip-settings"` → `TipSettings` page
 - `"/buy-button-settings"` → `BuyButtonSettings` page
+
+**Admin SPA REST call pattern:** All feature pages use `axios` (bundled) for REST requests. GET:
+```js
+axios.get(`${COMMERCEKIT.apiurl}/get-<resource>`, { headers: { 'X-WP-Nonce': COMMERCEKIT.nonce } })
+```
+POST:
+```js
+axios.post(`${COMMERCEKIT.apiurl}/save-<resource>`, payload, {
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': COMMERCEKIT.nonce }
+})
+```
+`COMMERCEKIT.apiurl` already includes a trailing slash (set from `rest_url('commerce-kit/v1/')`), so endpoints are appended without a leading slash. Do not use `wp.apiFetch` in the admin SPA.
 
 Tailwind scans: `app/**/*.php`, `views/**/*.html`, `spa/public/src/**/*.jsx`, `spa/admin/**/*.jsx`, `spa/admin/common/**/*.jsx`.
 

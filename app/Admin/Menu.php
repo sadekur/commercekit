@@ -9,6 +9,7 @@ class Menu {
 
     function __construct() {
         $this->action( 'admin_menu', [ $this, 'add_admin_menu' ] );
+        $this->action( 'admin_init', [ $this, 'suppress_notices_on_our_pages' ] );
     }
 
     public function add_admin_menu() {
