@@ -67,19 +67,19 @@ trait CslStylesTrait {
         margin-bottom: <?php echo esc_attr( $thumb_mb ); ?>px;
         <?php if ( 'grayscale' === $image_mode ) : ?>filter: grayscale(100%);<?php endif; ?>
     }
-<?php if ( 'zoom_in' === $thumb_zoom ) : ?>
-#<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap { overflow: hidden; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-thumb { transition: transform 0.4s ease; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap:hover .ck-csl-thumb { transform: scale(1.1); }
-<?php elseif ( 'zoom_out' === $thumb_zoom ) : ?>
-#<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap { overflow: hidden; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-thumb { transform: scale(1.1); transition: transform 0.4s ease; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap:hover .ck-csl-thumb { transform: scale(1); }
-<?php endif; ?>
-<?php if ( 'grayscale' === $image_mode ) : ?>
-#<?php echo esc_attr( $uid ); ?> .ck-csl-thumb { transition: filter 0.3s ease; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap:hover .ck-csl-thumb { filter: grayscale(0%); }
-<?php endif; ?>
+    <?php if ( 'zoom_in' === $thumb_zoom ) : ?>
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap { overflow: hidden; }
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb { transition: transform 0.4s ease; }
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap:hover .ck-csl-thumb { transform: scale(1.1); }
+        <?php elseif ( 'zoom_out' === $thumb_zoom ) : ?>
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap { overflow: hidden; }
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb { transform: scale(1.1); transition: transform 0.4s ease; }
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap:hover .ck-csl-thumb { transform: scale(1); }
+        <?php endif; ?>
+        <?php if ( 'grayscale' === $image_mode ) : ?>
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb { transition: filter 0.3s ease; }
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap:hover .ck-csl-thumb { filter: grayscale(0%); }
+    <?php endif; ?>
 #<?php echo esc_attr( $uid ); ?> .ck-csl-overlay {
     background: <?php echo esc_attr( $overlay_bg ); ?>;
     transition: background 0.3s ease<?php echo 'on_hover' === $overlay_vis ? ', opacity 0.3s ease' : ''; ?>;
