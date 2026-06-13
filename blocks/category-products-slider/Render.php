@@ -765,6 +765,12 @@ class CategoryProductsSliderRender {
 #<?php echo esc_attr( $uid ); ?> .swiper-pagination-bullet-active { background:<?php echo esc_attr( $pager_active ); ?>; opacity:1; }
 #<?php echo esc_attr( $uid ); ?> .swiper-pagination-progressbar .swiper-pagination-progressbar-fill { background:<?php echo esc_attr( $pager_active ); ?>; }
 <?php endif; ?>
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-children { list-style:none; margin:8px 0 0; padding:0; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-children li { padding:4px 0; border-bottom:1px solid #f0f0f0; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-children li:last-child { border-bottom:none; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-children a { text-decoration:none; color:#555; font-size:13px; display:flex; justify-content:space-between; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-children a:hover { color:#cc2b5e; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-count { color:#999; }
 </style>
         <?php
         echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput
