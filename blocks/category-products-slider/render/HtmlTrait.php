@@ -84,33 +84,33 @@ trait CslHtmlTrait {
 
         ob_start();
         ?>
-<div id="<?php echo esc_attr( $uid ); ?>" class="ck-csl-wrap ck-csl-layout-<?php echo esc_attr( $layout ); ?> w-full">
+            <div id="<?php echo esc_attr( $uid ); ?>" class="ck-csl-wrap ck-csl-layout-<?php echo esc_attr( $layout ); ?> w-full">
 
-    <?php if ( $show_title && $title_text ) : ?>
-        <h3 class="ck-csl-section-title text-[22px] font-bold text-[#222] m-0 mb-5 leading-[1.3]"><?php echo esc_html( $title_text ); ?></h3>
-    <?php endif; ?>
+                <?php if ( $show_title && $title_text ) : ?>
+                    <h3 class="ck-csl-section-title text-[22px] font-bold text-[#222] m-0 mb-5 leading-[1.3]"><?php echo esc_html( $title_text ); ?></h3>
+                <?php endif; ?>
 
-    <?php if ( 'inline' === $layout ) : ?>
-    <div class="ck-csl-inline-wrap" style="display:flex;flex-wrap:nowrap;gap:<?php echo intval( $a['spaceBetween'] ?? 20 ); ?>px;overflow-x:auto;-webkit-overflow-scrolling:touch;">
-        <?php foreach ( $terms as $term ) :
-            if ( ! ( $term instanceof WP_Term ) ) continue; ?>
-            <div class="ck-csl-inline-item" style="flex:0 0 220px;min-width:0;">
-                <?php $this->render_item( $term, $ctx ); ?>
-            </div>
-        <?php endforeach; ?>
-    </div>
-    <?php else : /* grid */ ?>
-    <div class="ck-csl-grid-wrap">
-        <?php foreach ( $terms as $term ) :
-            if ( ! ( $term instanceof WP_Term ) ) continue; ?>
-            <div class="ck-csl-grid-item">
-                <?php $this->render_item( $term, $ctx ); ?>
-            </div>
-        <?php endforeach; ?>
-    </div>
-    <?php endif; ?>
+                <?php if ( 'inline' === $layout ) : ?>
+                <div class="ck-csl-inline-wrap" style="display:flex;flex-wrap:nowrap;gap:<?php echo intval( $a['spaceBetween'] ?? 20 ); ?>px;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+                    <?php foreach ( $terms as $term ) :
+                        if ( ! ( $term instanceof WP_Term ) ) continue; ?>
+                        <div class="ck-csl-inline-item" style="flex:0 0 220px;min-width:0;">
+                            <?php $this->render_item( $term, $ctx ); ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php else : /* grid */ ?>
+                <div class="ck-csl-grid-wrap">
+                    <?php foreach ( $terms as $term ) :
+                        if ( ! ( $term instanceof WP_Term ) ) continue; ?>
+                        <div class="ck-csl-grid-item">
+                            <?php $this->render_item( $term, $ctx ); ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
 
-</div><!-- .ck-csl-wrap -->
+            </div><!-- .ck-csl-wrap -->
         <?php
         echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput
     }
