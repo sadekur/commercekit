@@ -5,29 +5,29 @@ trait CslScriptTrait {
         $uid = $this->uid;
         $cfg = wp_json_encode( $this->swiper_config() );
         ?>
-<script>
-(function () {
-    'use strict';
-    function ckCslInit() {
-        var wrap = document.getElementById('<?php echo esc_js( $uid ); ?>');
-        if (!wrap || typeof Swiper === 'undefined') return;
-        var el = wrap.querySelector('.ck-csl-swiper');
-        if (!el) return;
-        new Swiper(el, <?php echo $cfg; // phpcs:ignore ?>);
-    }
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', ckCslInit);
-    } else {
-        ckCslInit();
-    }
-    window.addEventListener('load', function () {
-        var wrap = document.getElementById('<?php echo esc_js( $uid ); ?>');
-        if (!wrap) return;
-        var el = wrap.querySelector('.ck-csl-swiper');
-        if (el && !el.classList.contains('swiper-initialized')) ckCslInit();
-    });
-})();
-</script>
+        <script>
+        (function () {
+            'use strict';
+            function ckCslInit() {
+                var wrap = document.getElementById('<?php echo esc_js( $uid ); ?>');
+                if (!wrap || typeof Swiper === 'undefined') return;
+                var el = wrap.querySelector('.ck-csl-swiper');
+                if (!el) return;
+                new Swiper(el, <?php echo $cfg; // phpcs:ignore ?>);
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', ckCslInit);
+            } else {
+                ckCslInit();
+            }
+            window.addEventListener('load', function () {
+                var wrap = document.getElementById('<?php echo esc_js( $uid ); ?>');
+                if (!wrap) return;
+                var el = wrap.querySelector('.ck-csl-swiper');
+                if (el && !el.classList.contains('swiper-initialized')) ckCslInit();
+            });
+        })();
+        </script>
         <?php
     }
 
