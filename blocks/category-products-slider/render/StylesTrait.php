@@ -90,8 +90,8 @@ trait CslStylesTrait {
         #<?php echo esc_attr( $uid ); ?> .ck-csl-details { opacity:0; transition:opacity 0.3s ease; }
         #<?php echo esc_attr( $uid ); ?> .ck-csl-item:hover .ck-csl-details { opacity:1; }
     <?php else : ?>
-#<?php echo esc_attr( $uid ); ?> .ck-csl-item:hover .ck-csl-overlay { background:<?php echo esc_attr( $overlay_hvr ); ?>; }
-<?php endif; ?>
+    #<?php echo esc_attr( $uid ); ?> .ck-csl-item:hover .ck-csl-overlay { background:<?php echo esc_attr( $overlay_hvr ); ?>; }
+    <?php endif; ?>
 #<?php echo esc_attr( $uid ); ?> .ck-csl-cat-name a { font-size:<?php echo esc_attr( $cat_name_size ); ?>px; font-weight:<?php echo esc_attr( $cat_name_weight ); ?>; color:<?php echo esc_attr( $cat_name_color ); ?>; }
 #<?php echo esc_attr( $uid ); ?> .ck-csl-count { font-size:<?php echo esc_attr( $count_size ); ?>px; color:<?php echo esc_attr( $count_color ); ?>; margin-left:4px; }
 #<?php echo esc_attr( $uid ); ?> .ck-csl-product-count { font-size:<?php echo esc_attr( $count_size ); ?>px; color:<?php echo esc_attr( $count_color ); ?>; }
@@ -101,16 +101,16 @@ trait CslStylesTrait {
 #<?php echo esc_attr( $uid ); ?> .ck-csl-nav-btn { width:<?php echo esc_attr( $nav_size + 18 ); ?>px; height:<?php echo esc_attr( $nav_size + 18 ); ?>px; color:<?php echo esc_attr( $nav_color ); ?>; background:<?php echo esc_attr( $nav_bg ); ?>; border:1px solid <?php echo esc_attr( $nav_border ); ?>; border-radius:<?php echo esc_attr( $nav_radius ); ?>px; }
 #<?php echo esc_attr( $uid ); ?> .ck-csl-nav-btn:hover { color:<?php echo esc_attr( $nav_hvr_c ); ?>; background:<?php echo esc_attr( $nav_hvr_bg ); ?>; border-color:<?php echo esc_attr( $nav_hvr_bdr ); ?>; }
 <?php if ( $show_pager ) : ?>
-#<?php echo esc_attr( $uid ); ?> .swiper-pagination-bullet { background:<?php echo esc_attr( $pager_color ); ?>; opacity:0.5; }
-#<?php echo esc_attr( $uid ); ?> .swiper-pagination-bullet-active { background:<?php echo esc_attr( $pager_active ); ?>; opacity:1; }
-#<?php echo esc_attr( $uid ); ?> .swiper-pagination-progressbar .swiper-pagination-progressbar-fill { background:<?php echo esc_attr( $pager_active ); ?>; }
-<?php endif; ?>
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-parent-link { display:inline-block; font-size:<?php echo esc_attr( $cat_name_size ); ?>px; font-weight:<?php echo esc_attr( $cat_name_weight ); ?>; color:<?php echo esc_attr( $cat_name_color ); ?>; transition:opacity 0.2s ease; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-parent-link:hover { opacity:0.75; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pill { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:20px; font-size:12px; font-weight:500; color:#4b5563; text-decoration:none; line-height:1.4; transition:background 0.2s ease,color 0.2s ease,border-color 0.2s ease; white-space:nowrap; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pill:hover { background:<?php echo esc_attr( $nav_hvr_bg ); ?>; border-color:<?php echo esc_attr( $nav_hvr_bg ); ?>; color:<?php echo esc_attr( $nav_hvr_c ); ?>; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pill-count { font-size:11px; opacity:0.65; }
+    #<?php echo esc_attr( $uid ); ?> .swiper-pagination-bullet { background:<?php echo esc_attr( $pager_color ); ?>; opacity:0.5; }
+    #<?php echo esc_attr( $uid ); ?> .swiper-pagination-bullet-active { background:<?php echo esc_attr( $pager_active ); ?>; opacity:1; }
+    #<?php echo esc_attr( $uid ); ?> .swiper-pagination-progressbar .swiper-pagination-progressbar-fill { background:<?php echo esc_attr( $pager_active ); ?>; }
+    <?php endif; ?>
+    #<?php echo esc_attr( $uid ); ?> .ck-csl-cup-parent-link { display:inline-block; font-size:<?php echo esc_attr( $cat_name_size ); ?>px; font-weight:<?php echo esc_attr( $cat_name_weight ); ?>; color:<?php echo esc_attr( $cat_name_color ); ?>; transition:opacity 0.2s ease; }
+    #<?php echo esc_attr( $uid ); ?> .ck-csl-cup-parent-link:hover { opacity:0.75; }
+    #<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+    #<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pill { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:20px; font-size:12px; font-weight:500; color:#4b5563; text-decoration:none; line-height:1.4; transition:background 0.2s ease,color 0.2s ease,border-color 0.2s ease; white-space:nowrap; }
+    #<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pill:hover { background:<?php echo esc_attr( $nav_hvr_bg ); ?>; border-color:<?php echo esc_attr( $nav_hvr_bg ); ?>; color:<?php echo esc_attr( $nav_hvr_c ); ?>; }
+    #<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pill-count { font-size:11px; opacity:0.65; }
 </style>
         <?php
         echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput
