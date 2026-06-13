@@ -7,6 +7,10 @@ import { __ } from '@wordpress/i18n';
 import SubHeading from '../components/SubHeading';
 import ColorRow   from '../components/ColorRow';
 
+const SWATCH = { width: 32, height: 28, padding: 2, border: '1px solid #ccc', borderRadius: 3, cursor: 'pointer', display: 'block' };
+const COL_HEAD = { fontSize: 10, fontWeight: 600, color: '#888', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 };
+const ROW_LABEL = { fontSize: 11, color: '#555', display: 'flex', alignItems: 'center', height: 28 };
+
 const SliderPanel = ({ attributes, setAttributes }) => {
 	const {
 		// Slider controls
@@ -22,6 +26,7 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 		touchSwipe, mousewheelControl, mouseDraggable, freeMode,
 	} = attributes;
 	const set = (key) => (val) => setAttributes({ [key]: val });
+	const swatch = (key) => (e) => setAttributes({ [key]: e.target.value });
 
 	return (
 		<PanelBody title={__('Slider Settings', 'commerce-kit')} initialOpen={false}>
@@ -54,31 +59,47 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 			/>
 			<ToggleControl label={__('Right-to-Left Direction', 'commerce-kit')} checked={rtlDirection} onChange={set('rtlDirection')} />
 
-			{/* ── Navigation*/}
+			{/* ── Navigation */}
 			<SubHeading>{__('Navigation', 'commerce-kit')}</SubHeading>
 
 			<ToggleControl label={__('Show Navigation Arrows', 'commerce-kit')} checked={showNavigation} onChange={set('showNavigation')} />
+
 			{showNavigation && (
 				<>
 					<SelectControl
 						label={__('Arrow Icon Style', 'commerce-kit')}
 						value={String(navIconStyle)}
 						options={[
-							{ label: __('Style 1 – Chevron', 'commerce-kit'),           value: '1' },
-							{ label: __('Style 2 – Arrow with Line', 'commerce-kit'),   value: '2' },
-							{ label: __('Style 3 – Arrow in Circle', 'commerce-kit'),   value: '3' },
+							{ label: __('Style 1 – Chevron', 'commerce-kit'),         value: '1' },
+							{ label: __('Style 2 – Arrow with Line', 'commerce-kit'), value: '2' },
+							{ label: __('Style 3 – Arrow in Circle', 'commerce-kit'), value: '3' },
 						]}
 						onChange={(v) => setAttributes({ navIconStyle: parseInt(v) })}
 					/>
 					<RangeControl label={__('Icon Size (px)', 'commerce-kit')} value={navIconSize} onChange={set('navIconSize')} min={12} max={48} />
-					<Flex wrap>
-						<FlexItem><ColorRow label={__('Arrow Color', 'commerce-kit')}        value={navColor}            onChange={set('navColor')} /></FlexItem>
-						<FlexItem><ColorRow label={__('Arrow Hover Color', 'commerce-kit')}  value={navHoverColor}       onChange={set('navHoverColor')} /></FlexItem>
-						<FlexItem><ColorRow label={__('BG Color', 'commerce-kit')}           value={navBgColor}          onChange={set('navBgColor')} /></FlexItem>
-						<FlexItem><ColorRow label={__('BG Hover', 'commerce-kit')}           value={navHoverBgColor}     onChange={set('navHoverBgColor')} /></FlexItem>
-						<FlexItem><ColorRow label={__('Border', 'commerce-kit')}             value={navBorderColor}      onChange={set('navBorderColor')} /></FlexItem>
-						<FlexItem><ColorRow label={__('Border Hover', 'commerce-kit')}       value={navHoverBorderColor} onChange={set('navHoverBorderColor')} /></FlexItem>
-					</Flex>
+
+					{/* Normal / Hover color grid */}
+					<div style={{ background: '#f9f9f9', border: '1px solid #e8e8e8', borderRadius: 4, padding: '10px 12px', marginBottom: 10 }}>
+						<div style={{ display: 'grid', gridTemplateColumns: '52px 1fr 1fr', gap: '8px 6px', alignItems: 'center' }}>
+							{/* Column headers */}
+							<div />
+							<div style={COL_HEAD}>{__('Normal', 'commerce-kit')}</div>
+							<div style={COL_HEAD}>{__('Hover', 'commerce-kit')}</div>
+							{/* Arrow */}
+							<div style={ROW_LABEL}>{__('Arrow', 'commerce-kit')}</div>
+							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navColor}       onChange={swatch('navColor')}       style={SWATCH} /></div>
+							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navHoverColor}  onChange={swatch('navHoverColor')}  style={SWATCH} /></div>
+							{/* Background */}
+							<div style={ROW_LABEL}>{__('BG', 'commerce-kit')}</div>
+							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navBgColor}     onChange={swatch('navBgColor')}     style={SWATCH} /></div>
+							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navHoverBgColor} onChange={swatch('navHoverBgColor')} style={SWATCH} /></div>
+							{/* Border */}
+							<div style={ROW_LABEL}>{__('Border', 'commerce-kit')}</div>
+							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navBorderColor}      onChange={swatch('navBorderColor')}      style={SWATCH} /></div>
+							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navHoverBorderColor} onChange={swatch('navHoverBorderColor')} style={SWATCH} /></div>
+						</div>
+					</div>
+
 					<RangeControl label={__('Button Border Radius (px)', 'commerce-kit')} value={navBorderRadius} onChange={set('navBorderRadius')} min={0} max={50} />
 				</>
 			)}
@@ -93,16 +114,16 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 						label={__('Pagination Type', 'commerce-kit')}
 						value={sliderPaginationType}
 						options={[
-							{ label: __('Bullets', 'commerce-kit'),          value: 'bullets' },
-							{ label: __('Dynamic Bullets', 'commerce-kit'),  value: 'dynamic' },
-							{ label: __('Fraction (1/10)', 'commerce-kit'),  value: 'fraction' },
-							{ label: __('Progress Bar', 'commerce-kit'),     value: 'progressbar' },
+							{ label: __('Bullets', 'commerce-kit'),         value: 'bullets' },
+							{ label: __('Dynamic Bullets', 'commerce-kit'), value: 'dynamic' },
+							{ label: __('Fraction (1/10)', 'commerce-kit'), value: 'fraction' },
+							{ label: __('Progress Bar', 'commerce-kit'),    value: 'progressbar' },
 						]}
 						onChange={set('sliderPaginationType')}
 					/>
 					<Flex>
-						<FlexItem><ColorRow label={__('Bullet Color', 'commerce-kit')}  value={paginationColor}       onChange={set('paginationColor')} /></FlexItem>
-						<FlexItem><ColorRow label={__('Active Color', 'commerce-kit')}  value={paginationActiveColor} onChange={set('paginationActiveColor')} /></FlexItem>
+						<FlexItem><ColorRow label={__('Bullet Color', 'commerce-kit')} value={paginationColor}       onChange={set('paginationColor')} /></FlexItem>
+						<FlexItem><ColorRow label={__('Active Color', 'commerce-kit')} value={paginationActiveColor} onChange={set('paginationActiveColor')} /></FlexItem>
 					</Flex>
 				</>
 			)}
@@ -110,10 +131,12 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 			{/* ── Miscellaneous */}
 			<SubHeading>{__('Miscellaneous', 'commerce-kit')}</SubHeading>
 
-			<ToggleControl label={__('Touch Swipe', 'commerce-kit')}             checked={touchSwipe}        onChange={set('touchSwipe')} />
-			<ToggleControl label={__('Mouse Wheel Control', 'commerce-kit')}     checked={mousewheelControl} onChange={set('mousewheelControl')} />
-			<ToggleControl label={__('Mouse Draggable', 'commerce-kit')}         checked={mouseDraggable}    onChange={set('mouseDraggable')} />
-			<ToggleControl label={__('Free Mode (no snapping)', 'commerce-kit')} checked={freeMode}          onChange={set('freeMode')} />
+			<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 8px' }}>
+				<ToggleControl label={__('Touch Swipe', 'commerce-kit')}        checked={touchSwipe}        onChange={set('touchSwipe')} />
+				<ToggleControl label={__('Mouse Wheel', 'commerce-kit')}        checked={mousewheelControl} onChange={set('mousewheelControl')} />
+				<ToggleControl label={__('Mouse Drag', 'commerce-kit')}         checked={mouseDraggable}    onChange={set('mouseDraggable')} />
+				<ToggleControl label={__('Free Mode', 'commerce-kit')}          checked={freeMode}          onChange={set('freeMode')} />
+			</div>
 
 		</PanelBody>
 	);
