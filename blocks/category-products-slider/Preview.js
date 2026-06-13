@@ -58,19 +58,31 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 			{!isLoading && !fetchError && previewCats.length > 0 && (
 				<div
 					className="ck-csl-editor-cards"
-					style={{ display: 'flex', gap: spaceBetween + 'px', overflow: 'hidden', alignItems: 'stretch' }}
+					style={
+						layout === 'grid'
+							? { display: 'grid', gridTemplateColumns: `repeat(${previewCount}, 1fr)`, gap: spaceBetween + 'px' }
+							: layout === 'inline'
+							? { display: 'flex', flexWrap: 'nowrap', gap: spaceBetween + 'px', overflowX: 'auto' }
+							: { display: 'flex', gap: spaceBetween + 'px', overflow: 'hidden', alignItems: 'stretch' }
+					}
 				>
 					{previewCats.map((cat) => {
 						const thumbSrc  = cat.image && cat.image.src ? cat.image.src : null;
 						const thumbAlt  = cat.image && cat.image.alt ? cat.image.alt : cat.name;
-						const cardWidth = `calc(${100 / previewCount}% - ${spaceBetween * (previewCount - 1) / previewCount}px)`;
+						const cardWidth = layout === 'inline'
+							? '200px'
+							: `calc(${100 / previewCount}% - ${spaceBetween * (previewCount - 1) / previewCount}px)`;
 						const desc      = cat.description ? cat.description.replace(/<[^>]+>/g, '') : '';
 
 						return (
 							<div
 								key={cat.id}
 								className="ck-csl-editor-card"
-								style={{ flex: `0 0 ${cardWidth}`, minWidth: 0, display: 'flex', flexDirection: 'column' }}
+								style={
+									layout === 'grid'
+										? { minWidth: 0, display: 'flex', flexDirection: 'column' }
+										: { flex: `0 0 ${cardWidth}`, minWidth: 0, display: 'flex', flexDirection: 'column' }
+								}
 							>
 								{showThumbnail && (
 									<div style={{
