@@ -136,35 +136,35 @@ trait CslHtmlTrait {
 
         ob_start();
         ?>
-<div id="<?php echo esc_attr( $uid ); ?>" class="<?php echo esc_attr( $wrap_cls ); ?>" dir="<?php echo $rtl ? 'rtl' : 'ltr'; ?>">
-    <?php if ( $show_title && $title_text ) : ?>
-        <h3 class="ck-csl-section-title text-[22px] font-bold text-[#222] m-0 mb-5 leading-[1.3]"><?php echo esc_html( $title_text ); ?></h3>
-    <?php endif; ?>
-    <div class="<?php echo esc_attr( $outer_cls ); ?>">
-        <?php if ( $show_nav ) : ?>
-        <div class="<?php echo esc_attr( $nav_wrap_cls ); ?>">
-            <div class="ck-csl-prev <?php echo esc_attr( $nav_btn_cls ); ?>" role="button" aria-label="<?php esc_attr_e( 'Previous', 'commerce-kit' ); ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" width="<?php echo esc_attr( $nav_size ); ?>" height="<?php echo esc_attr( $nav_size ); ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?php echo $svg_prev; // phpcs:ignore ?></svg>
-            </div>
-            <div class="ck-csl-next <?php echo esc_attr( $nav_btn_cls ); ?>" role="button" aria-label="<?php esc_attr_e( 'Next', 'commerce-kit' ); ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" width="<?php echo esc_attr( $nav_size ); ?>" height="<?php echo esc_attr( $nav_size ); ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?php echo $svg_next; // phpcs:ignore ?></svg>
-            </div>
-        </div>
-        <?php endif; ?>
-        <div class="<?php echo esc_attr( $swiper_cls ); ?>">
-            <div class="swiper-wrapper">
-                <?php foreach ( $groups as $group ) : ?>
-                <div class="swiper-slide ck-csl-slide box-border">
-                    <?php $this->render_cup_group( $group ); ?>
+            <div id="<?php echo esc_attr( $uid ); ?>" class="<?php echo esc_attr( $wrap_cls ); ?>" dir="<?php echo $rtl ? 'rtl' : 'ltr'; ?>">
+                <?php if ( $show_title && $title_text ) : ?>
+                    <h3 class="ck-csl-section-title text-[22px] font-bold text-[#222] m-0 mb-5 leading-[1.3]"><?php echo esc_html( $title_text ); ?></h3>
+                <?php endif; ?>
+                <div class="<?php echo esc_attr( $outer_cls ); ?>">
+                    <?php if ( $show_nav ) : ?>
+                    <div class="<?php echo esc_attr( $nav_wrap_cls ); ?>">
+                        <div class="ck-csl-prev <?php echo esc_attr( $nav_btn_cls ); ?>" role="button" aria-label="<?php esc_attr_e( 'Previous', 'commerce-kit' ); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="<?php echo esc_attr( $nav_size ); ?>" height="<?php echo esc_attr( $nav_size ); ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?php echo $svg_prev; // phpcs:ignore ?></svg>
+                        </div>
+                        <div class="ck-csl-next <?php echo esc_attr( $nav_btn_cls ); ?>" role="button" aria-label="<?php esc_attr_e( 'Next', 'commerce-kit' ); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="<?php echo esc_attr( $nav_size ); ?>" height="<?php echo esc_attr( $nav_size ); ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?php echo $svg_next; // phpcs:ignore ?></svg>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                    <div class="<?php echo esc_attr( $swiper_cls ); ?>">
+                        <div class="swiper-wrapper">
+                            <?php foreach ( $groups as $group ) : ?>
+                            <div class="swiper-slide ck-csl-slide box-border">
+                                <?php $this->render_cup_group( $group ); ?>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php if ( $show_pager ) : ?>
+                        <div class="ck-csl-pager swiper-pagination text-center mt-[18px] !static"></div>
+                        <?php endif; ?>
+                    </div>
                 </div>
-                <?php endforeach; ?>
             </div>
-            <?php if ( $show_pager ) : ?>
-            <div class="ck-csl-pager swiper-pagination text-center mt-[18px] !static"></div>
-            <?php endif; ?>
-        </div>
-    </div>
-</div>
         <?php
         echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput
     }
