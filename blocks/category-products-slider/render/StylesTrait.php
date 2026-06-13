@@ -51,22 +51,22 @@ trait CslStylesTrait {
         ob_start();
         ?>
 <style id="<?php echo esc_attr( $uid ); ?>-css">
-<?php if ( 'grid' === $layout ) : ?>
-#<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { display:grid; gap:<?php echo esc_attr( $gap ); ?>px; grid-template-columns:repeat(<?php echo esc_attr( $col_m ); ?>,1fr); }
-@media(min-width:480px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_t ); ?>,1fr); } }
-@media(min-width:768px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_p ); ?>,1fr); } }
-@media(min-width:1024px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_d ); ?>,1fr); } }
-@media(min-width:1280px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_l ); ?>,1fr); } }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-grid-item { min-width:0; }
-<?php endif; ?>
-#<?php echo esc_attr( $uid ); ?> .ck-csl-thumb {
-    border-radius: <?php echo esc_attr( $this->thumb_br() ); ?>;
-    border: <?php echo esc_attr( $this->border_css() ); ?>;
-    box-shadow: <?php echo esc_attr( $this->shadow_css() ); ?>;
-    padding: <?php echo esc_attr( $thumb_pad ); ?>px;
-    margin-bottom: <?php echo esc_attr( $thumb_mb ); ?>px;
-    <?php if ( 'grayscale' === $image_mode ) : ?>filter: grayscale(100%);<?php endif; ?>
-}
+    <?php if ( 'grid' === $layout ) : ?>
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { display:grid; gap:<?php echo esc_attr( $gap ); ?>px; grid-template-columns:repeat(<?php echo esc_attr( $col_m ); ?>,1fr); }
+        @media(min-width:480px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_t ); ?>,1fr); } }
+        @media(min-width:768px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_p ); ?>,1fr); } }
+        @media(min-width:1024px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_d ); ?>,1fr); } }
+        @media(min-width:1280px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_l ); ?>,1fr); } }
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-item { min-width:0; }
+    <?php endif; ?>
+    #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb {
+        border-radius: <?php echo esc_attr( $this->thumb_br() ); ?>;
+        border: <?php echo esc_attr( $this->border_css() ); ?>;
+        box-shadow: <?php echo esc_attr( $this->shadow_css() ); ?>;
+        padding: <?php echo esc_attr( $thumb_pad ); ?>px;
+        margin-bottom: <?php echo esc_attr( $thumb_mb ); ?>px;
+        <?php if ( 'grayscale' === $image_mode ) : ?>filter: grayscale(100%);<?php endif; ?>
+    }
 <?php if ( 'zoom_in' === $thumb_zoom ) : ?>
 #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap { overflow: hidden; }
 #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb { transition: transform 0.4s ease; }
