@@ -65,7 +65,7 @@ const Edit = ({ attributes, setAttributes }) => {
 
 		return () => { alive.current = false; };
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [totalCategories, orderBy, order, hideEmpty, filterType, specificCategories, hideCatWithoutThumb, randomize]);
+	}, [totalCategories, orderBy, order, hideEmpty, filterType, specificCategories, hideCatWithoutThumb, randomize, categoryType]);
 
 	return (
 		<div {...blockProps}>
