@@ -162,7 +162,11 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 
 			<div className="ck-csl-editor-hint">
 				{categories.length > previewCount
-					? `${__('Showing', 'commerce-kit')} ${previewCount} ${__('of', 'commerce-kit')} ${categories.length} ${__('categories. Full carousel renders on the front-end.', 'commerce-kit')}`
+					? `${__('Showing', 'commerce-kit')} ${previewCount} ${__('of', 'commerce-kit')} ${categories.length} ${__('categories. Full layout renders on the front-end.', 'commerce-kit')}`
+					: layout === 'grid'
+					? __('Front-end renders a static responsive CSS grid.', 'commerce-kit')
+					: layout === 'inline'
+					? __('Front-end renders a horizontally scrollable row.', 'commerce-kit')
 					: __('Front-end renders the full Swiper carousel with all configured settings.', 'commerce-kit')
 				}
 			</div>
