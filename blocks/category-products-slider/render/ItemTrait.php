@@ -214,7 +214,6 @@ trait CslItemTrait {
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
-
             </div>
         </div>
         <?php
