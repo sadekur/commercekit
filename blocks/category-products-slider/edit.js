@@ -73,7 +73,7 @@ const Edit = ({ attributes, setAttributes }) => {
 				<GeneralPanel   attributes={attributes} setAttributes={setAttributes} />
 				<DisplayPanel   attributes={attributes} setAttributes={setAttributes} />
 				<ThumbnailPanel attributes={attributes} setAttributes={setAttributes} />
-				<SliderPanel    attributes={attributes} setAttributes={setAttributes} />
+				{isSliderLayout && <SliderPanel attributes={attributes} setAttributes={setAttributes} />}
 			</InspectorControls>
 
 			<Preview
