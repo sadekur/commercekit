@@ -1,9 +1,16 @@
 const SubHeading = ({ children }) => (
 	<div style={{
-		fontSize: '11px', fontWeight: 600, textTransform: 'uppercase',
-		letterSpacing: '0.08em', color: '#1e1e1e',
-		borderBottom: '1px solid #e0e0e0', paddingBottom: '6px',
-		marginBottom: '12px', marginTop: '16px',
+		fontSize: '11px',
+		fontWeight: 700,
+		textTransform: 'uppercase',
+		letterSpacing: '0.06em',
+		color: '#3c3c3c',
+		borderLeft: '3px solid #cc2b5e',
+		background: 'linear-gradient(90deg,#fdf0f3 0%,transparent 80%)',
+		padding: '5px 8px',
+		borderRadius: '0 2px 2px 0',
+		marginTop: '20px',
+		marginBottom: '10px',
 	}}>
 		{children}
 	</div>
