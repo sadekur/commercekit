@@ -59,6 +59,10 @@ class CategoryProductsSliderRender {
             $args['order']   = $a['order']   ?? 'ASC';
         }
 
+        if ( ( $a['categoryType'] ?? 'parent' ) === 'parent' ) {
+            $args['parent'] = 0;
+        }
+
         if ( ( $a['filterType'] ?? '' ) === 'specific' && ! empty( $a['specificCategories'] ) ) {
             $ids = array_map( 'intval', array_filter( array_map( 'trim', explode( ',', $a['specificCategories'] ) ) ) );
             if ( $ids ) {
