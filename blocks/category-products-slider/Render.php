@@ -37,7 +37,11 @@ class CategoryProductsSliderRender {
         $this->uid = 'ck-csl-' . wp_unique_id();
         $this->html( $terms );
         $this->inline_styles();
-        $this->inline_script();
+
+        $layout = $this->a['layout'] ?? 'carousel';
+        if ( in_array( $layout, [ 'carousel', 'slider' ], true ) ) {
+            $this->inline_script();
+        }
     }
 
     // ── Category query
