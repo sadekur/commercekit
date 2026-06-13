@@ -14,6 +14,7 @@
 		"_schemaVersion": { "type": "number", "default": 2 },
 
 		"layout":              { "type": "string",  "default": "carousel" },
+		"categoryType":        { "type": "string",  "default": "parent" },
 		"colLarge":            { "type": "number",  "default": 4 },
 		"colDesktop":          { "type": "number",  "default": 3 },
 		"colLaptop":           { "type": "number",  "default": 2 },
