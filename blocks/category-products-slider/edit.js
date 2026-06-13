@@ -39,6 +39,10 @@ const Edit = ({ attributes, setAttributes }) => {
 			hide_empty: hideEmpty ? 'true' : 'false',
 		});
 
+		if (categoryType === 'parent') {
+			params.set('parent', '0');
+		}
+
 		if (filterType === 'specific' && specificCategories) {
 			const ids = specificCategories.split(',').map(s => s.trim()).filter(Boolean).join(',');
 			if (ids) params.set('include', ids);
