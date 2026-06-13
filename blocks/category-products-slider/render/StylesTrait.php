@@ -80,16 +80,16 @@ trait CslStylesTrait {
         #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb { transition: filter 0.3s ease; }
         #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap:hover .ck-csl-thumb { filter: grayscale(0%); }
     <?php endif; ?>
-#<?php echo esc_attr( $uid ); ?> .ck-csl-overlay {
-    background: <?php echo esc_attr( $overlay_bg ); ?>;
-    transition: background 0.3s ease<?php echo 'on_hover' === $overlay_vis ? ', opacity 0.3s ease' : ''; ?>;
-    <?php echo 'on_hover' === $overlay_vis ? 'opacity:0;' : ''; ?>
-}
-<?php if ( 'on_hover' === $overlay_vis ) : ?>
-#<?php echo esc_attr( $uid ); ?> .ck-csl-item:hover .ck-csl-overlay { opacity:1; background:<?php echo esc_attr( $overlay_hvr ); ?>; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-details { opacity:0; transition:opacity 0.3s ease; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-item:hover .ck-csl-details { opacity:1; }
-<?php else : ?>
+    #<?php echo esc_attr( $uid ); ?> .ck-csl-overlay {
+        background: <?php echo esc_attr( $overlay_bg ); ?>;
+        transition: background 0.3s ease<?php echo 'on_hover' === $overlay_vis ? ', opacity 0.3s ease' : ''; ?>;
+        <?php echo 'on_hover' === $overlay_vis ? 'opacity:0;' : ''; ?>
+    }
+    <?php if ( 'on_hover' === $overlay_vis ) : ?>
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-item:hover .ck-csl-overlay { opacity:1; background:<?php echo esc_attr( $overlay_hvr ); ?>; }
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-details { opacity:0; transition:opacity 0.3s ease; }
+        #<?php echo esc_attr( $uid ); ?> .ck-csl-item:hover .ck-csl-details { opacity:1; }
+    <?php else : ?>
 #<?php echo esc_attr( $uid ); ?> .ck-csl-item:hover .ck-csl-overlay { background:<?php echo esc_attr( $overlay_hvr ); ?>; }
 <?php endif; ?>
 #<?php echo esc_attr( $uid ); ?> .ck-csl-cat-name a { font-size:<?php echo esc_attr( $cat_name_size ); ?>px; font-weight:<?php echo esc_attr( $cat_name_weight ); ?>; color:<?php echo esc_attr( $cat_name_color ); ?>; }
