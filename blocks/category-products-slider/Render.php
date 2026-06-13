@@ -817,12 +817,12 @@ class CategoryProductsSliderRender {
 #<?php echo esc_attr( $uid ); ?> .swiper-pagination-bullet-active { background:<?php echo esc_attr( $pager_active ); ?>; opacity:1; }
 #<?php echo esc_attr( $uid ); ?> .swiper-pagination-progressbar .swiper-pagination-progressbar-fill { background:<?php echo esc_attr( $pager_active ); ?>; }
 <?php endif; ?>
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-children { list-style:none; margin:8px 0 0; padding:0; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-children li { padding:4px 0; border-bottom:1px solid #f0f0f0; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-children li:last-child { border-bottom:none; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-children a { text-decoration:none; color:#555; font-size:13px; display:flex; justify-content:space-between; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-children a:hover { color:#cc2b5e; }
-#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-count { color:#999; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-parent-link { display:inline-block; font-size:<?php echo esc_attr( $cat_name_size ); ?>px; font-weight:<?php echo esc_attr( $cat_name_weight ); ?>; color:<?php echo esc_attr( $cat_name_color ); ?>; transition:opacity 0.2s ease; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-parent-link:hover { opacity:0.75; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pill { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:20px; font-size:12px; font-weight:500; color:#4b5563; text-decoration:none; line-height:1.4; transition:background 0.2s ease,color 0.2s ease,border-color 0.2s ease; white-space:nowrap; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pill:hover { background:<?php echo esc_attr( $nav_hvr_bg ); ?>; border-color:<?php echo esc_attr( $nav_hvr_bg ); ?>; color:<?php echo esc_attr( $nav_hvr_c ); ?>; }
+#<?php echo esc_attr( $uid ); ?> .ck-csl-cup-pill-count { font-size:11px; opacity:0.65; }
 </style>
         <?php
         echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput
