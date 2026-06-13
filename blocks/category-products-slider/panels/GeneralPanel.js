@@ -7,6 +7,7 @@ import {
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import ResponsiveColumns from '../components/ResponsiveColumns';
+import SubHeading       from '../components/SubHeading';
 
 const LAYOUTS = [
 	['carousel', __('Carousel', 'commerce-kit')],
@@ -15,8 +16,8 @@ const LAYOUTS = [
 	['inline',   __('Inline',   'commerce-kit')],
 ];
 
-const LABEL_STYLE  = { fontSize: '12px', fontWeight: 500, color: '#1e1e1e', marginBottom: 4 };
-const HELP_STYLE   = { fontSize: 11, color: '#757575', margin: '0 0 8px' };
+const LABEL_STYLE = { fontSize: '12px', fontWeight: 500, color: '#1e1e1e', marginBottom: 4 };
+const HELP_STYLE  = { fontSize: 11, color: '#757575', margin: '0 0 8px' };
 
 // Build a depth-sorted flat list from a flat category array (WC REST format)
 function buildHierarchyTree(cats) {
@@ -41,7 +42,7 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 		orderBy, order, randomize,
 	} = attributes;
 
-	const set = (key) => (val) => setAttributes({ [key]: val });
+	const set      = (key) => (val) => setAttributes({ [key]: val });
 	const isSlider  = layout === 'carousel' || layout === 'slider';
 	const isAllMode = categoryType === 'all';
 
@@ -80,7 +81,7 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 		<PanelBody title={__('General Settings', 'commerce-kit')} initialOpen={true}>
 
 			{/* ── Layout Preset */}
-			<div style={{ marginBottom: 12 }}>
+			<div style={{ marginBottom: 14 }}>
 				<div style={LABEL_STYLE}>{__('Layout Preset', 'commerce-kit')}</div>
 				<ButtonGroup>
 					{LAYOUTS.map(([val, label]) => (
@@ -92,7 +93,7 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 						>{label}</Button>
 					))}
 				</ButtonGroup>
-				<p style={{ ...HELP_STYLE, marginTop: 4 }}>
+				<p style={{ ...HELP_STYLE, marginTop: 5 }}>
 					{layout === 'carousel' && __('Multi-column Swiper carousel.', 'commerce-kit')}
 					{layout === 'slider'   && __('Full-width single-column slider.', 'commerce-kit')}
 					{layout === 'grid'     && __('Static responsive CSS grid — no slider.', 'commerce-kit')}
@@ -101,7 +102,7 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 			</div>
 
 			{/* ── Category Type */}
-			<div style={{ marginBottom: 8 }}>
+			<div style={{ marginBottom: 10 }}>
 				<div style={LABEL_STYLE}>{__('Category Type', 'commerce-kit')}</div>
 				<p style={HELP_STYLE}>{__('Select a category type.', 'commerce-kit')}</p>
 				<ButtonGroup>
@@ -125,33 +126,43 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 					<Divider />
 
 					{/* Category selector */}
-					<div style={{ marginBottom: 12 }}>
-						<div style={LABEL_STYLE}>{__('Parent and Child', 'commerce-kit')}</div>
-						<p style={HELP_STYLE}>{__('Select category(s). Leave empty to show all.', 'commerce-kit')}</p>
+					<div style={{ marginBottom: 14 }}>
+						<div style={LABEL_STYLE}>{__('Select Categories', 'commerce-kit')}</div>
+						<p style={HELP_STYLE}>{__('Leave empty to show all.', 'commerce-kit')}</p>
 
-						<div style={{ border: '1px solid #ddd', borderRadius: 3, background: '#fff', marginBottom: 4 }}>
-							{/* Search input */}
-							<input
-								type="text"
-								placeholder={__('Select Category(s)', 'commerce-kit')}
-								value={catSearch}
-								onChange={e => setCatSearch(e.target.value)}
-								style={{
-									width: '100%', boxSizing: 'border-box',
-									padding: '6px 10px', fontSize: 12,
-									border: 'none', borderBottom: '1px solid #eee', outline: 'none',
-								}}
-							/>
+						<div style={{ border: '1px solid #ddd', borderRadius: 4, background: '#fff', overflow: 'hidden', marginBottom: 6 }}>
+							{/* Search */}
+							<div style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #eee', padding: '0 10px', gap: 6 }}>
+								<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+									<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+								</svg>
+								<input
+									type="text"
+									placeholder={__('Search categories…', 'commerce-kit')}
+									value={catSearch}
+									onChange={e => setCatSearch(e.target.value)}
+									style={{
+										flex: 1, padding: '7px 0', fontSize: 12,
+										border: 'none', outline: 'none', background: 'transparent',
+									}}
+								/>
+								{catSearch && (
+									<button
+										onClick={() => setCatSearch('')}
+										style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', padding: 0, lineHeight: 1, fontSize: 14 }}
+									>×</button>
+								)}
+							</div>
 
 							{/* Category list */}
-							<div style={{ maxHeight: 180, overflowY: 'auto' }}>
+							<div style={{ maxHeight: 190, overflowY: 'auto' }}>
 								{catsLoading && (
-									<div style={{ padding: 10, display: 'flex', alignItems: 'center', gap: 8, color: '#888', fontSize: 12 }}>
+									<div style={{ padding: '12px 10px', display: 'flex', alignItems: 'center', gap: 8, color: '#888', fontSize: 12 }}>
 										<Spinner /> {__('Loading…', 'commerce-kit')}
 									</div>
 								)}
 								{!catsLoading && filteredCats.length === 0 && (
-									<div style={{ padding: '8px 10px', fontSize: 12, color: '#999' }}>
+									<div style={{ padding: '10px 12px', fontSize: 12, color: '#999' }}>
 										{__('No categories found.', 'commerce-kit')}
 									</div>
 								)}
@@ -161,22 +172,29 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 										<label
 											key={cat.id}
 											style={{
-												display: 'flex', alignItems: 'center',
-												padding: '4px 10px', cursor: 'pointer', gap: 6,
+												display: 'flex', alignItems: 'center', gap: 8,
+												padding: '5px 10px',
+												paddingLeft: (cat.depth * 16 + 10) + 'px',
+												cursor: 'pointer',
 												background: isSelected ? '#f0f5ff' : 'transparent',
 												borderBottom: '1px solid #f5f5f5',
+												transition: 'background 0.1s',
 											}}
 										>
 											<input
 												type="checkbox"
 												checked={isSelected}
 												onChange={() => toggleCat(cat.id)}
-												style={{ flexShrink: 0, margin: 0 }}
+												style={{ flexShrink: 0, margin: 0, accentColor: '#cc2b5e' }}
 											/>
-											<span style={{ fontSize: 12, paddingLeft: cat.depth * 14 }}>
-												{'–'.repeat(cat.depth)}{cat.depth > 0 ? '' : ''}{cat.name}
-												{' '}
-												<span style={{ color: '#999' }}>({cat.count})</span>
+											<span style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 4, minWidth: 0 }}>
+												{cat.depth > 0 && (
+													<span style={{ color: '#ccc', fontSize: 10, flexShrink: 0 }}>›</span>
+												)}
+												<span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+													{cat.name}
+												</span>
+												<span style={{ color: '#aaa', fontSize: 11, flexShrink: 0 }}>({cat.count})</span>
 											</span>
 										</label>
 									);
@@ -184,49 +202,75 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 							</div>
 						</div>
 
+						{/* Selected chips */}
 						{selectedIds.length > 0 && (
-							<button
-								onClick={() => setAttributes({ parentChildCategories: '' })}
-								style={{ fontSize: 11, color: '#cc2b5e', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-							>
-								{__('Clear selection', 'commerce-kit')}
-							</button>
+							<div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 6 }}>
+								{selectedIds.map(id => {
+									const cat = allCats.find(c => c.id === id);
+									if (!cat) return null;
+									return (
+										<span
+											key={id}
+											style={{
+												display: 'inline-flex', alignItems: 'center', gap: 4,
+												padding: '2px 8px 2px 10px', fontSize: 11,
+												background: '#eef2ff', color: '#4361ee',
+												border: '1px solid #c7d2fe', borderRadius: 20,
+											}}
+										>
+											{cat.name}
+											<button
+												onClick={() => toggleCat(id)}
+												style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#a0aec0', padding: 0, lineHeight: 1, fontSize: 13 }}
+											>×</button>
+										</span>
+									);
+								})}
+								<button
+									onClick={() => setAttributes({ parentChildCategories: '' })}
+									style={{ fontSize: 11, color: '#cc2b5e', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 4px' }}
+								>
+									{__('Clear all', 'commerce-kit')}
+								</button>
+							</div>
 						)}
 					</div>
 
 					{/* Display Type */}
-					<div style={{ marginBottom: 12 }}>
+					<div style={{ marginBottom: 14 }}>
 						<div style={LABEL_STYLE}>{__('Display Type', 'commerce-kit')}</div>
-						<p style={HELP_STYLE}>{__('Select display type for parent and child categories.', 'commerce-kit')}</p>
-						<ButtonGroup>
+						<p style={HELP_STYLE}>{__('How to display parent and child categories.', 'commerce-kit')}</p>
+						<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 6 }}>
 							{[
-								['individualize',      __('Individualize Each',  'commerce-kit')],
-								['child_under_parent', __('Child Under Parent',  'commerce-kit')],
-							].map(([val, label]) => (
-								<Button
+								['individualize',      __('Individualize Each',  'commerce-kit'), __('Each as its own card', 'commerce-kit')],
+								['child_under_parent', __('Child Under Parent',  'commerce-kit'), __('Children inside parent card', 'commerce-kit')],
+							].map(([val, label, desc]) => (
+								<button
 									key={val}
-									variant={displayType === val ? 'primary' : 'secondary'}
 									onClick={() => setAttributes({ displayType: val })}
-									size="small"
-								>{label}</Button>
+									style={{
+										padding: '8px 10px', textAlign: 'left', cursor: 'pointer',
+										border: displayType === val ? '2px solid #cc2b5e' : '2px solid #e0e0e0',
+										borderRadius: 4, background: displayType === val ? '#fff5f7' : '#fff',
+										transition: 'border-color 0.15s, background 0.15s',
+									}}
+								>
+									<div style={{ fontSize: 12, fontWeight: 600, color: displayType === val ? '#cc2b5e' : '#333', marginBottom: 2 }}>{label}</div>
+									<div style={{ fontSize: 10, color: '#888', lineHeight: 1.3 }}>{desc}</div>
+								</button>
 							))}
-						</ButtonGroup>
-						<p style={{ ...HELP_STYLE, marginTop: 4 }}>
-							{displayType === 'individualize'
-								? __('Each category shown as an individual card.', 'commerce-kit')
-								: __('Children listed under their parent card.', 'commerce-kit')}
-						</p>
+						</div>
 					</div>
 
 					{/* Exclude Levels */}
-					<div style={{ marginBottom: 8 }}>
+					<div style={{ marginBottom: 10 }}>
 						<div style={LABEL_STYLE}>{__('Exclude Level(s)', 'commerce-kit')}</div>
-						<p style={HELP_STYLE}>{__('Exclude different levels of categories.', 'commerce-kit')}</p>
-						<div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 16px' }}>
-							<CheckboxControl label={__('Parent',           'commerce-kit')} checked={excludeParent}          onChange={set('excludeParent')} />
-							<CheckboxControl label={__('Child',            'commerce-kit')} checked={excludeChild}           onChange={set('excludeChild')} />
-							<CheckboxControl label={__('Grand Child',      'commerce-kit')} checked={excludeGrandChild}      onChange={set('excludeGrandChild')} />
-							<CheckboxControl label={__('Great-grand Child','commerce-kit')} checked={excludeGreatGrandChild} onChange={set('excludeGreatGrandChild')} />
+						<p style={HELP_STYLE}>{__('Exclude categories by depth level.', 'commerce-kit')}</p>
+						<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 0' }}>
+							<CheckboxControl label={__('Parent',            'commerce-kit')} checked={excludeParent}          onChange={set('excludeParent')} />
+							<CheckboxControl label={__('Child',             'commerce-kit')} checked={excludeChild}           onChange={set('excludeChild')} />
+							<CheckboxControl label={__('Grand Child',       'commerce-kit')} checked={excludeGrandChild}      onChange={set('excludeGrandChild')} />
+							<CheckboxControl label={__('Great-grand Child', 'commerce-kit')} checked={excludeGreatGrandChild} onChange={set('excludeGreatGrandChild')} />
 						</div>
 					</div>
 
@@ -251,15 +295,18 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 
 			<Divider />
 
-			{/* Filter / order (only in parent mode or individualize) */}
+			{/* ── Filter & Order */}
+			<SubHeading>{__('Filter & Order', 'commerce-kit')}</SubHeading>
+
+			{/* Filter (only in parent mode or individualize) */}
 			{(!isAllMode || displayType === 'individualize') && (
 				<>
 					<SelectControl
 						label={__('Filter Categories', 'commerce-kit')}
 						value={filterType}
 						options={[
-							{ label: __('Show All',             'commerce-kit'), value: 'all' },
-							{ label: __('Specific Categories',  'commerce-kit'), value: 'specific' },
+							{ label: __('Show All',            'commerce-kit'), value: 'all' },
+							{ label: __('Specific Categories', 'commerce-kit'), value: 'specific' },
 						]}
 						onChange={set('filterType')}
 					/>
@@ -306,9 +353,9 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 				onChange={set('order')}
 			/>
 
-			<ToggleControl label={__('Randomize Order',                         'commerce-kit')} checked={randomize}           onChange={set('randomize')} />
-			<ToggleControl label={__('Hide Empty Categories',                   'commerce-kit')} checked={hideEmpty}            onChange={set('hideEmpty')} />
-			<ToggleControl label={__('Hide Categories Without Thumbnail',       'commerce-kit')} checked={hideCatWithoutThumb}  onChange={set('hideCatWithoutThumb')} />
+			<ToggleControl label={__('Randomize Order',                   'commerce-kit')} checked={randomize}          onChange={set('randomize')} />
+			<ToggleControl label={__('Hide Empty Categories',             'commerce-kit')} checked={hideEmpty}           onChange={set('hideEmpty')} />
+			<ToggleControl label={__('Hide Categories Without Thumbnail', 'commerce-kit')} checked={hideCatWithoutThumb} onChange={set('hideCatWithoutThumb')} />
 
 		</PanelBody>
 	);
