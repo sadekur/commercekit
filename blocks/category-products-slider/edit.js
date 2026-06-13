@@ -10,9 +10,12 @@ const Edit = ({ attributes, setAttributes }) => {
 	const blockProps = useBlockProps({ className: 'ck-csl-editor-wrap' });
 
 	const {
+		layout, categoryType,
 		totalCategories, orderBy, order, hideEmpty,
 		filterType, specificCategories, hideCatWithoutThumb, randomize,
 	} = attributes;
+
+	const isSliderLayout = layout === 'carousel' || layout === 'slider';
 
 	// ── Live category fetch
 	const [categories, setCategories] = useState([]);
