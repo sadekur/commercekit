@@ -103,73 +103,29 @@ class CategoryProductsSliderRender {
     // ── HTML markup
 
     private function html( array $terms ): void {
-        $a   = $this->a;
-        $uid = $this->uid;
+        $layout = $this->a['layout'] ?? 'carousel';
+        if ( in_array( $layout, [ 'carousel', 'slider' ], true ) ) {
+            $this->html_slider( $terms );
+        } else {
+            $this->html_static( $terms, $layout );
+        }
+    }
 
-        $rtl         = ! empty( $a['rtlDirection'] );
-        $show_pager  = ! empty( $a['showSliderPagination'] );
-        $show_nav    = isset( $a['showNavigation'] ) ? (bool) $a['showNavigation'] : true;
+    // ── Shared item rendering context builder
+
+    private function item_context(): array {
+        $a           = $this->a;
         $content_pos = $a['contentPosition'] ?? 'below';
         $is_overlay  = in_array( $content_pos,
             [ 'overlay', 'overlay_top', 'overlay_middle', 'overlay_bottom', 'overlay_box' ], true );
+        $equal_h     = isset( $a['equalHeight'] ) ? (bool) $a['equalHeight'] : true;
 
-        $show_title = isset( $a['showSectionTitle'] ) ? (bool) $a['showSectionTitle'] : true;
-        $title_text = sanitize_text_field( $a['sectionTitleText'] ?? 'Category Showcase' );
-        $equal_h    = isset( $a['equalHeight'] ) ? (bool) $a['equalHeight'] : true;
-
-        $thumb_size = $a['thumbnailImgSize'] ?? 'medium';
-        $show_thumb = isset( $a['showThumbnail'] ) ? (bool) $a['showThumbnail'] : true;
-
-        $pad = esc_attr( intval( $a['contentPadTop'] ?? 15 ) . 'px '
-            . intval( $a['contentPadRight'] ?? 10 ) . 'px '
-            . intval( $a['contentPadBottom'] ?? 15 ) . 'px '
-            . intval( $a['contentPadLeft']   ?? 10 ) . 'px' );
-
-        $show_name    = isset( $a['showCatName'] ) ? (bool) $a['showCatName'] : true;
-        $show_count   = ! empty( $a['showProductCount'] );
-        $count_pos    = $a['productCountPos']    ?? 'beside';
-        $count_before = $a['productCountBefore'] ?? '(';
-        $count_after  = $a['productCountAfter']  ?? ')';
-        $show_desc    = ! empty( $a['showDescription'] );
-        $show_custom  = ! empty( $a['showCustomText'] );
-        $custom_text  = sanitize_text_field( $a['customText'] ?? '' );
-        $name_mt      = intval( $a['catNameMarginTop'] ?? 10 );
-        $desc_mt      = intval( $a['descMarginTop']    ?? 6 );
-
-        $show_shop   = ! empty( $a['showShopNow'] );
-        $shop_label  = sanitize_text_field( $a['shopNowLabel'] ?? 'Shop Now' );
-        $shop_align  = $a['shopNowAlignment'] ?? 'center';
-        $shop_target = $a['shopNowTarget']    ?? '_self';
-        $shop_mt     = intval( $a['shopNowMarginTop'] ?? 10 );
-
-        [ $svg_prev, $svg_next ] = $this->nav_svgs();
-        $nav_size = intval( $a['navIconSize'] ?? 22 );
-
-        // ── Pre-computed class strings
-
-        $wrap_cls = 'ck-csl-wrap relative w-full'
-            . ( $rtl        ? ' ck-csl-rtl'      : '' )
-            . ( $show_pager ? ' ck-csl-has-pager' : '' );
-
-        $outer_cls = 'ck-csl-outer relative' . ( $show_nav ? ' ck-has-nav' : '' );
-
-        $nav_wrap_cls = 'ck-csl-nav-wrap absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 px-1.5'
-            . ( $rtl ? ' flex-row-reverse' : '' );
-
-        $nav_btn_cls = 'ck-csl-nav-btn flex items-center justify-center cursor-pointer pointer-events-auto transition-[background,color,border-color] duration-200 shrink-0 focus:outline focus:outline-2 focus:outline-[#0073aa] focus:outline-offset-2';
-
-        $swiper_cls = 'swiper ck-csl-swiper overflow-hidden' . ( $show_pager ? ' pb-10' : '' );
-
-        $slide_cls = 'swiper-slide ck-csl-slide box-border' . ( $equal_h ? ' h-full' : '' );
-
-        // Structural + content-position Tailwind layout classes
         $item_cls = 'ck-csl-item relative flex flex-col bg-white rounded overflow-hidden ck-csl-pos-' . str_replace( '_', '-', $content_pos );
         if ( $equal_h )                  $item_cls .= ' ck-eq-height h-full';
         if ( 'above' === $content_pos )  $item_cls .= ' flex-col-reverse';
         if ( 'left'  === $content_pos )  $item_cls .= ' flex-row items-stretch';
         if ( 'right' === $content_pos )  $item_cls .= ' flex-row-reverse items-stretch';
 
-        // Overflow + conditional width for side / overlay layouts
         $thumb_wrap_cls = 'ck-csl-thumb-wrap overflow-hidden leading-[0] relative';
         if ( in_array( $content_pos, [ 'left', 'right' ], true ) ) {
             $thumb_wrap_cls .= ' basis-[45%] max-w-[45%] shrink-0';
@@ -177,7 +133,6 @@ class CategoryProductsSliderRender {
             $thumb_wrap_cls .= ' flex-none w-full';
         }
 
-        // flex-1 base + absolute positioning variant for each overlay mode
         $details_cls = 'ck-csl-details flex-1 transition-opacity duration-300';
         if ( $is_overlay ) {
             $details_cls .= ' absolute left-0 right-0 z-[2] text-white';
@@ -191,6 +146,140 @@ class CategoryProductsSliderRender {
                 $details_cls .= ' inset-0 flex flex-col justify-center';
             }
         }
+
+        $a           = $this->a;
+        $pad         = esc_attr( intval( $a['contentPadTop'] ?? 15 ) . 'px '
+            . intval( $a['contentPadRight'] ?? 10 ) . 'px '
+            . intval( $a['contentPadBottom'] ?? 15 ) . 'px '
+            . intval( $a['contentPadLeft']   ?? 10 ) . 'px' );
+
+        return compact(
+            'content_pos', 'is_overlay', 'equal_h',
+            'item_cls', 'thumb_wrap_cls', 'details_cls', 'pad'
+        );
+    }
+
+    // ── Render a single category item (shared by slider + static layouts)
+
+    private function render_item( WP_Term $term, array $ctx ): void {
+        $a           = $this->a;
+        $link        = get_term_link( $term );
+        $thumb_size  = $a['thumbnailImgSize'] ?? 'medium';
+        $show_thumb  = isset( $a['showThumbnail'] ) ? (bool) $a['showThumbnail'] : true;
+        $thumb_id    = get_term_meta( $term->term_id, 'thumbnail_id', true );
+        $thumb_url   = $thumb_id ? wp_get_attachment_image_url( $thumb_id, $thumb_size ) : '';
+
+        $show_name    = isset( $a['showCatName'] ) ? (bool) $a['showCatName'] : true;
+        $show_count   = ! empty( $a['showProductCount'] );
+        $count_pos    = $a['productCountPos']    ?? 'beside';
+        $count_before = $a['productCountBefore'] ?? '(';
+        $count_after  = $a['productCountAfter']  ?? ')';
+        $show_desc    = ! empty( $a['showDescription'] );
+        $show_custom  = ! empty( $a['showCustomText'] );
+        $custom_text  = sanitize_text_field( $a['customText'] ?? '' );
+        $name_mt      = intval( $a['catNameMarginTop'] ?? 10 );
+        $desc_mt      = intval( $a['descMarginTop']    ?? 6 );
+        $show_shop    = ! empty( $a['showShopNow'] );
+        $shop_label   = sanitize_text_field( $a['shopNowLabel'] ?? 'Shop Now' );
+        $shop_align   = $a['shopNowAlignment'] ?? 'center';
+        $shop_target  = $a['shopNowTarget']    ?? '_self';
+        $shop_mt      = intval( $a['shopNowMarginTop'] ?? 10 );
+        ?>
+        <div class="<?php echo esc_attr( $ctx['item_cls'] ); ?>">
+
+            <?php if ( $show_thumb ) : ?>
+            <div class="<?php echo esc_attr( $ctx['thumb_wrap_cls'] ); ?>">
+                <?php if ( $thumb_url ) : ?>
+                    <a href="<?php echo esc_url( $link ); ?>" tabindex="-1">
+                        <img src="<?php echo esc_url( $thumb_url ); ?>"
+                             alt="<?php echo esc_attr( $term->name ); ?>"
+                             class="ck-csl-thumb w-full h-auto block [transition:transform_0.4s_ease,filter_0.3s_ease]" loading="lazy" />
+                    </a>
+                <?php else : ?>
+                    <div class="ck-csl-thumb-placeholder w-full aspect-square bg-gray-100 flex items-center justify-center text-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+
+            <?php if ( $ctx['is_overlay'] ) : ?>
+            <div class="ck-csl-overlay absolute inset-0 pointer-events-none z-[1] transition-[background] duration-300"></div>
+            <?php endif; ?>
+
+            <div class="<?php echo esc_attr( $ctx['details_cls'] ); ?>" style="padding:<?php echo $ctx['pad']; ?>">
+
+                <?php if ( $show_name ) : ?>
+                <div class="ck-csl-cat-name" style="margin-top:<?php echo esc_attr( $name_mt ); ?>px">
+                    <a href="<?php echo esc_url( $link ); ?>" class="inline-block no-underline leading-[1.3] transition-opacity duration-200 hover:opacity-75">
+                        <?php echo esc_html( $term->name ); ?>
+                        <?php if ( $show_count && 'beside' === $count_pos ) : ?>
+                            <span class="ck-csl-count inline-block"><?php echo esc_html( $count_before . $term->count . $count_after ); ?></span>
+                        <?php endif; ?>
+                    </a>
+                </div>
+                <?php endif; ?>
+
+                <?php if ( $show_count && 'under' === $count_pos ) : ?>
+                <div class="ck-csl-product-count inline-block" style="margin-top:4px">
+                    <?php echo esc_html( $count_before . $term->count . $count_after ); ?>
+                </div>
+                <?php endif; ?>
+
+                <?php if ( $show_custom && $custom_text ) : ?>
+                <div class="ck-csl-custom-text mt-1.5"><?php echo esc_html( $custom_text ); ?></div>
+                <?php endif; ?>
+
+                <?php if ( $show_desc && $term->description ) : ?>
+                <div class="ck-csl-cat-desc leading-[1.6]" style="margin-top:<?php echo esc_attr( $desc_mt ); ?>px">
+                    <?php echo wp_kses_post( $term->description ); ?>
+                </div>
+                <?php endif; ?>
+
+                <?php if ( $show_shop ) : ?>
+                <div class="ck-csl-shop-now-wrap leading-none" style="margin-top:<?php echo esc_attr( $shop_mt ); ?>px;text-align:<?php echo esc_attr( $shop_align ); ?>">
+                    <a href="<?php echo esc_url( $link ); ?>"
+                       class="ck-csl-shop-now"
+                       target="<?php echo esc_attr( $shop_target ); ?>"
+                       <?php echo $shop_target === '_blank' ? 'rel="noopener noreferrer"' : ''; ?>>
+                        <?php echo esc_html( $shop_label ); ?>
+                    </a>
+                </div>
+                <?php endif; ?>
+
+            </div><!-- .ck-csl-details -->
+        </div><!-- .ck-csl-item -->
+        <?php
+    }
+
+    // ── Slider / Carousel layout (Swiper)
+
+    private function html_slider( array $terms ): void {
+        $a   = $this->a;
+        $uid = $this->uid;
+        $ctx = $this->item_context();
+
+        $rtl        = ! empty( $a['rtlDirection'] );
+        $show_pager = ! empty( $a['showSliderPagination'] );
+        $show_nav   = isset( $a['showNavigation'] ) ? (bool) $a['showNavigation'] : true;
+        $equal_h    = $ctx['equal_h'];
+
+        $show_title = isset( $a['showSectionTitle'] ) ? (bool) $a['showSectionTitle'] : true;
+        $title_text = sanitize_text_field( $a['sectionTitleText'] ?? 'Category Showcase' );
+
+        [ $svg_prev, $svg_next ] = $this->nav_svgs();
+        $nav_size = intval( $a['navIconSize'] ?? 22 );
+
+        $wrap_cls = 'ck-csl-wrap relative w-full'
+            . ( $rtl        ? ' ck-csl-rtl'      : '' )
+            . ( $show_pager ? ' ck-csl-has-pager' : '' );
+
+        $outer_cls    = 'ck-csl-outer relative' . ( $show_nav ? ' ck-has-nav' : '' );
+        $nav_wrap_cls = 'ck-csl-nav-wrap absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 px-1.5'
+            . ( $rtl ? ' flex-row-reverse' : '' );
+        $nav_btn_cls  = 'ck-csl-nav-btn flex items-center justify-center cursor-pointer pointer-events-auto transition-[background,color,border-color] duration-200 shrink-0 focus:outline focus:outline-2 focus:outline-[#0073aa] focus:outline-offset-2';
+        $swiper_cls   = 'swiper ck-csl-swiper overflow-hidden' . ( $show_pager ? ' pb-10' : '' );
+        $slide_cls    = 'swiper-slide ck-csl-slide box-border' . ( $equal_h ? ' h-full' : '' );
 
         ob_start();
         ?>
@@ -225,76 +314,10 @@ class CategoryProductsSliderRender {
             <div class="swiper-wrapper">
                 <?php foreach ( $terms as $term ) :
                     if ( ! ( $term instanceof WP_Term ) ) continue;
-                    $link      = get_term_link( $term );
-                    $thumb_id  = get_term_meta( $term->term_id, 'thumbnail_id', true );
-                    $thumb_url = $thumb_id ? wp_get_attachment_image_url( $thumb_id, $thumb_size ) : '';
                     ?>
                     <div class="<?php echo esc_attr( $slide_cls ); ?>">
-                        <div class="<?php echo esc_attr( $item_cls ); ?>">
-
-                            <?php if ( $show_thumb ) : ?>
-                            <div class="<?php echo esc_attr( $thumb_wrap_cls ); ?>">
-                                <?php if ( $thumb_url ) : ?>
-                                    <a href="<?php echo esc_url( $link ); ?>" tabindex="-1">
-                                        <img src="<?php echo esc_url( $thumb_url ); ?>"
-                                             alt="<?php echo esc_attr( $term->name ); ?>"
-                                             class="ck-csl-thumb w-full h-auto block [transition:transform_0.4s_ease,filter_0.3s_ease]" loading="lazy" />
-                                    </a>
-                                <?php else : ?>
-                                    <div class="ck-csl-thumb-placeholder w-full aspect-square bg-gray-100 flex items-center justify-center text-gray-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                            <?php endif; ?>
-
-                            <?php if ( $is_overlay ) : ?>
-                            <div class="ck-csl-overlay absolute inset-0 pointer-events-none z-[1] transition-[background] duration-300"></div>
-                            <?php endif; ?>
-
-                            <div class="<?php echo esc_attr( $details_cls ); ?>" style="padding:<?php echo $pad; ?>">
-
-                                <?php if ( $show_name ) : ?>
-                                <div class="ck-csl-cat-name" style="margin-top:<?php echo esc_attr( $name_mt ); ?>px">
-                                    <a href="<?php echo esc_url( $link ); ?>" class="inline-block no-underline leading-[1.3] transition-opacity duration-200 hover:opacity-75">
-                                        <?php echo esc_html( $term->name ); ?>
-                                        <?php if ( $show_count && 'beside' === $count_pos ) : ?>
-                                            <span class="ck-csl-count inline-block"><?php echo esc_html( $count_before . $term->count . $count_after ); ?></span>
-                                        <?php endif; ?>
-                                    </a>
-                                </div>
-                                <?php endif; ?>
-
-                                <?php if ( $show_count && 'under' === $count_pos ) : ?>
-                                <div class="ck-csl-product-count inline-block" style="margin-top:4px">
-                                    <?php echo esc_html( $count_before . $term->count . $count_after ); ?>
-                                </div>
-                                <?php endif; ?>
-
-                                <?php if ( $show_custom && $custom_text ) : ?>
-                                <div class="ck-csl-custom-text mt-1.5"><?php echo esc_html( $custom_text ); ?></div>
-                                <?php endif; ?>
-
-                                <?php if ( $show_desc && $term->description ) : ?>
-                                <div class="ck-csl-cat-desc leading-[1.6]" style="margin-top:<?php echo esc_attr( $desc_mt ); ?>px">
-                                    <?php echo wp_kses_post( $term->description ); ?>
-                                </div>
-                                <?php endif; ?>
-
-                                <?php if ( $show_shop ) : ?>
-                                <div class="ck-csl-shop-now-wrap leading-none" style="margin-top:<?php echo esc_attr( $shop_mt ); ?>px;text-align:<?php echo esc_attr( $shop_align ); ?>">
-                                    <a href="<?php echo esc_url( $link ); ?>"
-                                       class="ck-csl-shop-now"
-                                       target="<?php echo esc_attr( $shop_target ); ?>"
-                                       <?php echo $shop_target === '_blank' ? 'rel="noopener noreferrer"' : ''; ?>>
-                                        <?php echo esc_html( $shop_label ); ?>
-                                    </a>
-                                </div>
-                                <?php endif; ?>
-
-                            </div><!-- .ck-csl-details -->
-                        </div><!-- .ck-csl-item -->
-                    </div><!-- .swiper-slide -->
+                        <?php $this->render_item( $term, $ctx ); ?>
+                    </div>
                 <?php endforeach; ?>
             </div><!-- .swiper-wrapper -->
 
@@ -304,6 +327,49 @@ class CategoryProductsSliderRender {
         </div><!-- .swiper -->
 
     </div><!-- .ck-csl-outer -->
+</div><!-- .ck-csl-wrap -->
+        <?php
+        echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput
+    }
+
+    // ── Grid / Inline static layouts (no Swiper)
+
+    private function html_static( array $terms, string $layout ): void {
+        $a   = $this->a;
+        $uid = $this->uid;
+        $ctx = $this->item_context();
+
+        $show_title = isset( $a['showSectionTitle'] ) ? (bool) $a['showSectionTitle'] : true;
+        $title_text = sanitize_text_field( $a['sectionTitleText'] ?? 'Category Showcase' );
+
+        ob_start();
+        ?>
+<div id="<?php echo esc_attr( $uid ); ?>" class="ck-csl-wrap ck-csl-layout-<?php echo esc_attr( $layout ); ?> w-full">
+
+    <?php if ( $show_title && $title_text ) : ?>
+        <h3 class="ck-csl-section-title text-[22px] font-bold text-[#222] m-0 mb-5 leading-[1.3]"><?php echo esc_html( $title_text ); ?></h3>
+    <?php endif; ?>
+
+    <?php if ( 'inline' === $layout ) : ?>
+    <div class="ck-csl-inline-wrap" style="display:flex;flex-wrap:nowrap;gap:<?php echo intval( $a['spaceBetween'] ?? 20 ); ?>px;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <?php foreach ( $terms as $term ) :
+            if ( ! ( $term instanceof WP_Term ) ) continue; ?>
+            <div class="ck-csl-inline-item" style="flex:0 0 220px;min-width:0;">
+                <?php $this->render_item( $term, $ctx ); ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <?php else : /* grid */ ?>
+    <div class="ck-csl-grid-wrap">
+        <?php foreach ( $terms as $term ) :
+            if ( ! ( $term instanceof WP_Term ) ) continue; ?>
+            <div class="ck-csl-grid-item">
+                <?php $this->render_item( $term, $ctx ); ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+
 </div><!-- .ck-csl-wrap -->
         <?php
         echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput
