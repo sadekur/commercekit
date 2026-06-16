@@ -42,6 +42,10 @@ class CategoryProductsSliderRender {
         }
 
         $this->inline_styles();
-        if ( $is_slider ) $this->inline_script();
+        if ( $is_slider ) {
+            $this->inline_script();
+        } else {
+            $this->inline_script_static();
+        }
     }
 }
