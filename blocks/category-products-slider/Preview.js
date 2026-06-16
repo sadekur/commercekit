@@ -87,6 +87,42 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 										: { flex: `0 0 ${cardWidth}`, minWidth: 0, display: 'flex', flexDirection: 'column' }
 								}
 							>
+								{/* Details block — rendered before thumbnail when position is "above" */}
+								{isAbove && (
+									<div style={{ flexShrink: 0, padding: `${contentPadTop}px ${contentPadRight}px ${contentPadBottom}px ${contentPadLeft}px` }}>
+										{showCatName && (
+											<div style={{ fontWeight: catNameFontWeight, fontSize: catNameFontSize, color: catNameColor, lineHeight: 1.3 }}>
+												{cat.name}
+												{showProductCount && productCountPos === 'beside' && (
+													<span style={{ fontSize: countFontSize, color: countColor, marginLeft: 4 }}>
+														{productCountBefore}{cat.count}{productCountAfter}
+													</span>
+												)}
+											</div>
+										)}
+										{showProductCount && productCountPos === 'under' && (
+											<div style={{ fontSize: countFontSize, color: countColor, marginTop: 4 }}>
+												{productCountBefore}{cat.count}{productCountAfter}
+											</div>
+										)}
+										{showCustomText && customText && (
+											<div style={{ fontSize: 13, color: '#555', marginTop: 6 }}>{customText}</div>
+										)}
+										{showDescription && (
+											<div style={{ fontSize: descFontSize, color: descColor, marginTop: descMarginTop, lineHeight: 1.5 }}>
+												{desc || <em style={{ color: '#bbb' }}>{__('(no description)', 'commerce-kit')}</em>}
+											</div>
+										)}
+										{showShopNow && (
+											<div style={{ textAlign: shopNowAlignment, marginTop: shopNowMarginTop }}>
+												<span style={{ display: 'inline-block', padding: '8px 18px', background: shopNowBgColor, color: shopNowTextColor, borderRadius: shopNowBorderRadius, fontSize: 13, fontWeight: 600, cursor: 'default' }}>
+													{shopNowLabel}
+												</span>
+											</div>
+										)}
+									</div>
+								)}
+
 								{showThumbnail && (
 									<div style={{
 										overflow: 'hidden',
@@ -98,15 +134,16 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 										background: '#f0f0f0',
 										lineHeight: 0,
 										filter: imageMode === 'grayscale' ? 'grayscale(100%)' : 'none',
+										...(isAbove ? { flex: '1 1 auto', minHeight: 120 } : {}),
 									}}>
 										{thumbSrc ? (
 											<img
 												src={thumbSrc}
 												alt={thumbAlt}
-												style={{ width: '100%', height: 'auto', display: 'block', borderRadius: thumbBr }}
+												style={{ width: '100%', height: isAbove ? '100%' : 'auto', objectFit: isAbove ? 'cover' : 'initial', display: 'block', borderRadius: thumbBr }}
 											/>
 										) : (
-											<div style={{ aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb' }}>
+											<div style={{ aspectRatio: isAbove ? undefined : '1', height: isAbove ? '100%' : undefined, minHeight: isAbove ? 160 : undefined, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb' }}>
 												<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
 													<rect x="3" y="3" width="18" height="18" rx="2"/>
 													<circle cx="8.5" cy="8.5" r="1.5"/>
@@ -117,46 +154,49 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 									</div>
 								)}
 
-								<div style={{ flex: 1, padding: `${contentPadTop}px ${contentPadRight}px ${contentPadBottom}px ${contentPadLeft}px` }}>
-									{showCatName && (
-										<div style={{ fontWeight: catNameFontWeight, fontSize: catNameFontSize, color: catNameColor, marginTop: catNameMarginTop, lineHeight: 1.3 }}>
-											{cat.name}
-											{showProductCount && productCountPos === 'beside' && (
-												<span style={{ fontSize: countFontSize, color: countColor, marginLeft: 4 }}>
-													{productCountBefore}{cat.count}{productCountAfter}
+								{/* Details block — rendered after thumbnail for all other positions */}
+								{!isAbove && (
+									<div style={{ flex: 1, padding: `${contentPadTop}px ${contentPadRight}px ${contentPadBottom}px ${contentPadLeft}px` }}>
+										{showCatName && (
+											<div style={{ fontWeight: catNameFontWeight, fontSize: catNameFontSize, color: catNameColor, marginTop: catNameMarginTop, lineHeight: 1.3 }}>
+												{cat.name}
+												{showProductCount && productCountPos === 'beside' && (
+													<span style={{ fontSize: countFontSize, color: countColor, marginLeft: 4 }}>
+														{productCountBefore}{cat.count}{productCountAfter}
+													</span>
+												)}
+											</div>
+										)}
+
+										{showProductCount && productCountPos === 'under' && (
+											<div style={{ fontSize: countFontSize, color: countColor, marginTop: 4 }}>
+												{productCountBefore}{cat.count}{productCountAfter}
+											</div>
+										)}
+
+										{showCustomText && customText && (
+											<div style={{ fontSize: 13, color: '#555', marginTop: 6 }}>{customText}</div>
+										)}
+
+										{showDescription && (
+											<div style={{ fontSize: descFontSize, color: descColor, marginTop: descMarginTop, lineHeight: 1.5 }}>
+												{desc || <em style={{ color: '#bbb' }}>{__('(no description)', 'commerce-kit')}</em>}
+											</div>
+										)}
+
+										{showShopNow && (
+											<div style={{ textAlign: shopNowAlignment, marginTop: shopNowMarginTop }}>
+												<span style={{
+													display: 'inline-block', padding: '8px 18px',
+													background: shopNowBgColor, color: shopNowTextColor,
+													borderRadius: shopNowBorderRadius, fontSize: 13, fontWeight: 600, cursor: 'default',
+												}}>
+													{shopNowLabel}
 												</span>
-											)}
-										</div>
-									)}
-
-									{showProductCount && productCountPos === 'under' && (
-										<div style={{ fontSize: countFontSize, color: countColor, marginTop: 4 }}>
-											{productCountBefore}{cat.count}{productCountAfter}
-										</div>
-									)}
-
-									{showCustomText && customText && (
-										<div style={{ fontSize: 13, color: '#555', marginTop: 6 }}>{customText}</div>
-									)}
-
-									{showDescription && (
-										<div style={{ fontSize: descFontSize, color: descColor, marginTop: descMarginTop, lineHeight: 1.5 }}>
-											{desc || <em style={{ color: '#bbb' }}>{__('(no description)', 'commerce-kit')}</em>}
-										</div>
-									)}
-
-									{showShopNow && (
-										<div style={{ textAlign: shopNowAlignment, marginTop: shopNowMarginTop }}>
-											<span style={{
-												display: 'inline-block', padding: '8px 18px',
-												background: shopNowBgColor, color: shopNowTextColor,
-												borderRadius: shopNowBorderRadius, fontSize: 13, fontWeight: 600, cursor: 'default',
-											}}>
-												{shopNowLabel}
-											</span>
-										</div>
-									)}
-								</div>
+											</div>
+										)}
+									</div>
+								)}
 							</div>
 						);
 					})}
