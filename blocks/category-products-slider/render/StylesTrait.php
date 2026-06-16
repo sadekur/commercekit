@@ -65,6 +65,16 @@ trait CslStylesTrait {
                 @media(min-width:1280px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_l ); ?>,1fr); } }
                 #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-item { min-width:0; }
             <?php endif; ?>
+            /* ── "Above thumbnail" layout fix ──
+             * Without this, details (flex-1) swallowed all remaining height,
+             * pushing the thumbnail to different Y positions per card.
+             * Solution: details shrinks to content; thumb-wrap fills the rest.
+             * CSS order swaps visual position without changing DOM order. */
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-pos-above .ck-csl-details    { order: 1; flex: 0 0 auto; }
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-pos-above .ck-csl-thumb-wrap { order: 2; flex: 1 1 auto; min-height: 120px; }
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-pos-above .ck-csl-thumb      { width: 100%; height: 100%; object-fit: cover; }
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-pos-above .ck-csl-thumb-placeholder { height: 100%; min-height: 160px; }
+
             #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb {
                 border-radius: <?php echo esc_attr( $this->thumb_br() ); ?>;
                 border: <?php echo esc_attr( $this->border_css() ); ?>;
