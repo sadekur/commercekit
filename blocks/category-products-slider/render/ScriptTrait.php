@@ -2,12 +2,19 @@
 trait CslScriptTrait {
 
     private function inline_script(): void {
-        $uid = $this->uid;
-        $cfg = wp_json_encode( $this->swiper_config() );
+        $uid       = $this->uid;
+        $cfg       = wp_json_encode( $this->swiper_config() );
+        $preloader = isset( $this->a['preloader'] ) ? (bool) $this->a['preloader'] : true;
         ?>
         <script>
         (function () {
             'use strict';
+            function ckCslReveal() {
+                var wrap = document.getElementById('<?php echo esc_js( $uid ); ?>');
+                if (!wrap) return;
+                wrap.classList.remove('ck-csl-preloader');
+                wrap.classList.add('ck-csl-ready');
+            }
             function ckCslInit() {
                 var wrap = document.getElementById('<?php echo esc_js( $uid ); ?>');
                 if (!wrap || typeof Swiper === 'undefined') return;
@@ -25,7 +32,32 @@ trait CslScriptTrait {
                 if (!wrap) return;
                 var el = wrap.querySelector('.ck-csl-swiper');
                 if (el && !el.classList.contains('swiper-initialized')) ckCslInit();
+                <?php if ( $preloader ) : ?>ckCslReveal();<?php endif; ?>
             });
+        })();
+        </script>
+        <?php
+    }
+
+    private function inline_script_static(): void {
+        $uid       = $this->uid;
+        $preloader = isset( $this->a['preloader'] ) ? (bool) $this->a['preloader'] : true;
+        if ( ! $preloader ) return;
+        ?>
+        <script>
+        (function () {
+            'use strict';
+            function ckCslReveal() {
+                var wrap = document.getElementById('<?php echo esc_js( $uid ); ?>');
+                if (!wrap) return;
+                wrap.classList.remove('ck-csl-preloader');
+                wrap.classList.add('ck-csl-ready');
+            }
+            if (document.readyState === 'complete') {
+                ckCslReveal();
+            } else {
+                window.addEventListener('load', ckCslReveal);
+            }
         })();
         </script>
         <?php
