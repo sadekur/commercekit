@@ -127,7 +127,9 @@
 		"touchSwipe":          { "type": "boolean", "default": true },
 		"mousewheelControl":   { "type": "boolean", "default": false },
 		"mouseDraggable":      { "type": "boolean", "default": true },
-		"freeMode":            { "type": "boolean", "default": false }
+		"freeMode":            { "type": "boolean", "default": false },
+
+		"preloader":           { "type": "boolean", "default": true }
 	},
 	"editorScript": "file:./index.js",
 	"render": "file:./render.php",
