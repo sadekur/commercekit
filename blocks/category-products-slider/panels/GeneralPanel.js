@@ -39,7 +39,7 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 		excludeParent, excludeChild, excludeGrandChild, excludeGreatGrandChild,
 		spaceBetween, filterType, specificCategories,
 		hideEmpty, hideCatWithoutThumb, totalCategories,
-		orderBy, order, randomize,
+		orderBy, order, randomize, preloader,
 	} = attributes;
 
 	const set      = (key) => (val) => setAttributes({ [key]: val });
