@@ -178,10 +178,11 @@ trait CslHtmlTrait {
 
         $show_title = isset( $a['showSectionTitle'] ) ? (bool) $a['showSectionTitle'] : true;
         $title_text = sanitize_text_field( $a['sectionTitleText'] ?? 'Category Showcase' );
+        $preloader  = isset( $a['preloader'] ) ? (bool) $a['preloader'] : true;
 
         ob_start();
         ?>
-            <div id="<?php echo esc_attr( $uid ); ?>" class="ck-csl-wrap ck-csl-layout-<?php echo esc_attr( $layout ); ?> w-full">
+            <div id="<?php echo esc_attr( $uid ); ?>" class="ck-csl-wrap ck-csl-layout-<?php echo esc_attr( $layout ); ?> w-full<?php echo $preloader ? ' ck-csl-preloader' : ''; ?>">
                 <?php if ( $show_title && $title_text ) : ?>
                     <h3 class="ck-csl-section-title text-[22px] font-bold text-[#222] m-0 mb-5 leading-[1.3]"><?php echo esc_html( $title_text ); ?></h3>
                 <?php endif; ?>
