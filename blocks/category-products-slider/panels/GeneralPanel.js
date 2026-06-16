@@ -357,6 +357,15 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 			<ToggleControl label={__('Hide Empty Categories',             'commerce-kit')} checked={hideEmpty}           onChange={set('hideEmpty')} />
 			<ToggleControl label={__('Hide Categories Without Thumbnail', 'commerce-kit')} checked={hideCatWithoutThumb} onChange={set('hideCatWithoutThumb')} />
 
+			<Divider />
+
+			<ToggleControl
+				label={__('Preloader', 'commerce-kit')}
+				help={__('Slider will be hidden until page load is completed.', 'commerce-kit')}
+				checked={preloader !== false}
+				onChange={set('preloader')}
+			/>
+
 		</PanelBody>
 	);
 };
