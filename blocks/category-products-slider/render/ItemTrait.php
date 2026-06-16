@@ -10,7 +10,6 @@ trait CslItemTrait {
 
         $item_cls = 'ck-csl-item relative flex flex-col bg-white rounded overflow-hidden ck-csl-pos-' . str_replace( '_', '-', $content_pos );
         if ( $equal_h )                  $item_cls .= ' ck-eq-height h-full';
-        if ( 'above' === $content_pos )  $item_cls .= ' flex-col-reverse';
         if ( 'left'  === $content_pos )  $item_cls .= ' flex-row items-stretch';
         if ( 'right' === $content_pos )  $item_cls .= ' flex-row-reverse items-stretch';
 
