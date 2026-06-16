@@ -4,6 +4,7 @@ import { __ }     from '@wordpress/i18n';
 const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	const {
 		layout, colDesktop, spaceBetween,
+		contentPosition,
 		showSectionTitle, sectionTitleText,
 		showThumbnail, thumbnailShape, thumbnailRadius,
 		showThumbBorder, thumbBorderWidth, thumbBorderStyle, thumbBorderColor,
@@ -18,6 +19,8 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		showShopNow, shopNowLabel, shopNowBgColor, shopNowTextColor,
 		shopNowBorderRadius, shopNowAlignment, shopNowMarginTop,
 	} = attributes;
+
+	const isAbove = contentPosition === 'above';
 
 	const previewCount = layout === 'slider'
 		? 1
