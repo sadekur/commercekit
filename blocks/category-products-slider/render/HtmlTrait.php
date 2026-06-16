@@ -13,10 +13,11 @@ trait CslHtmlTrait {
         $show_title = isset( $a['showSectionTitle'] ) ? (bool) $a['showSectionTitle'] : true;
         $title_text = sanitize_text_field( $a['sectionTitleText'] ?? 'Category Showcase' );
         $nav_size   = intval( $a['navIconSize'] ?? 22 );
+        $preloader  = isset( $a['preloader'] ) ? (bool) $a['preloader'] : true;
 
         [ $svg_prev, $svg_next ] = $this->nav_svgs();
 
-        $wrap_cls     = 'ck-csl-wrap relative w-full' . ( $rtl ? ' ck-csl-rtl' : '' ) . ( $show_pager ? ' ck-csl-has-pager' : '' );
+        $wrap_cls     = 'ck-csl-wrap relative w-full' . ( $rtl ? ' ck-csl-rtl' : '' ) . ( $show_pager ? ' ck-csl-has-pager' : '' ) . ( $preloader ? ' ck-csl-preloader' : '' );
         $outer_cls    = 'ck-csl-outer relative' . ( $show_nav ? ' ck-has-nav' : '' );
         $nav_wrap_cls = 'ck-csl-nav-wrap absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 px-1.5' . ( $rtl ? ' flex-row-reverse' : '' );
         $nav_btn_cls  = 'ck-csl-nav-btn flex items-center justify-center cursor-pointer pointer-events-auto transition-[background,color,border-color] duration-200 shrink-0 focus:outline focus:outline-2 focus:outline-[#0073aa] focus:outline-offset-2';
