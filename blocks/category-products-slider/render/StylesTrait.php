@@ -48,9 +48,15 @@ trait CslStylesTrait {
         $col_m  = max( 1, intval( $a['colMobile']  ?? 1 ) );
         $gap    = intval( $a['spaceBetween'] ?? 20 );
 
+        $preloader = isset( $a['preloader'] ) ? (bool) $a['preloader'] : true;
+
         ob_start();
         ?>
         <style id="<?php echo esc_attr( $uid ); ?>-css">
+            <?php if ( $preloader ) : ?>
+            #<?php echo esc_attr( $uid ); ?>.ck-csl-preloader { opacity: 0; transition: opacity 0.5s ease; }
+            #<?php echo esc_attr( $uid ); ?>.ck-csl-ready { opacity: 1; }
+            <?php endif; ?>
             <?php if ( 'grid' === $layout ) : ?>
                 #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { display:grid; gap:<?php echo esc_attr( $gap ); ?>px; grid-template-columns:repeat(<?php echo esc_attr( $col_m ); ?>,1fr); }
                 @media(min-width:480px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_t ); ?>,1fr); } }
