@@ -58,7 +58,9 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	);
 
 	const renderThumb = ( cat, extraWrapStyle = {}, imgStyle = { width: '100%', display: 'block' } ) => {
-		const src = cat.image && cat.image.src ? cat.image.src : null;
+		const src = cat.image && cat.image.src
+			? cat.image.src
+			: ( useCustomPlaceholder && customPlaceholderUrl ? customPlaceholderUrl : null );
 		const alt = cat.image && cat.image.alt ? cat.image.alt : cat.name;
 		return (
 			<div style={{ ...thumbWrapBase, ...extraWrapStyle }}>
