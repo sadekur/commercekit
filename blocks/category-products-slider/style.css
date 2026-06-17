@@ -21,12 +21,25 @@
 	align-items: stretch;
 }
 
-.ck-csl-editor-card {
+/* Shared card appearance — editor preview and frontend */
+.ck-csl-editor-card,
+.ck-csl-item {
 	background: #fff;
 	border: 1px solid #e8e8e8;
 	border-radius: 4px;
 	overflow: hidden;
 	min-width: 0;
+}
+
+/* Side layouts: thumbnail must fill the full card height */
+.ck-csl-pos-left .ck-csl-thumb-wrap,
+.ck-csl-pos-right .ck-csl-thumb-wrap {
+	align-self: stretch;
+}
+.ck-csl-pos-left .ck-csl-thumb,
+.ck-csl-pos-right .ck-csl-thumb {
+	height: 100%;
+	object-fit: cover;
 }
 
 .ck-csl-editor-hint {

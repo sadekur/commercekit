@@ -157,7 +157,7 @@ trait CslHtmlTrait {
                     <div class="<?php echo esc_attr( $swiper_cls ); ?>">
                         <div class="swiper-wrapper">
                             <?php foreach ( $groups as $group ) : ?>
-                            <div class="swiper-slide ck-csl-slide box-border">
+                            <div class="swiper-slide ck-csl-slide box-border border">
                                 <?php $this->render_cup_group( $group ); ?>
                             </div>
                             <?php endforeach; ?>
