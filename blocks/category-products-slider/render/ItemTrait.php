@@ -47,9 +47,14 @@ trait CslItemTrait {
         $a           = $this->a;
         $link        = get_term_link( $term );
         $thumb_size  = $a['thumbnailImgSize'] ?? 'medium';
-        $show_thumb  = isset( $a['showThumbnail'] ) ? (bool) $a['showThumbnail'] : true;
-        $thumb_id    = get_term_meta( $term->term_id, 'thumbnail_id', true );
-        $thumb_url   = $thumb_id ? wp_get_attachment_image_url( $thumb_id, $thumb_size ) : '';
+        $show_thumb         = isset( $a['showThumbnail'] ) ? (bool) $a['showThumbnail'] : true;
+        $thumb_id           = get_term_meta( $term->term_id, 'thumbnail_id', true );
+        $thumb_url          = $thumb_id ? wp_get_attachment_image_url( $thumb_id, $thumb_size ) : '';
+        $use_placeholder    = ! empty( $a['useCustomPlaceholder'] );
+        $placeholder_url    = isset( $a['customPlaceholderUrl'] ) ? esc_url_raw( $a['customPlaceholderUrl'] ) : '';
+        if ( ! $thumb_url && $use_placeholder && $placeholder_url ) {
+            $thumb_url = $placeholder_url;
+        }
 
         $show_name    = isset( $a['showCatName'] ) ? (bool) $a['showCatName'] : true;
         $show_count   = ! empty( $a['showProductCount'] );
