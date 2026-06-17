@@ -59,7 +59,6 @@ const DisplayPanel = ({ attributes, setAttributes }) => {
 					{ label: __('Overlay (Bottom)', 'commerce-kit'),   value: 'overlay' },
 					{ label: __('Overlay (Top)', 'commerce-kit'),      value: 'overlay_top' },
 					{ label: __('Overlay (Middle)', 'commerce-kit'),   value: 'overlay_middle' },
-					{ label: __('Overlay (Bottom)', 'commerce-kit'),   value: 'overlay_bottom' },
 					{ label: __('Overlay Box', 'commerce-kit'),        value: 'overlay_box' },
 				]}
 				onChange={set('contentPosition')}
