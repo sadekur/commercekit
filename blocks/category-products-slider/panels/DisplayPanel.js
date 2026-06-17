@@ -16,7 +16,7 @@ const DisplayPanel = ({ attributes, setAttributes }) => {
 		equalHeight, contentPadTop, contentPadRight, contentPadBottom, contentPadLeft,
 		// Category content
 		showCatName, showProductCount, productCountPos, productCountBefore, productCountAfter,
-		showDescription, showCustomText, customText,
+		showDescription, showCustomText, customText, customTextColor,
 		// Shop now
 		showShopNow, shopNowLabel, shopNowBgColor, shopNowHoverBg, shopNowTextColor,
 		shopNowBorderRadius, shopNowAlignment, shopNowTarget, shopNowMarginTop,
