@@ -10,7 +10,8 @@ import ColorRow   from '../components/ColorRow';
 
 const ThumbnailPanel = ({ attributes, setAttributes }) => {
 	const {
-		showThumbnail, thumbnailImgSize, thumbnailShape, thumbnailRadius,
+		showThumbnail, useCustomPlaceholder, customPlaceholderId, customPlaceholderUrl,
+		thumbnailImgSize, thumbnailShape, thumbnailRadius,
 		showThumbBorder, thumbBorderWidth, thumbBorderStyle, thumbBorderColor,
 		showBoxShadow, boxShadowH, boxShadowV, boxShadowBlur, boxShadowSpread, boxShadowColor,
 		thumbInnerPad, thumbMarginBottom, thumbnailZoom, imageMode,
