@@ -12,6 +12,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		thumbInnerPad, thumbMarginBottom, imageMode,
 		contentPadTop, contentPadRight, contentPadBottom, contentPadLeft,
 		overlayBgColor,
+		useCustomPlaceholder, customPlaceholderUrl,
 		showCatName, catNameFontSize, catNameFontWeight, catNameColor, catNameMarginTop,
 		showProductCount, productCountPos, productCountBefore, productCountAfter,
 		countFontSize, countColor,
