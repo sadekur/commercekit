@@ -23,6 +23,60 @@ const ThumbnailPanel = ({ attributes, setAttributes }) => {
 
 			<ToggleControl label={__('Show Thumbnail', 'commerce-kit')} checked={showThumbnail} onChange={set('showThumbnail')} />
 
+			{/* ── Custom Placeholder */}
+			<SubHeading>{__('Custom Thumbnail', 'commerce-kit')}</SubHeading>
+			<p style={{ fontSize: 12, color: '#757575', margin: '0 0 8px' }}>
+				{__('Placeholder image for categories that have no thumbnail.', 'commerce-kit')}
+			</p>
+			<ToggleControl
+				label={__('Use Custom Placeholder', 'commerce-kit')}
+				checked={useCustomPlaceholder}
+				onChange={set('useCustomPlaceholder')}
+			/>
+			{useCustomPlaceholder && (
+				<MediaUploadCheck>
+					<MediaUpload
+						onSelect={(media) => setAttributes({ customPlaceholderId: media.id, customPlaceholderUrl: media.url })}
+						allowedTypes={['image']}
+						value={customPlaceholderId}
+						render={({ open }) => (
+							<div style={{ marginBottom: 8 }}>
+								{customPlaceholderUrl ? (
+									<>
+										<img
+											src={customPlaceholderUrl}
+											alt=""
+											style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 4, marginBottom: 6, border: '1px solid #e0e0e0' }}
+										/>
+										<Flex>
+											<FlexItem>
+												<Button variant="secondary" size="small" onClick={open}>
+													{__('Change', 'commerce-kit')}
+												</Button>
+											</FlexItem>
+											<FlexItem>
+												<Button
+													variant="secondary"
+													size="small"
+													isDestructive
+													onClick={() => setAttributes({ customPlaceholderId: 0, customPlaceholderUrl: '' })}
+												>
+													{__('Remove', 'commerce-kit')}
+												</Button>
+											</FlexItem>
+										</Flex>
+									</>
+								) : (
+									<Button variant="secondary" onClick={open} style={{ width: '100%', justifyContent: 'center' }}>
+										{__('Select Placeholder Image', 'commerce-kit')}
+									</Button>
+								)}
+							</div>
+						)}
+					/>
+				</MediaUploadCheck>
+			)}
+
 			{showThumbnail && (
 				<>
 					<SelectControl
