@@ -11,54 +11,140 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		showBoxShadow, boxShadowH, boxShadowV, boxShadowBlur, boxShadowSpread, boxShadowColor,
 		thumbInnerPad, thumbMarginBottom, imageMode,
 		contentPadTop, contentPadRight, contentPadBottom, contentPadLeft,
+		overlayBgColor,
 		showCatName, catNameFontSize, catNameFontWeight, catNameColor, catNameMarginTop,
 		showProductCount, productCountPos, productCountBefore, productCountAfter,
 		countFontSize, countColor,
-		showCustomText, customText,
+		showCustomText, customText, customTextColor,
 		showDescription, descFontSize, descColor, descMarginTop,
 		showShopNow, shopNowLabel, shopNowBgColor, shopNowTextColor,
 		shopNowBorderRadius, shopNowAlignment, shopNowMarginTop,
 	} = attributes;
 
-	const isAbove = contentPosition === 'above';
+	const isAbove   = contentPosition === 'above';
+	const isLeft    = contentPosition === 'left';
+	const isRight   = contentPosition === 'right';
+	const isSide    = isLeft || isRight;
+	const isOverlay = [ 'overlay', 'overlay_top', 'overlay_middle', 'overlay_box' ].includes( contentPosition );
 
-	const previewCount = layout === 'slider'
-		? 1
-		: Math.min(colDesktop || 3, 4);
-	const previewCats  = categories.slice(0, previewCount);
+	const previewCount = layout === 'slider' ? 1 : Math.min( colDesktop || 3, 4 );
+	const previewCats  = categories.slice( 0, previewCount );
 
 	const thumbBr = thumbnailShape === 'circle'  ? '50%'
 	              : thumbnailShape === 'rounded' ? '8px'
 	              : thumbnailRadius > 0           ? thumbnailRadius + 'px'
 	              : '0';
 
+	const thumbWrapBase = {
+		overflow:   'hidden',
+		borderRadius: thumbBr,
+		border:     showThumbBorder ? `${thumbBorderWidth}px ${thumbBorderStyle} ${thumbBorderColor}` : 'none',
+		boxShadow:  showBoxShadow   ? `${boxShadowH}px ${boxShadowV}px ${boxShadowBlur}px ${boxShadowSpread}px ${boxShadowColor}` : 'none',
+		padding:    thumbInnerPad   ? thumbInnerPad + 'px' : 0,
+		background: '#f0f0f0',
+		lineHeight: 0,
+		filter:     imageMode === 'grayscale' ? 'grayscale(100%)' : 'none',
+	};
+
+	const PlaceholderImg = () => (
+		<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb', aspectRatio: '1' }}>
+			<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+				<rect x="3" y="3" width="18" height="18" rx="2"/>
+				<circle cx="8.5" cy="8.5" r="1.5"/>
+				<polyline points="21 15 16 10 5 21"/>
+			</svg>
+		</div>
+	);
+
+	const renderThumb = ( cat, extraWrapStyle = {}, imgStyle = { width: '100%', display: 'block' } ) => {
+		const src = cat.image && cat.image.src ? cat.image.src : null;
+		const alt = cat.image && cat.image.alt ? cat.image.alt : cat.name;
+		return (
+			<div style={{ ...thumbWrapBase, ...extraWrapStyle }}>
+				{ src
+					? <img src={src} alt={alt} style={{ ...imgStyle, borderRadius: thumbBr }} />
+					: <PlaceholderImg />
+				}
+			</div>
+		);
+	};
+
+	const renderContent = ( cat, overrideColor = null ) => {
+		const desc       = ( cat.description || '' ).replace( /<[^>]+>/g, '' );
+		const nameColor  = overrideColor || catNameColor;
+		const cntColor   = overrideColor || countColor;
+		const custColor  = overrideColor || customTextColor;
+		const dscColor   = overrideColor || descColor;
+		const noDescColor = overrideColor ? 'rgba(255,255,255,0.45)' : '#bbb';
+
+		return (
+			<>
+				{ showCatName && (
+					<div style={{ fontWeight: catNameFontWeight, fontSize: catNameFontSize, color: nameColor, marginTop: catNameMarginTop, lineHeight: 1.3 }}>
+						{ cat.name }
+						{ showProductCount && productCountPos === 'beside' && (
+							<span style={{ fontSize: countFontSize, color: cntColor, marginLeft: 4 }}>
+								{ productCountBefore }{ cat.count }{ productCountAfter }
+							</span>
+						) }
+					</div>
+				) }
+				{ showProductCount && productCountPos === 'under' && (
+					<div style={{ fontSize: countFontSize, color: cntColor, marginTop: 4 }}>
+						{ productCountBefore }{ cat.count }{ productCountAfter }
+					</div>
+				) }
+				{ showCustomText && customText && (
+					<div style={{ fontSize: 13, color: custColor, marginTop: 6 }}>{ customText }</div>
+				) }
+				{ showDescription && (
+					<div style={{ fontSize: descFontSize, color: dscColor, marginTop: descMarginTop, lineHeight: 1.5 }}>
+						{ desc || <em style={{ color: noDescColor }}>{ __( '(no description)', 'commerce-kit' ) }</em> }
+					</div>
+				) }
+				{ showShopNow && (
+					<div style={{ textAlign: shopNowAlignment, marginTop: shopNowMarginTop }}>
+						<span style={{ display: 'inline-block', padding: '8px 18px', background: shopNowBgColor, color: shopNowTextColor, borderRadius: shopNowBorderRadius, fontSize: 13, fontWeight: 600, cursor: 'default' }}>
+							{ shopNowLabel }
+						</span>
+					</div>
+				) }
+			</>
+		);
+	};
+
+	const cardBaseStyle = ( cardWidth ) =>
+		layout === 'grid'
+			? { minWidth: 0 }
+			: { flex: `0 0 ${cardWidth}`, minWidth: 0 };
+
 	return (
 		<div className="ck-csl-editor-preview">
 
-			{showSectionTitle && sectionTitleText && (
-				<h3 className="ck-csl-editor-title">{sectionTitleText}</h3>
-			)}
+			{ showSectionTitle && sectionTitleText && (
+				<h3 className="ck-csl-editor-title">{ sectionTitleText }</h3>
+			) }
 
-			{isLoading && (
+			{ isLoading && (
 				<div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '20px 0', color: '#888' }}>
 					<Spinner />
-					<span style={{ fontSize: 13 }}>{__('Loading categories…', 'commerce-kit')}</span>
+					<span style={{ fontSize: 13 }}>{ __( 'Loading categories…', 'commerce-kit' ) }</span>
 				</div>
-			)}
+			) }
 
-			{!isLoading && fetchError && (
+			{ !isLoading && fetchError && (
 				<div style={{ padding: '12px 16px', background: '#fff3cd', border: '1px solid #ffc107', borderRadius: 4, fontSize: 13, color: '#856404' }}>
-					{__('Could not load categories. Make sure WooCommerce is active and you are logged in as an administrator.', 'commerce-kit')}
+					{ __( 'Could not load categories. Make sure WooCommerce is active and you are logged in as an administrator.', 'commerce-kit' ) }
 				</div>
-			)}
+			) }
 
-			{!isLoading && !fetchError && categories.length === 0 && (
+			{ !isLoading && !fetchError && categories.length === 0 && (
 				<div style={{ padding: '12px 16px', background: '#f0f0f0', borderRadius: 4, fontSize: 13, color: '#555' }}>
-					{__('No categories found with the current settings.', 'commerce-kit')}
+					{ __( 'No categories found with the current settings.', 'commerce-kit' ) }
 				</div>
-			)}
+			) }
 
-			{!isLoading && !fetchError && previewCats.length > 0 && (
+			{ !isLoading && !fetchError && previewCats.length > 0 && (
 				<div
 					className="ck-csl-editor-cards"
 					style={
@@ -69,148 +155,88 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 							: { display: 'flex', gap: spaceBetween + 'px', overflow: 'hidden', alignItems: 'stretch' }
 					}
 				>
-					{previewCats.map((cat) => {
-						const thumbSrc  = cat.image && cat.image.src ? cat.image.src : null;
-						const thumbAlt  = cat.image && cat.image.alt ? cat.image.alt : cat.name;
+					{ previewCats.map( ( cat ) => {
 						const cardWidth = layout === 'inline'
 							? '200px'
-							: `calc(${100 / previewCount}% - ${spaceBetween * (previewCount - 1) / previewCount}px)`;
-						const desc      = cat.description ? cat.description.replace(/<[^>]+>/g, '') : '';
+							: `calc(${100 / previewCount}% - ${spaceBetween * ( previewCount - 1 ) / previewCount}px)`;
+						const base = cardBaseStyle( cardWidth );
 
-						return (
-							<div
-								key={cat.id}
-								className="ck-csl-editor-card"
-								style={
-									layout === 'grid'
-										? { minWidth: 0, display: 'flex', flexDirection: 'column' }
-										: { flex: `0 0 ${cardWidth}`, minWidth: 0, display: 'flex', flexDirection: 'column' }
-								}
-							>
-								{/* Details block — rendered before thumbnail when position is "above" */}
-								{isAbove && (
-									<div style={{ flexShrink: 0, padding: `${contentPadTop}px ${contentPadRight}px ${contentPadBottom}px ${contentPadLeft}px` }}>
-										{showCatName && (
-											<div style={{ fontWeight: catNameFontWeight, fontSize: catNameFontSize, color: catNameColor, lineHeight: 1.3 }}>
-												{cat.name}
-												{showProductCount && productCountPos === 'beside' && (
-													<span style={{ fontSize: countFontSize, color: countColor, marginLeft: 4 }}>
-														{productCountBefore}{cat.count}{productCountAfter}
-													</span>
-												)}
-											</div>
-										)}
-										{showProductCount && productCountPos === 'under' && (
-											<div style={{ fontSize: countFontSize, color: countColor, marginTop: 4 }}>
-												{productCountBefore}{cat.count}{productCountAfter}
-											</div>
-										)}
-										{showCustomText && customText && (
-											<div style={{ fontSize: 13, color: '#555', marginTop: 6 }}>{customText}</div>
-										)}
-										{showDescription && (
-											<div style={{ fontSize: descFontSize, color: descColor, marginTop: descMarginTop, lineHeight: 1.5 }}>
-												{desc || <em style={{ color: '#bbb' }}>{__('(no description)', 'commerce-kit')}</em>}
-											</div>
-										)}
-										{showShopNow && (
-											<div style={{ textAlign: shopNowAlignment, marginTop: shopNowMarginTop }}>
-												<span style={{ display: 'inline-block', padding: '8px 18px', background: shopNowBgColor, color: shopNowTextColor, borderRadius: shopNowBorderRadius, fontSize: 13, fontWeight: 600, cursor: 'default' }}>
-													{shopNowLabel}
-												</span>
-											</div>
-										)}
+						/* ── Overlay positions ─────────────────────────────── */
+						if ( isOverlay ) {
+							const detailsPos =
+								contentPosition === 'overlay_top'    ? { top: 0, left: 0, right: 0 }
+								: contentPosition === 'overlay_middle' ? { top: '50%', left: 0, right: 0, transform: 'translateY(-50%)' }
+								: contentPosition === 'overlay_box'    ? { inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }
+								: { bottom: 0, left: 0, right: 0 }; // overlay (bottom)
+
+							return (
+								<div key={ cat.id } className="ck-csl-editor-card"
+									style={{ ...base, position: 'relative', overflow: 'hidden', borderRadius: 4 }}>
+									{ showThumbnail && renderThumb( cat ) }
+									<div style={{ position: 'absolute', inset: 0, background: overlayBgColor, zIndex: 1, pointerEvents: 'none' }} />
+									<div style={{ position: 'absolute', zIndex: 2, padding: `${contentPadTop}px ${contentPadRight}px ${contentPadBottom}px ${contentPadLeft}px`, ...detailsPos }}>
+										{ renderContent( cat, '#ffffff' ) }
 									</div>
-								)}
+								</div>
+							);
+						}
 
-								{showThumbnail && (
-									<div style={{
-										overflow: 'hidden',
-										borderRadius: thumbBr,
-										border: showThumbBorder ? `${thumbBorderWidth}px ${thumbBorderStyle} ${thumbBorderColor}` : 'none',
-										boxShadow: showBoxShadow ? `${boxShadowH}px ${boxShadowV}px ${boxShadowBlur}px ${boxShadowSpread}px ${boxShadowColor}` : 'none',
-										padding: thumbInnerPad ? thumbInnerPad + 'px' : 0,
-										marginBottom: thumbMarginBottom ? thumbMarginBottom + 'px' : 0,
-										background: '#f0f0f0',
-										lineHeight: 0,
-										filter: imageMode === 'grayscale' ? 'grayscale(100%)' : 'none',
-										...(isAbove ? { flex: '1 1 auto', minHeight: 120 } : {}),
-									}}>
-										{thumbSrc ? (
-											<img
-												src={thumbSrc}
-												alt={thumbAlt}
-												style={{ width: '100%', height: isAbove ? '100%' : 'auto', objectFit: isAbove ? 'cover' : 'initial', display: 'block', borderRadius: thumbBr }}
-											/>
-										) : (
-											<div style={{ aspectRatio: isAbove ? undefined : '1', height: isAbove ? '100%' : undefined, minHeight: isAbove ? 160 : undefined, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb' }}>
-												<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
-													<rect x="3" y="3" width="18" height="18" rx="2"/>
-													<circle cx="8.5" cy="8.5" r="1.5"/>
-													<polyline points="21 15 16 10 5 21"/>
-												</svg>
-											</div>
-										)}
-									</div>
-								)}
-
-								{/* Details block — rendered after thumbnail for all other positions */}
-								{!isAbove && (
+						/* ── Left / Right of thumbnail ─────────────────────── */
+						if ( isSide ) {
+							return (
+								<div key={ cat.id } className="ck-csl-editor-card"
+									style={{ ...base, display: 'flex', flexDirection: isLeft ? 'row' : 'row-reverse', alignItems: 'stretch', overflow: 'hidden', borderRadius: 4, background: '#fff' }}>
+									{ showThumbnail && renderThumb( cat,
+										{ width: '45%', flexShrink: 0, alignSelf: 'stretch' },
+										{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }
+									) }
 									<div style={{ flex: 1, padding: `${contentPadTop}px ${contentPadRight}px ${contentPadBottom}px ${contentPadLeft}px` }}>
-										{showCatName && (
-											<div style={{ fontWeight: catNameFontWeight, fontSize: catNameFontSize, color: catNameColor, marginTop: catNameMarginTop, lineHeight: 1.3 }}>
-												{cat.name}
-												{showProductCount && productCountPos === 'beside' && (
-													<span style={{ fontSize: countFontSize, color: countColor, marginLeft: 4 }}>
-														{productCountBefore}{cat.count}{productCountAfter}
-													</span>
-												)}
-											</div>
-										)}
-
-										{showProductCount && productCountPos === 'under' && (
-											<div style={{ fontSize: countFontSize, color: countColor, marginTop: 4 }}>
-												{productCountBefore}{cat.count}{productCountAfter}
-											</div>
-										)}
-
-										{showCustomText && customText && (
-											<div style={{ fontSize: 13, color: '#555', marginTop: 6 }}>{customText}</div>
-										)}
-
-										{showDescription && (
-											<div style={{ fontSize: descFontSize, color: descColor, marginTop: descMarginTop, lineHeight: 1.5 }}>
-												{desc || <em style={{ color: '#bbb' }}>{__('(no description)', 'commerce-kit')}</em>}
-											</div>
-										)}
-
-										{showShopNow && (
-											<div style={{ textAlign: shopNowAlignment, marginTop: shopNowMarginTop }}>
-												<span style={{
-													display: 'inline-block', padding: '8px 18px',
-													background: shopNowBgColor, color: shopNowTextColor,
-													borderRadius: shopNowBorderRadius, fontSize: 13, fontWeight: 600, cursor: 'default',
-												}}>
-													{shopNowLabel}
-												</span>
-											</div>
-										)}
+										{ renderContent( cat ) }
 									</div>
-								)}
+								</div>
+							);
+						}
+
+						/* ── Above thumbnail ───────────────────────────────── */
+						if ( isAbove ) {
+							return (
+								<div key={ cat.id } className="ck-csl-editor-card"
+									style={{ ...base, display: 'flex', flexDirection: 'column' }}>
+									<div style={{ flexShrink: 0, padding: `${contentPadTop}px ${contentPadRight}px ${contentPadBottom}px ${contentPadLeft}px` }}>
+										{ renderContent( cat ) }
+									</div>
+									{ showThumbnail && renderThumb( cat,
+										{ flex: '1 1 auto', minHeight: 120 },
+										{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }
+									) }
+								</div>
+							);
+						}
+
+						/* ── Below thumbnail (default) ─────────────────────── */
+						return (
+							<div key={ cat.id } className="ck-csl-editor-card"
+								style={{ ...base, display: 'flex', flexDirection: 'column' }}>
+								{ showThumbnail && renderThumb( cat,
+									{ marginBottom: thumbMarginBottom ? thumbMarginBottom + 'px' : 0 }
+								) }
+								<div style={{ flex: 1, padding: `${contentPadTop}px ${contentPadRight}px ${contentPadBottom}px ${contentPadLeft}px` }}>
+									{ renderContent( cat ) }
+								</div>
 							</div>
 						);
-					})}
+					} ) }
 				</div>
-			)}
+			) }
 
 			<div className="ck-csl-editor-hint">
-				{categories.length > previewCount
-					? `${__('Showing', 'commerce-kit')} ${previewCount} ${__('of', 'commerce-kit')} ${categories.length} ${__('categories. Full layout renders on the front-end.', 'commerce-kit')}`
+				{ categories.length > previewCount
+					? `${ __( 'Showing', 'commerce-kit' ) } ${ previewCount } ${ __( 'of', 'commerce-kit' ) } ${ categories.length } ${ __( 'categories. Full layout renders on the front-end.', 'commerce-kit' ) }`
 					: layout === 'grid'
-					? __('Front-end renders a static responsive CSS grid.', 'commerce-kit')
+					? __( 'Front-end renders a static responsive CSS grid.', 'commerce-kit' )
 					: layout === 'inline'
-					? __('Front-end renders a horizontally scrollable row.', 'commerce-kit')
-					: __('Front-end renders the full Swiper carousel with all configured settings.', 'commerce-kit')
+					? __( 'Front-end renders a horizontally scrollable row.', 'commerce-kit' )
+					: __( 'Front-end renders the full Swiper carousel with all configured settings.', 'commerce-kit' )
 				}
 			</div>
 		</div>
