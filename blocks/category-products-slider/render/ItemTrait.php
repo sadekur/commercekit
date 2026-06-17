@@ -8,10 +8,11 @@ trait CslItemTrait {
             [ 'overlay', 'overlay_top', 'overlay_middle', 'overlay_bottom', 'overlay_box' ], true );
         $equal_h     = isset( $a['equalHeight'] ) ? (bool) $a['equalHeight'] : true;
 
-        $item_cls = 'ck-csl-item relative flex flex-col bg-white rounded overflow-hidden ck-csl-pos-' . str_replace( '_', '-', $content_pos );
-        if ( $equal_h )                  $item_cls .= ' ck-eq-height h-full';
-        if ( 'left'  === $content_pos )  $item_cls .= ' flex-row items-stretch';
-        if ( 'right' === $content_pos )  $item_cls .= ' flex-row-reverse items-stretch';
+        $flex_dir = 'left'  === $content_pos ? 'flex-row'
+                  : ( 'right' === $content_pos ? 'flex-row-reverse' : 'flex-col' );
+        $item_cls = 'ck-csl-item relative flex ' . $flex_dir . ' bg-white rounded overflow-hidden ck-csl-pos-' . str_replace( '_', '-', $content_pos );
+        if ( $equal_h ) $item_cls .= ' ck-eq-height h-full';
+        if ( in_array( $content_pos, [ 'left', 'right' ], true ) ) $item_cls .= ' items-stretch';
 
         $thumb_wrap_cls = 'ck-csl-thumb-wrap overflow-hidden leading-[0] relative';
         if ( in_array( $content_pos, [ 'left', 'right' ], true ) ) {
