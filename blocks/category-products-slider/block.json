@@ -78,7 +78,10 @@
 		"countColor":          { "type": "string",  "default": "#888888" },
 		"countFontSize":       { "type": "number",  "default": 13 },
 
-		"showThumbnail":       { "type": "boolean", "default": true },
+		"showThumbnail":          { "type": "boolean", "default": true },
+		"useCustomPlaceholder":   { "type": "boolean", "default": false },
+		"customPlaceholderId":    { "type": "number",  "default": 0 },
+		"customPlaceholderUrl":   { "type": "string",  "default": "" },
 		"thumbnailImgSize":    { "type": "string",  "default": "medium" },
 		"thumbnailShape":      { "type": "string",  "default": "square" },
 		"thumbnailRadius":     { "type": "number",  "default": 0 },
