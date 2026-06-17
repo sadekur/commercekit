@@ -56,6 +56,7 @@
 		"showDescription":     { "type": "boolean", "default": false },
 		"showCustomText":      { "type": "boolean", "default": false },
 		"customText":          { "type": "string",  "default": "" },
+		"customTextColor":     { "type": "string",  "default": "#555555" },
 
 		"showShopNow":         { "type": "boolean", "default": false },
 		"shopNowLabel":        { "type": "string",  "default": "Shop Now" },
