@@ -3,6 +3,7 @@ import {
 	RangeControl, Flex, FlexItem, ButtonGroup, Button,
 	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
+import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import SubHeading from '../components/SubHeading';
 import ColorRow   from '../components/ColorRow';
