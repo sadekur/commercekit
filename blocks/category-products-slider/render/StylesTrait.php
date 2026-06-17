@@ -19,6 +19,7 @@ trait CslStylesTrait {
         $count_color     = $a['countColor']                ?? '#888888';
         $desc_size       = intval( $a['descFontSize']      ?? 14 );
         $desc_color      = $a['descColor']                 ?? '#666666';
+        $custom_text_color = $a['customTextColor']         ?? '#555555';
         $thumb_pad       = intval( $a['thumbInnerPad']     ?? 0 );
         $thumb_mb        = intval( $a['thumbMarginBottom'] ?? 0 );
 
