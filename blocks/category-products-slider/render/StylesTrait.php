@@ -113,6 +113,7 @@ trait CslStylesTrait {
             #<?php echo esc_attr( $uid ); ?> .ck-csl-count { font-size:<?php echo esc_attr( $count_size ); ?>px; color:<?php echo esc_attr( $count_color ); ?>; margin-left:4px; }
             #<?php echo esc_attr( $uid ); ?> .ck-csl-product-count { font-size:<?php echo esc_attr( $count_size ); ?>px; color:<?php echo esc_attr( $count_color ); ?>; }
             #<?php echo esc_attr( $uid ); ?> .ck-csl-cat-desc { font-size:<?php echo esc_attr( $desc_size ); ?>px; color:<?php echo esc_attr( $desc_color ); ?>; }
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-custom-text { color:<?php echo esc_attr( $custom_text_color ); ?>; }
             #<?php echo esc_attr( $uid ); ?> .ck-csl-shop-now { display:inline-block; padding:8px 18px; background:<?php echo esc_attr( $shop_bg ); ?>; color:<?php echo esc_attr( $shop_color ); ?>; border-radius:<?php echo esc_attr( $shop_radius ); ?>px; text-decoration:none; font-weight:600; transition:background 0.2s ease; }
             #<?php echo esc_attr( $uid ); ?> .ck-csl-shop-now:hover { background:<?php echo esc_attr( $shop_hvr ); ?>; }
             #<?php echo esc_attr( $uid ); ?> .ck-csl-nav-btn { width:<?php echo esc_attr( $nav_size + 18 ); ?>px; height:<?php echo esc_attr( $nav_size + 18 ); ?>px; color:<?php echo esc_attr( $nav_color ); ?>; background:<?php echo esc_attr( $nav_bg ); ?>; border:1px solid <?php echo esc_attr( $nav_border ); ?>; border-radius:<?php echo esc_attr( $nav_radius ); ?>px; }
