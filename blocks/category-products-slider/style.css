@@ -21,7 +21,6 @@
 	align-items: stretch;
 }
 
-/* Shared card appearance — editor preview and frontend */
 .ck-csl-editor-card,
 .ck-csl-item {
 	background: #fff;
