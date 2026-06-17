@@ -132,7 +132,10 @@ const DisplayPanel = ({ attributes, setAttributes }) => {
 			<ToggleControl label={__('Show Description', 'commerce-kit')} checked={showDescription} onChange={set('showDescription')} />
 			<ToggleControl label={__('Show Custom Text', 'commerce-kit')} checked={showCustomText}  onChange={set('showCustomText')} />
 			{showCustomText && (
-				<TextControl label={__('Custom Text', 'commerce-kit')} value={customText} onChange={set('customText')} />
+				<>
+					<TextControl label={__('Custom Text', 'commerce-kit')} value={customText} onChange={set('customText')} />
+					<ColorRow label={__('Custom Text Color', 'commerce-kit')} value={customTextColor} onChange={set('customTextColor')} />
+				</>
 			)}
 
 			{/* ── Shop Now Button */}
