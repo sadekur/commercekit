@@ -185,7 +185,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 						if ( isSide ) {
 							return (
 								<div key={ cat.id } className="ck-csl-editor-card"
-									style={{ ...base, display: 'flex', flexDirection: isLeft ? 'row' : 'row-reverse', alignItems: 'stretch', overflow: 'hidden', borderRadius: 4, background: '#fff' }}>
+									style={{ ...base, display: 'flex', flexDirection: isLeft ? 'row-reverse' : 'row', alignItems: 'stretch', overflow: 'hidden', borderRadius: 4, background: '#fff' }}>
 									{ showThumbnail && renderThumb( cat,
 										{ width: '45%', flexShrink: 0, alignSelf: 'stretch' },
 										{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }
