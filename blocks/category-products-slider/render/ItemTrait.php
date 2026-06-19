@@ -192,6 +192,9 @@ trait CslItemTrait {
                         </svg>
                     </div>
                 <?php endif; ?>
+                <?php if ( 'custom_color' === $image_mode ) : ?>
+                <div class="ck-csl-thumb-color-overlay" aria-hidden="true"></div>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
 
