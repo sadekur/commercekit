@@ -77,6 +77,15 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 					? <img src={src} alt={alt} style={{ ...imgStyle, borderRadius: thumbBr, ...zoomStyle }} />
 					: <PlaceholderImg />
 				}
+				{ imageMode === 'custom_color' && (
+					<div style={{
+						position:   'absolute',
+						inset:      0,
+						background: imageCustomColor || '#cc0000',
+						mixBlendMode: 'multiply',
+						pointerEvents: 'none',
+					}} />
+				) }
 			</div>
 		);
 	};
