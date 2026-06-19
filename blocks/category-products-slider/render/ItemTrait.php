@@ -56,6 +56,7 @@ trait CslItemTrait {
             $thumb_url = $placeholder_url;
         }
 
+        $image_mode   = $a['imageMode'] ?? 'normal';
         $show_name    = isset( $a['showCatName'] ) ? (bool) $a['showCatName'] : true;
         $show_count   = ! empty( $a['showProductCount'] );
         $count_pos    = $a['productCountPos']    ?? 'beside';
