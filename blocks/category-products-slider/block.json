@@ -99,6 +99,7 @@
 		"thumbMarginBottom":   { "type": "number",  "default": 0 },
 		"thumbnailZoom":       { "type": "string",  "default": "none" },
 		"imageMode":           { "type": "string",  "default": "normal" },
+		"imageCustomColor":    { "type": "string",  "default": "#cc0000" },
 
 		"autoplay":            { "type": "boolean", "default": true },
 		"autoplaySpeed":       { "type": "number",  "default": 3000 },
