@@ -98,6 +98,17 @@ trait CslStylesTrait {
                 #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb { transition: filter 0.3s ease; }
                 #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap:hover .ck-csl-thumb { filter: grayscale(0%); }
             <?php endif; ?>
+            <?php if ( 'custom_color' === $image_mode ) : ?>
+                #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-color-overlay {
+                    position: absolute;
+                    inset: 0;
+                    background: <?php echo esc_attr( $image_custom_color ); ?>;
+                    mix-blend-mode: multiply;
+                    pointer-events: none;
+                    transition: opacity 0.3s ease;
+                }
+                #<?php echo esc_attr( $uid ); ?> .ck-csl-thumb-wrap:hover .ck-csl-thumb-color-overlay { opacity: 0; }
+            <?php endif; ?>
             #<?php echo esc_attr( $uid ); ?> .ck-csl-overlay {
                 background: <?php echo esc_attr( $overlay_bg ); ?>;
                 transition: background 0.3s ease<?php echo 'on_hover' === $overlay_vis ? ', opacity 0.3s ease' : ''; ?>;
