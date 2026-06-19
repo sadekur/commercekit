@@ -57,6 +57,14 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		</div>
 	);
 
+	// zoom_out starts at scale(1.1) and zooms back to 1 on hover (visible in static preview).
+	// zoom_in starts at scale(1) and zooms to 1.1 on hover only (no static transform needed).
+	const zoomStyle = thumbnailZoom === 'zoom_out'
+		? { transform: 'scale(1.1)', transition: 'transform 0.4s ease' }
+		: thumbnailZoom === 'zoom_in'
+		? { transition: 'transform 0.4s ease' }
+		: {};
+
 	const renderThumb = ( cat, extraWrapStyle = {}, imgStyle = { width: '100%', display: 'block' } ) => {
 		const src = cat.image && cat.image.src
 			? cat.image.src
@@ -65,7 +73,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		return (
 			<div style={{ ...thumbWrapBase, ...extraWrapStyle }}>
 				{ src
-					? <img src={src} alt={alt} style={{ ...imgStyle, borderRadius: thumbBr }} />
+					? <img src={src} alt={alt} style={{ ...imgStyle, borderRadius: thumbBr, ...zoomStyle }} />
 					: <PlaceholderImg />
 				}
 			</div>
