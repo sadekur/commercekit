@@ -14,7 +14,7 @@ const ThumbnailPanel = ({ attributes, setAttributes }) => {
 		thumbnailImgSize, thumbnailShape, thumbnailRadius,
 		showThumbBorder, thumbBorderWidth, thumbBorderStyle, thumbBorderColor,
 		showBoxShadow, boxShadowH, boxShadowV, boxShadowBlur, boxShadowSpread, boxShadowColor,
-		thumbInnerPad, thumbMarginBottom, thumbnailZoom, imageMode,
+		thumbInnerPad, thumbMarginBottom, thumbnailZoom, imageMode, imageCustomColor,
 	} = attributes;
 	const set = (key) => (val) => setAttributes({ [key]: val });
 
