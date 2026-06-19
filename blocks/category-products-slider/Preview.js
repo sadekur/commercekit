@@ -9,7 +9,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		showThumbnail, thumbnailShape, thumbnailRadius,
 		showThumbBorder, thumbBorderWidth, thumbBorderStyle, thumbBorderColor,
 		showBoxShadow, boxShadowH, boxShadowV, boxShadowBlur, boxShadowSpread, boxShadowColor,
-		thumbInnerPad, thumbMarginBottom, imageMode,
+		thumbInnerPad, thumbMarginBottom, thumbnailZoom, imageMode,
 		contentPadTop, contentPadRight, contentPadBottom, contentPadLeft,
 		overlayBgColor,
 		useCustomPlaceholder, customPlaceholderUrl,
