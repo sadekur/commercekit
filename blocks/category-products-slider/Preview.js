@@ -38,6 +38,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 
 	const thumbWrapBase = {
 		overflow:   'hidden',
+		position:   'relative',
 		borderRadius: thumbBr,
 		border:     showThumbBorder ? `${thumbBorderWidth}px ${thumbBorderStyle} ${thumbBorderColor}` : 'none',
 		boxShadow:  showBoxShadow   ? `${boxShadowH}px ${boxShadowV}px ${boxShadowBlur}px ${boxShadowSpread}px ${boxShadowColor}` : 'none',
