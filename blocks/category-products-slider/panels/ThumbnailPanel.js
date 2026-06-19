@@ -180,15 +180,34 @@ const ThumbnailPanel = ({ attributes, setAttributes }) => {
 						]}
 						onChange={set('thumbnailZoom')}
 					/>
-					<SelectControl
-						label={__('Image Mode', 'commerce-kit')}
-						value={imageMode}
-						options={[
-							{ label: __('Normal', 'commerce-kit'),    value: 'normal' },
-							{ label: __('Grayscale', 'commerce-kit'), value: 'grayscale' },
-						]}
-						onChange={set('imageMode')}
-					/>
+					<div style={{ marginBottom: 8 }}>
+						<p style={{ fontSize: 11, fontWeight: 500, textTransform: 'uppercase', color: '#757575', margin: '12px 0 6px' }}>
+							{__('Image Mode', 'commerce-kit')}
+						</p>
+						<ButtonGroup>
+							{[
+								['normal',       __('Normal',      'commerce-kit')],
+								['grayscale',    __('Grayscale',   'commerce-kit')],
+								['custom_color', __('Custom Color','commerce-kit')],
+							].map(([val, label]) => (
+								<Button
+									key={val}
+									variant={imageMode === val ? 'primary' : 'secondary'}
+									onClick={() => setAttributes({ imageMode: val })}
+									size="small"
+								>
+									{label}
+								</Button>
+							))}
+						</ButtonGroup>
+					</div>
+					{imageMode === 'custom_color' && (
+						<ColorRow
+							label={__('Overlay Color', 'commerce-kit')}
+							value={imageCustomColor}
+							onChange={set('imageCustomColor')}
+						/>
+					)}
 					<NumberControl label={__('Inner Padding (px)', 'commerce-kit')} value={thumbInnerPad}     min={0} max={40} onChange={(v) => setAttributes({ thumbInnerPad:     parseInt(v) || 0 })} />
 					<NumberControl label={__('Bottom Margin (px)', 'commerce-kit')} value={thumbMarginBottom} min={0} max={60} onChange={(v) => setAttributes({ thumbMarginBottom: parseInt(v) || 0 })} />
 				</>
