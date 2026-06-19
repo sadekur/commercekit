@@ -5,8 +5,9 @@ trait CslStylesTrait {
         $a   = $this->a;
         $uid = $this->uid;
 
-        $thumb_zoom = $a['thumbnailZoom'] ?? 'none';
-        $image_mode = $a['imageMode']     ?? 'normal';
+        $thumb_zoom         = $a['thumbnailZoom']    ?? 'none';
+        $image_mode         = $a['imageMode']        ?? 'normal';
+        $image_custom_color = $a['imageCustomColor'] ?? '#cc0000';
 
         $overlay_bg  = $a['overlayBgColor']           ?? 'rgba(0,0,0,0.5)';
         $overlay_hvr = $a['overlayHoverBgColor']      ?? 'rgba(0,0,0,0.75)';
