@@ -150,6 +150,7 @@ trait CslItemTrait {
 
         $show_thumb  = isset( $a['showThumbnail'] ) ? (bool) $a['showThumbnail'] : true;
         $thumb_size  = $a['thumbnailImgSize'] ?? 'medium';
+        $image_mode  = $a['imageMode'] ?? 'normal';
         $show_count  = ! empty( $a['showProductCount'] );
         $count_b     = $a['productCountBefore'] ?? '(';
         $count_a     = $a['productCountAfter']  ?? ')';
