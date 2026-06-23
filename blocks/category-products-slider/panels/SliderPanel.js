@@ -1,5 +1,5 @@
 import {
-	PanelBody, ToggleControl, SelectControl,
+	PanelBody, ToggleControl, CheckboxControl, SelectControl,
 	RangeControl, Flex, FlexItem,
 	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
