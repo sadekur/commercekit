@@ -111,6 +111,7 @@
 "rtlDirection":        { "type": "boolean", "default": false },
 
 		"showNavigation":      { "type": "boolean", "default": true },
+		"navHideOnMobile":     { "type": "boolean", "default": false },
 		"navIconStyle":        { "type": "number",  "default": 1 },
 		"navIconSize":         { "type": "number",  "default": 22 },
 		"navColor":            { "type": "string",  "default": "#333333" },
