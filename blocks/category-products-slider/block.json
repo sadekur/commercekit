@@ -108,8 +108,7 @@
 		"pauseOnHover":        { "type": "boolean", "default": true },
 		"infiniteLoop":        { "type": "boolean", "default": true },
 		"adaptiveHeight":      { "type": "boolean", "default": false },
-		"slideEffect":         { "type": "string",  "default": "slide" },
-		"rtlDirection":        { "type": "boolean", "default": false },
+"rtlDirection":        { "type": "boolean", "default": false },
 
 		"showNavigation":      { "type": "boolean", "default": true },
 		"navIconStyle":        { "type": "number",  "default": 1 },
