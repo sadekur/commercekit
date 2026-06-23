@@ -7,13 +7,81 @@ import { __ } from '@wordpress/i18n';
 import SubHeading from '../components/SubHeading';
 import ColorRow   from '../components/ColorRow';
 
+// ── Navigation Position mini-diagram ─────────────────────────────────────────
+const NAV_POS_OPTIONS = [
+	{ label: __( 'Top Right',       'commerce-kit' ), value: 'top-right'       },
+	{ label: __( 'Top Center',      'commerce-kit' ), value: 'top-center'      },
+	{ label: __( 'Top Left',        'commerce-kit' ), value: 'top-left'        },
+	{ label: __( 'Bottom Right',    'commerce-kit' ), value: 'bottom-right'    },
+	{ label: __( 'Bottom Center',   'commerce-kit' ), value: 'bottom-center'   },
+	{ label: __( 'Bottom Left',     'commerce-kit' ), value: 'bottom-left'     },
+	{ label: __( 'Vertical Inner',  'commerce-kit' ), value: 'vertical-inner'  },
+	{ label: __( 'Vertical Outer',  'commerce-kit' ), value: 'vertical-outer'  },
+	{ label: __( 'Vertical Center', 'commerce-kit' ), value: 'vertical-center' },
+];
+
+const Arr = ({ dir }) => (
+	<span style={{
+		display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+		width: 14, height: 14, background: '#444', color: '#fff',
+		borderRadius: 2, fontSize: 9, fontWeight: 700, lineHeight: 1, flexShrink: 0,
+	}}>{ dir === 'prev' ? '‹' : '›' }</span>
+);
+
+const Slides = () => (
+	<div style={{ display: 'flex', gap: 2, flex: 1 }}>
+		{ [ 0, 1, 2 ].map( i => (
+			<div key={ i } style={{ flex: 1, height: 32, background: '#c0c0c0', borderRadius: 2 }} />
+		) ) }
+	</div>
+);
+
+const NavPosDiagram = ({ position }) => {
+	const isVertical = position.startsWith( 'vertical' );
+	const isBottom   = position.startsWith( 'bottom' );
+	const align      = position.endsWith( 'right'  ) ? 'flex-end'
+	                 : position.endsWith( 'center' ) ? 'center'
+	                 : 'flex-start';
+
+	if ( isVertical ) {
+		const inset = position === 'vertical-outer' ? -16
+		            : position === 'vertical-inner'  ? 4
+		            : 0;
+		return (
+			<div style={{ border: '1px solid #ddd', borderRadius: 4, padding: '8px', margin: '8px 0 4px', position: 'relative', overflow: position === 'vertical-outer' ? 'visible' : 'hidden' }}>
+				<Slides />
+				<div style={{
+					position: 'absolute', top: '50%', transform: 'translateY(-50%)',
+					left: inset, right: inset, display: 'flex', justifyContent: 'space-between',
+				}}>
+					<Arr dir="prev" /><Arr dir="next" />
+				</div>
+			</div>
+		);
+	}
+
+	const NavRow = () => (
+		<div style={{ display: 'flex', justifyContent: align, gap: 4 }}>
+			<Arr dir="prev" /><Arr dir="next" />
+		</div>
+	);
+
+	return (
+		<div style={{ border: '1px solid #ddd', borderRadius: 4, padding: '8px', margin: '8px 0 4px' }}>
+			{ ! isBottom && <><NavRow /><div style={{ height: 3 }} /></> }
+			<Slides />
+			{ isBottom && <><div style={{ height: 3 }} /><NavRow /></> }
+		</div>
+	);
+};
+
 const SliderPanel = ({ attributes, setAttributes }) => {
 	const {
 		// Slider controls
 		autoplay, autoplaySpeed, scrollSpeed, slidesToScroll,
 		pauseOnHover, infiniteLoop, adaptiveHeight, rtlDirection,
 		// Navigation
-		showNavigation, navHideOnMobile, navIconStyle, navIconSize,
+		showNavigation, navHideOnMobile, navPosition, navIconStyle, navIconSize,
 		navColor, navHoverColor, navBgColor, navHoverBgColor,
 		navBorderColor, navHoverBorderColor, navBorderRadius,
 		// Pagination
