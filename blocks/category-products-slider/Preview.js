@@ -373,144 +373,169 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	const navPos        = navPosition || 'top-right';
 	const navIsVertical = navPos.startsWith( 'vertical' );
 	const navIsBottom   = navPos.startsWith( 'bottom' );
+	const navIsTop      = ! navIsVertical && ! navIsBottom;
 	const navAlign      = navPos.endsWith( 'right'  ) ? 'flex-end'
 	                    : navPos.endsWith( 'center' ) ? 'center'
 	                    : 'flex-start';
 
-	// For vertical-outer, arrows extend beyond the slide area
-	const navInset = navPos === 'vertical-outer' ? -( ( navIconSize || 22 ) + 22 )
+	// Space reserved for top/bottom nav (button height + gap)
+	const btnDim     = Math.round( ( navIconSize || 22 ) * 1.8 );
+	const navPadding = navIsVertical ? 0 : btnDim + 10;
+
+	// Horizontal inset for vertical variants
+	const navInset = navPos === 'vertical-outer' ? -( btnDim + 4 )
 	               : navPos === 'vertical-inner'  ? 6
 	               : 0;
 
-	const navButtons = showNavigation && canSlide && (
-		<div style={
-			navIsVertical ? {
-				display: 'flex',
-				flexDirection: navFlexDir,
-				justifyContent: 'space-between',
-				alignItems: 'center',
-				position: 'absolute',
-				top: '50%',
-				transform: 'translateY(-50%)',
-				left: navInset,
-				right: navInset,
-				pointerEvents: 'none',
-				zIndex: 5,
-			} : {
-				display: 'flex',
-				flexDirection: 'row',
-				justifyContent: navAlign,
-				alignItems: 'center',
-				gap: 6,
-				[ navIsBottom ? 'marginTop' : 'marginBottom' ]: 8,
-			}
-		}>
-			<NavBtn
-				isPrev={ true }
-				iconStyle={ navIconStyle }
-				size={ navIconSize || 22 }
-				color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
-				hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
-				borderRadius={ navBorderRadius }
-				onClick={ () => scroll( 'prev' ) }
-				disabled={ ! infiniteLoop && currentSlide === 0 }
-			/>
-			<NavBtn
-				isPrev={ false }
-				iconStyle={ navIconStyle }
-				size={ navIconSize || 22 }
-				color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
-				hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
-				borderRadius={ navBorderRadius }
-				onClick={ () => scroll( 'next' ) }
-				disabled={ ! infiniteLoop && currentSlide === maxSlide }
-			/>
-		</div>
-	);
+	const renderSlider = () => {
+		const navStyle = navIsVertical ? {
+			// Vertical: centered over the slide area
+			position: 'absolute',
+			top: '50%',
+			transform: 'translateY(-50%)',
+			left: navInset,
+			right: navInset,
+			display: 'flex',
+			flexDirection: navFlexDir,
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			pointerEvents: 'none',
+			zIndex: 5,
+		} : navIsBottom ? {
+			// Bottom: pinned to bottom of the padded wrapper
+			position: 'absolute',
+			bottom: 0,
+			left: 0,
+			right: 0,
+			height: btnDim,
+			display: 'flex',
+			justifyContent: navAlign,
+			alignItems: 'center',
+			gap: 6,
+			pointerEvents: 'none',
+			zIndex: 5,
+		} : {
+			// Top: pinned to top of the padded wrapper
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			right: 0,
+			height: btnDim,
+			display: 'flex',
+			justifyContent: navAlign,
+			alignItems: 'center',
+			gap: 6,
+			pointerEvents: 'none',
+			zIndex: 5,
+		};
 
-	const renderSlider = () => (
-		<div
-			onMouseEnter={ () => { if ( pauseOnHover ) setIsPaused( true  ); } }
-			onMouseLeave={ () => { if ( pauseOnHover ) setIsPaused( false ); } }
-		>
-			{/* ── Top nav ── */}
-			{ ! navIsVertical && ! navIsBottom && navButtons }
+		return (
+			<div
+				style={{
+					position: 'relative',
+					paddingTop:    navIsTop    ? navPadding : 0,
+					paddingBottom: navIsBottom ? navPadding : 0,
+					overflow: navPos === 'vertical-outer' ? 'visible' : undefined,
+				}}
+				onMouseEnter={ () => { if ( pauseOnHover ) setIsPaused( true  ); } }
+				onMouseLeave={ () => { if ( pauseOnHover ) setIsPaused( false ); } }
+			>
+				{/* ── Navigation (all positions, absolutely placed) ── */}
+				{ showNavigation && canSlide && (
+					<div style={ navStyle }>
+						<NavBtn
+							isPrev={ true }
+							iconStyle={ navIconStyle }
+							size={ navIconSize || 22 }
+							color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
+							hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
+							borderRadius={ navBorderRadius }
+							onClick={ () => scroll( 'prev' ) }
+							disabled={ ! infiniteLoop && currentSlide === 0 }
+						/>
+						<NavBtn
+							isPrev={ false }
+							iconStyle={ navIconStyle }
+							size={ navIconSize || 22 }
+							color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
+							hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
+							borderRadius={ navBorderRadius }
+							onClick={ () => scroll( 'next' ) }
+							disabled={ ! infiniteLoop && currentSlide === maxSlide }
+						/>
+					</div>
+				) }
 
-			{/* ── Slide viewport + vertical nav wrapper ── */}
-			<div style={{ position: 'relative', overflow: navPos === 'vertical-outer' ? 'visible' : 'hidden' }}>
-				<div style={{
-					display: 'flex',
-					gap: gap + 'px',
-					transform: `translateX(calc(-${ translatePct.toFixed( 4 ) }% - ${ translatePx.toFixed( 4 ) }px))`,
-					transition: `transform ${ scrollSpeed || 600 }ms ease`,
-					alignItems: 'stretch',
-				}}>
-					{ displayCats.map( ( cat ) => (
-						<div key={ cat.id } style={{
-							flex: `0 0 calc(${ slideWidthPct.toFixed( 4 ) }% - ${ gapPerSlide.toFixed( 4 ) }px)`,
-							minWidth: 0,
-						}}>
-							{ renderCard( cat ) }
-						</div>
-					) ) }
+				{/* ── Slide viewport ── */}
+				<div style={{ overflow: 'hidden', position: 'relative' }}>
+					<div style={{
+						display: 'flex',
+						gap: gap + 'px',
+						transform: `translateX(calc(-${ translatePct.toFixed( 4 ) }% - ${ translatePx.toFixed( 4 ) }px))`,
+						transition: `transform ${ scrollSpeed || 600 }ms ease`,
+						alignItems: 'stretch',
+					}}>
+						{ displayCats.map( ( cat ) => (
+							<div key={ cat.id } style={{
+								flex: `0 0 calc(${ slideWidthPct.toFixed( 4 ) }% - ${ gapPerSlide.toFixed( 4 ) }px)`,
+								minWidth: 0,
+							}}>
+								{ renderCard( cat ) }
+							</div>
+						) ) }
+					</div>
 				</div>
 
-				{/* ── Vertical nav (absolute over slide area) ── */}
-				{ navIsVertical && navButtons }
+				{/* ── Pagination ── */}
+				{ showSliderPagination && canSlide && (
+					<Pager
+						type={ sliderPaginationType }
+						total={ pagerTotal }
+						current={ currentSlide }
+						color={ paginationColor }
+						activeColor={ paginationActiveColor }
+					/>
+				) }
+
+				{/* ── Status badges ── */}
+				<div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 10 }}>
+					{ autoplay && (
+						<span style={{
+							fontSize: 11, padding: '2px 8px', borderRadius: 3,
+							background: isPaused ? '#f5f5f5'  : '#e6f3ff',
+							color:      isPaused ? '#999'     : '#0073aa',
+							border:     `1px solid ${ isPaused ? '#ddd' : '#b8d9f5' }`,
+						}}>
+							{ isPaused
+								? __( '⏸ Autoplay paused', 'commerce-kit' )
+								: `▶ ${ __( 'Autoplay', 'commerce-kit' ) } — ${ autoplaySpeed || 3000 }ms`
+							}
+						</span>
+					) }
+					{ ! autoplay && (
+						<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f5f5f5', color: '#888', border: '1px solid #ddd' }}>
+							{ __( '⏹ Autoplay off', 'commerce-kit' ) }
+						</span>
+					) }
+					{ ! rtlDirection && (
+						<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#fff3e0', color: '#e65100', border: '1px solid #ffcc80' }}>
+							{ __( '↔ Reversed direction', 'commerce-kit' ) }
+						</span>
+					) }
+					{ navHideOnMobile && (
+						<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f3e8ff', color: '#6b21a8', border: '1px solid #d8b4fe' }}>
+							{ __( '📱 Nav hidden on mobile', 'commerce-kit' ) }
+						</span>
+					) }
+					{ ! infiniteLoop && (
+						<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f5f5f5', color: '#888', border: '1px solid #ddd' }}>
+							{ __( 'Loop off', 'commerce-kit' ) }
+						</span>
+					) }
+				</div>
 			</div>
-
-			{/* ── Bottom nav ── */}
-			{ ! navIsVertical && navIsBottom && navButtons }
-
-			{/* ── Pagination ── */}
-			{ showSliderPagination && canSlide && (
-				<Pager
-					type={ sliderPaginationType }
-					total={ pagerTotal }
-					current={ currentSlide }
-					color={ paginationColor }
-					activeColor={ paginationActiveColor }
-				/>
-			) }
-
-			{/* ── Status badges ── */}
-			<div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 10 }}>
-				{ autoplay && (
-					<span style={{
-						fontSize: 11, padding: '2px 8px', borderRadius: 3,
-						background: isPaused ? '#f5f5f5'  : '#e6f3ff',
-						color:      isPaused ? '#999'     : '#0073aa',
-						border:     `1px solid ${ isPaused ? '#ddd' : '#b8d9f5' }`,
-					}}>
-						{ isPaused
-							? __( '⏸ Autoplay paused', 'commerce-kit' )
-							: `▶ ${ __( 'Autoplay', 'commerce-kit' ) } — ${ autoplaySpeed || 3000 }ms`
-						}
-					</span>
-				) }
-				{ ! autoplay && (
-					<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f5f5f5', color: '#888', border: '1px solid #ddd' }}>
-						{ __( '⏹ Autoplay off', 'commerce-kit' ) }
-					</span>
-				) }
-				{ ! rtlDirection && (
-					<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#fff3e0', color: '#e65100', border: '1px solid #ffcc80' }}>
-						{ __( '↔ Reversed direction', 'commerce-kit' ) }
-					</span>
-				) }
-				{ navHideOnMobile && (
-					<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f3e8ff', color: '#6b21a8', border: '1px solid #d8b4fe' }}>
-						{ __( '📱 Nav hidden on mobile', 'commerce-kit' ) }
-					</span>
-				) }
-				{ ! infiniteLoop && (
-					<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f5f5f5', color: '#888', border: '1px solid #ddd' }}>
-						{ __( 'Loop off', 'commerce-kit' ) }
-					</span>
-				) }
-			</div>
-		</div>
-	);
+		);
+	};
 
 	// ── Non-slider card layout ─────────────────────────────────────────────
 	const previewCount = Math.min( colDesktop || 3, 4 );
