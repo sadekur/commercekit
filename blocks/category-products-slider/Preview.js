@@ -469,6 +469,11 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 						{ __( '↔ Reversed direction', 'commerce-kit' ) }
 					</span>
 				) }
+				{ navHideOnMobile && (
+					<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f3e8ff', color: '#6b21a8', border: '1px solid #d8b4fe' }}>
+						{ __( '📱 Nav hidden on mobile', 'commerce-kit' ) }
+					</span>
+				) }
 				{ ! infiniteLoop && (
 					<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f5f5f5', color: '#888', border: '1px solid #ddd' }}>
 						{ __( 'Loop off', 'commerce-kit' ) }
