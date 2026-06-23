@@ -15,7 +15,7 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 	const {
 		// Slider controls
 		autoplay, autoplaySpeed, scrollSpeed, slidesToScroll,
-		pauseOnHover, infiniteLoop, adaptiveHeight, slideEffect, rtlDirection,
+		pauseOnHover, infiniteLoop, adaptiveHeight, rtlDirection,
 		// Navigation
 		showNavigation, navIconStyle, navIconSize,
 		navColor, navHoverColor, navBgColor, navHoverBgColor,
