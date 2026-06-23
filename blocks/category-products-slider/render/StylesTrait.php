@@ -38,6 +38,8 @@ trait CslStylesTrait {
         $nav_hvr_bdr = $a['navHoverBorderColor']     ?? '#cc2b5e';
         $nav_radius  = intval( $a['navBorderRadius'] ?? 50 );
 
+        $nav_hide_mobile = ! empty( $a['navHideOnMobile'] );
+
         $show_pager   = ! empty( $a['showSliderPagination'] );
         $pager_color  = $a['paginationColor']       ?? '#cc2b5e';
         $pager_active = $a['paginationActiveColor'] ?? '#333333';
