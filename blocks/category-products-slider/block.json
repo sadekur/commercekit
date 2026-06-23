@@ -112,6 +112,7 @@
 
 		"showNavigation":      { "type": "boolean", "default": true },
 		"navHideOnMobile":     { "type": "boolean", "default": false },
+		"navPosition":         { "type": "string",  "default": "top-right" },
 		"navIconStyle":        { "type": "number",  "default": 1 },
 		"navIconSize":         { "type": "number",  "default": 22 },
 		"navColor":            { "type": "string",  "default": "#333333" },
