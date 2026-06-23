@@ -13,7 +13,7 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 		autoplay, autoplaySpeed, scrollSpeed, slidesToScroll,
 		pauseOnHover, infiniteLoop, adaptiveHeight, rtlDirection,
 		// Navigation
-		showNavigation, navIconStyle, navIconSize,
+		showNavigation, navHideOnMobile, navIconStyle, navIconSize,
 		navColor, navHoverColor, navBgColor, navHoverBgColor,
 		navBorderColor, navHoverBorderColor, navBorderRadius,
 		// Pagination
