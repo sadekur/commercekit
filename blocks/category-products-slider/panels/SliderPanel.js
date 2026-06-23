@@ -132,6 +132,14 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 				/>
 			</div>
 
+			<SelectControl
+				label={__('Navigation Position', 'commerce-kit')}
+				value={navPosition || 'top-right'}
+				options={NAV_POS_OPTIONS}
+				onChange={set('navPosition')}
+			/>
+			<NavPosDiagram position={navPosition || 'top-right'} />
+
 			{showNavigation && (
 				<>
 					<SelectControl
