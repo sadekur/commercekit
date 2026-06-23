@@ -369,14 +369,75 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 
 	const pagerTotal = Math.max( 1, maxSlide + 1 );
 
+	// ── Nav position helpers ──────────────────────────────────────────────────
+	const navPos        = navPosition || 'top-right';
+	const navIsVertical = navPos.startsWith( 'vertical' );
+	const navIsBottom   = navPos.startsWith( 'bottom' );
+	const navAlign      = navPos.endsWith( 'right'  ) ? 'flex-end'
+	                    : navPos.endsWith( 'center' ) ? 'center'
+	                    : 'flex-start';
+
+	// For vertical-outer, arrows extend beyond the slide area
+	const navInset = navPos === 'vertical-outer' ? -( ( navIconSize || 22 ) + 22 )
+	               : navPos === 'vertical-inner'  ? 6
+	               : 0;
+
+	const navButtons = showNavigation && canSlide && (
+		<div style={
+			navIsVertical ? {
+				display: 'flex',
+				flexDirection: navFlexDir,
+				justifyContent: 'space-between',
+				alignItems: 'center',
+				position: 'absolute',
+				top: '50%',
+				transform: 'translateY(-50%)',
+				left: navInset,
+				right: navInset,
+				pointerEvents: 'none',
+				zIndex: 5,
+			} : {
+				display: 'flex',
+				flexDirection: 'row',
+				justifyContent: navAlign,
+				alignItems: 'center',
+				gap: 6,
+				[ navIsBottom ? 'marginTop' : 'marginBottom' ]: 8,
+			}
+		}>
+			<NavBtn
+				isPrev={ true }
+				iconStyle={ navIconStyle }
+				size={ navIconSize || 22 }
+				color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
+				hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
+				borderRadius={ navBorderRadius }
+				onClick={ () => scroll( 'prev' ) }
+				disabled={ ! infiniteLoop && currentSlide === 0 }
+			/>
+			<NavBtn
+				isPrev={ false }
+				iconStyle={ navIconStyle }
+				size={ navIconSize || 22 }
+				color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
+				hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
+				borderRadius={ navBorderRadius }
+				onClick={ () => scroll( 'next' ) }
+				disabled={ ! infiniteLoop && currentSlide === maxSlide }
+			/>
+		</div>
+	);
+
 	const renderSlider = () => (
 		<div
-			style={{ position: 'relative' }}
 			onMouseEnter={ () => { if ( pauseOnHover ) setIsPaused( true  ); } }
 			onMouseLeave={ () => { if ( pauseOnHover ) setIsPaused( false ); } }
 		>
-			{/* ── Slide viewport ── */}
-			<div style={{ overflow: 'hidden', position: 'relative' }}>
+			{/* ── Top nav ── */}
+			{ ! navIsVertical && ! navIsBottom && navButtons }
+
+			{/* ── Slide viewport + vertical nav wrapper ── */}
+			<div style={{ position: 'relative', overflow: navPos === 'vertical-outer' ? 'visible' : 'hidden' }}>
 				<div style={{
 					display: 'flex',
 					gap: gap + 'px',
@@ -393,45 +454,13 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 						</div>
 					) ) }
 				</div>
+
+				{/* ── Vertical nav (absolute over slide area) ── */}
+				{ navIsVertical && navButtons }
 			</div>
 
-			{/* ── Navigation arrows ── */}
-			{ showNavigation && canSlide && (
-				<div style={{
-					display: 'flex',
-					flexDirection: navFlexDir,
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					position: 'absolute',
-					top: '50%',
-					transform: 'translateY(-50%)',
-					left: 6,
-					right: 6,
-					pointerEvents: 'none',
-					zIndex: 5,
-				}}>
-					<NavBtn
-						isPrev={ true }
-						iconStyle={ navIconStyle }
-						size={ navIconSize || 22 }
-						color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
-						hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
-						borderRadius={ navBorderRadius }
-						onClick={ () => scroll( 'prev' ) }
-						disabled={ ! infiniteLoop && currentSlide === 0 }
-					/>
-					<NavBtn
-						isPrev={ false }
-						iconStyle={ navIconStyle }
-						size={ navIconSize || 22 }
-						color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
-						hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
-						borderRadius={ navBorderRadius }
-						onClick={ () => scroll( 'next' ) }
-						disabled={ ! infiniteLoop && currentSlide === maxSlide }
-					/>
-				</div>
-			) }
+			{/* ── Bottom nav ── */}
+			{ ! navIsVertical && navIsBottom && navButtons }
 
 			{/* ── Pagination ── */}
 			{ showSliderPagination && canSlide && (
