@@ -134,6 +134,14 @@ trait CslStylesTrait {
             #<?php echo esc_attr( $uid ); ?> .ck-csl-shop-now:hover { background:<?php echo esc_attr( $shop_hvr ); ?>; }
             #<?php echo esc_attr( $uid ); ?> .ck-csl-nav-btn { width:<?php echo esc_attr( $nav_size + 18 ); ?>px; height:<?php echo esc_attr( $nav_size + 18 ); ?>px; color:<?php echo esc_attr( $nav_color ); ?>; background:<?php echo esc_attr( $nav_bg ); ?>; border:1px solid <?php echo esc_attr( $nav_border ); ?>; border-radius:<?php echo esc_attr( $nav_radius ); ?>px; }
             #<?php echo esc_attr( $uid ); ?> .ck-csl-nav-btn:hover { color:<?php echo esc_attr( $nav_hvr_c ); ?>; background:<?php echo esc_attr( $nav_hvr_bg ); ?>; border-color:<?php echo esc_attr( $nav_hvr_bdr ); ?>; }
+            <?php if ( ! $nav_is_vertical ) : ?>
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-nav-wrap { margin-<?php echo str_starts_with( $nav_pos, 'bottom' ) ? 'top' : 'bottom'; ?>: 10px; }
+            <?php elseif ( 'vertical-outer' === $nav_pos ) : ?>
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-outer { overflow: visible; }
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-nav-wrap { left: -<?php echo esc_attr( $nav_size + 22 ); ?>px; right: -<?php echo esc_attr( $nav_size + 22 ); ?>px; padding: 0; }
+            <?php elseif ( 'vertical-center' === $nav_pos ) : ?>
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-nav-wrap { padding: 0; }
+            <?php endif; ?>
             <?php if ( $nav_hide_mobile ) : ?>
             @media (max-width: 767px) { #<?php echo esc_attr( $uid ); ?> .ck-csl-nav-wrap { display: none !important; } }
             <?php endif; ?>
