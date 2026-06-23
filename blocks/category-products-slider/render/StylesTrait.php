@@ -39,6 +39,8 @@ trait CslStylesTrait {
         $nav_radius  = intval( $a['navBorderRadius'] ?? 50 );
 
         $nav_hide_mobile = ! empty( $a['navHideOnMobile'] );
+        $nav_pos         = $a['navPosition'] ?? 'top-right';
+        $nav_is_vertical = in_array( $nav_pos, [ 'vertical-inner', 'vertical-outer', 'vertical-center' ], true );
 
         $show_pager   = ! empty( $a['showSliderPagination'] );
         $pager_color  = $a['paginationColor']       ?? '#cc2b5e';
