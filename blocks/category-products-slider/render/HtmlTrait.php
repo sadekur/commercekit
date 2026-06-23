@@ -155,11 +155,41 @@ trait CslHtmlTrait {
 
         [ $svg_prev, $svg_next ] = $this->nav_svgs();
 
-        $wrap_cls     = 'ck-csl-wrap relative w-full' . ( $rtl ? '' : ' ck-csl-rtl' ) . ( $show_pager ? ' ck-csl-has-pager' : '' ) . ( $preloader ? ' ck-csl-preloader' : '' );
-        $outer_cls    = 'ck-csl-outer relative' . ( $show_nav ? ' ck-has-nav' : '' );
-        $nav_wrap_cls = 'ck-csl-nav-wrap absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 px-1.5' . ( $rtl ? '' : ' flex-row-reverse' );
-        $nav_btn_cls  = 'ck-csl-nav-btn flex items-center justify-center cursor-pointer pointer-events-auto transition-[background,color,border-color] duration-200 shrink-0 focus:outline focus:outline-2 focus:outline-[#0073aa] focus:outline-offset-2';
-        $swiper_cls   = 'swiper ck-csl-swiper overflow-hidden' . ( $show_pager ? ' pb-10' : '' );
+        $nav_pos     = $a['navPosition'] ?? 'top-right';
+        $is_vertical = in_array( $nav_pos, [ 'vertical-inner', 'vertical-outer', 'vertical-center' ], true );
+        $is_bottom   = str_starts_with( $nav_pos, 'bottom' );
+
+        if ( $is_vertical ) {
+            $px_cls       = 'vertical-outer' === $nav_pos ? '' : 'px-1.5';
+            $nav_wrap_cls = 'ck-csl-nav-wrap ck-csl-nav-' . $nav_pos . ' absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 ' . $px_cls . ( $rtl ? '' : ' flex-row-reverse' );
+        } else {
+            if ( 'top-left' === $nav_pos || 'bottom-left' === $nav_pos ) {
+                $nav_align = 'justify-start';
+            } elseif ( 'top-center' === $nav_pos || 'bottom-center' === $nav_pos ) {
+                $nav_align = 'justify-center';
+            } else {
+                $nav_align = 'justify-end';
+            }
+            $nav_wrap_cls = 'ck-csl-nav-wrap ck-csl-nav-' . $nav_pos . ' flex ' . $nav_align . ' gap-2 pointer-events-none z-10';
+        }
+
+        $wrap_cls    = 'ck-csl-wrap relative w-full' . ( $rtl ? '' : ' ck-csl-rtl' ) . ( $show_pager ? ' ck-csl-has-pager' : '' ) . ( $preloader ? ' ck-csl-preloader' : '' );
+        $outer_cls   = 'ck-csl-outer relative' . ( $show_nav ? ' ck-has-nav' : '' );
+        $nav_btn_cls = 'ck-csl-nav-btn flex items-center justify-center cursor-pointer pointer-events-auto transition-[background,color,border-color] duration-200 shrink-0 focus:outline focus:outline-2 focus:outline-[#0073aa] focus:outline-offset-2';
+        $swiper_cls  = 'swiper ck-csl-swiper overflow-hidden' . ( $show_pager ? ' pb-10' : '' );
+
+        ob_start();
+        if ( $show_nav ) : ?>
+        <div class="<?php echo esc_attr( $nav_wrap_cls ); ?>">
+            <div class="ck-csl-prev <?php echo esc_attr( $nav_btn_cls ); ?>" role="button" aria-label="<?php esc_attr_e( 'Previous', 'commerce-kit' ); ?>">
+                <svg xmlns="http://www.w3.org/2000/svg" width="<?php echo esc_attr( $nav_size ); ?>" height="<?php echo esc_attr( $nav_size ); ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?php echo $svg_prev; // phpcs:ignore ?></svg>
+            </div>
+            <div class="ck-csl-next <?php echo esc_attr( $nav_btn_cls ); ?>" role="button" aria-label="<?php esc_attr_e( 'Next', 'commerce-kit' ); ?>">
+                <svg xmlns="http://www.w3.org/2000/svg" width="<?php echo esc_attr( $nav_size ); ?>" height="<?php echo esc_attr( $nav_size ); ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?php echo $svg_next; // phpcs:ignore ?></svg>
+            </div>
+        </div>
+        <?php endif;
+        $nav_html = ob_get_clean();
 
         ob_start();
         ?>
@@ -168,16 +198,7 @@ trait CslHtmlTrait {
                     <h3 class="ck-csl-section-title text-[22px] font-bold text-[#222] m-0 mb-5 leading-[1.3]"><?php echo esc_html( $title_text ); ?></h3>
                 <?php endif; ?>
                 <div class="<?php echo esc_attr( $outer_cls ); ?>">
-                    <?php if ( $show_nav ) : ?>
-                    <div class="<?php echo esc_attr( $nav_wrap_cls ); ?>">
-                        <div class="ck-csl-prev <?php echo esc_attr( $nav_btn_cls ); ?>" role="button" aria-label="<?php esc_attr_e( 'Previous', 'commerce-kit' ); ?>">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="<?php echo esc_attr( $nav_size ); ?>" height="<?php echo esc_attr( $nav_size ); ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?php echo $svg_prev; // phpcs:ignore ?></svg>
-                        </div>
-                        <div class="ck-csl-next <?php echo esc_attr( $nav_btn_cls ); ?>" role="button" aria-label="<?php esc_attr_e( 'Next', 'commerce-kit' ); ?>">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="<?php echo esc_attr( $nav_size ); ?>" height="<?php echo esc_attr( $nav_size ); ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?php echo $svg_next; // phpcs:ignore ?></svg>
-                        </div>
-                    </div>
-                    <?php endif; ?>
+                    <?php if ( ! $is_bottom ) echo $nav_html; // phpcs:ignore — top & vertical positions ?>
                     <div class="<?php echo esc_attr( $swiper_cls ); ?>">
                         <div class="swiper-wrapper">
                             <?php foreach ( $groups as $group ) : ?>
@@ -190,6 +211,7 @@ trait CslHtmlTrait {
                         <div class="ck-csl-pager swiper-pagination text-center mt-[18px] !static"></div>
                         <?php endif; ?>
                     </div>
+                    <?php if ( $is_bottom ) echo $nav_html; // phpcs:ignore — bottom positions ?>
                 </div>
             </div>
         <?php
