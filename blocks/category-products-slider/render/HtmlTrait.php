@@ -131,15 +131,15 @@ trait CslHtmlTrait {
 
         [ $svg_prev, $svg_next ] = $this->nav_svgs();
 
-        $wrap_cls     = 'ck-csl-wrap relative w-full' . ( $rtl ? ' ck-csl-rtl' : '' ) . ( $show_pager ? ' ck-csl-has-pager' : '' ) . ( $preloader ? ' ck-csl-preloader' : '' );
+        $wrap_cls     = 'ck-csl-wrap relative w-full' . ( $rtl ? '' : ' ck-csl-rtl' ) . ( $show_pager ? ' ck-csl-has-pager' : '' ) . ( $preloader ? ' ck-csl-preloader' : '' );
         $outer_cls    = 'ck-csl-outer relative' . ( $show_nav ? ' ck-has-nav' : '' );
-        $nav_wrap_cls = 'ck-csl-nav-wrap absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 px-1.5' . ( $rtl ? ' flex-row-reverse' : '' );
+        $nav_wrap_cls = 'ck-csl-nav-wrap absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 px-1.5' . ( $rtl ? '' : ' flex-row-reverse' );
         $nav_btn_cls  = 'ck-csl-nav-btn flex items-center justify-center cursor-pointer pointer-events-auto transition-[background,color,border-color] duration-200 shrink-0 focus:outline focus:outline-2 focus:outline-[#0073aa] focus:outline-offset-2';
         $swiper_cls   = 'swiper ck-csl-swiper overflow-hidden' . ( $show_pager ? ' pb-10' : '' );
 
         ob_start();
         ?>
-            <div id="<?php echo esc_attr( $uid ); ?>" class="<?php echo esc_attr( $wrap_cls ); ?>" dir="<?php echo $rtl ? 'rtl' : 'ltr'; ?>">
+            <div id="<?php echo esc_attr( $uid ); ?>" class="<?php echo esc_attr( $wrap_cls ); ?>" dir="<?php echo $rtl ? 'ltr' : 'rtl'; ?>">
                 <?php if ( $show_title && $title_text ) : ?>
                     <h3 class="ck-csl-section-title text-[22px] font-bold text-[#222] m-0 mb-5 leading-[1.3]"><?php echo esc_html( $title_text ); ?></h3>
                 <?php endif; ?>
