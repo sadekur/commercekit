@@ -7,10 +7,6 @@ import { __ } from '@wordpress/i18n';
 import SubHeading from '../components/SubHeading';
 import ColorRow   from '../components/ColorRow';
 
-const SWATCH = { width: 32, height: 28, padding: 2, border: '1px solid #ccc', borderRadius: 3, cursor: 'pointer', display: 'block' };
-const COL_HEAD = { fontSize: 10, fontWeight: 600, color: '#888', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 };
-const ROW_LABEL = { fontSize: 11, color: '#555', display: 'flex', alignItems: 'center', height: 28 };
-
 const SliderPanel = ({ attributes, setAttributes }) => {
 	const {
 		// Slider controls
