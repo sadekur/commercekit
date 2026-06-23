@@ -64,27 +64,15 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 					/>
 					<RangeControl label={__('Icon Size (px)', 'commerce-kit')} value={navIconSize} onChange={set('navIconSize')} min={12} max={48} />
 
-					{/* Normal / Hover color grid */}
-					<div style={{ background: '#f9f9f9', border: '1px solid #e8e8e8', borderRadius: 4, padding: '10px 12px', marginBottom: 10 }}>
-						<div style={{ display: 'grid', gridTemplateColumns: '52px 1fr 1fr', gap: '8px 6px', alignItems: 'center' }}>
-							{/* Column headers */}
-							<div />
-							<div style={COL_HEAD}>{__('Normal', 'commerce-kit')}</div>
-							<div style={COL_HEAD}>{__('Hover', 'commerce-kit')}</div>
-							{/* Arrow */}
-							<div style={ROW_LABEL}>{__('Arrow', 'commerce-kit')}</div>
-							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navColor}       onChange={swatch('navColor')}       style={SWATCH} /></div>
-							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navHoverColor}  onChange={swatch('navHoverColor')}  style={SWATCH} /></div>
-							{/* Background */}
-							<div style={ROW_LABEL}>{__('BG', 'commerce-kit')}</div>
-							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navBgColor}     onChange={swatch('navBgColor')}     style={SWATCH} /></div>
-							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navHoverBgColor} onChange={swatch('navHoverBgColor')} style={SWATCH} /></div>
-							{/* Border */}
-							<div style={ROW_LABEL}>{__('Border', 'commerce-kit')}</div>
-							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navBorderColor}      onChange={swatch('navBorderColor')}      style={SWATCH} /></div>
-							<div style={{ display: 'flex', justifyContent: 'center' }}><input type="color" value={navHoverBorderColor} onChange={swatch('navHoverBorderColor')} style={SWATCH} /></div>
-						</div>
-					</div>
+					<div style={{ fontSize: 11, fontWeight: 600, color: '#888', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '12px 0 4px' }}>{__('Normal', 'commerce-kit')}</div>
+					<ColorRow label={__('Arrow Color', 'commerce-kit')}      value={navColor}       onChange={set('navColor')} />
+					<ColorRow label={__('Background', 'commerce-kit')}        value={navBgColor}     onChange={set('navBgColor')} />
+					<ColorRow label={__('Border Color', 'commerce-kit')}      value={navBorderColor} onChange={set('navBorderColor')} />
+
+					<div style={{ fontSize: 11, fontWeight: 600, color: '#888', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '12px 0 4px' }}>{__('Hover', 'commerce-kit')}</div>
+					<ColorRow label={__('Arrow Color', 'commerce-kit')}      value={navHoverColor}       onChange={set('navHoverColor')} />
+					<ColorRow label={__('Background', 'commerce-kit')}        value={navHoverBgColor}     onChange={set('navHoverBgColor')} />
+					<ColorRow label={__('Border Color', 'commerce-kit')}      value={navHoverBorderColor} onChange={set('navHoverBorderColor')} />
 
 					<RangeControl label={__('Button Border Radius (px)', 'commerce-kit')} value={navBorderRadius} onChange={set('navBorderRadius')} min={0} max={50} />
 				</>
