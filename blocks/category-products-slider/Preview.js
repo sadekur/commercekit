@@ -131,7 +131,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		autoplay, autoplaySpeed, scrollSpeed, slidesToScroll,
 		pauseOnHover, infiniteLoop, rtlDirection,
 		// Navigation
-		showNavigation, navIconStyle, navIconSize,
+		showNavigation, navHideOnMobile, navIconStyle, navIconSize,
 		navColor, navHoverColor, navBgColor, navHoverBgColor,
 		navBorderColor, navHoverBorderColor, navBorderRadius,
 		// Pagination
