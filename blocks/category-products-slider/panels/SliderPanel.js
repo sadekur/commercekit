@@ -22,7 +22,6 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 		touchSwipe, mousewheelControl, mouseDraggable, freeMode,
 	} = attributes;
 	const set = (key) => (val) => setAttributes({ [key]: val });
-	const swatch = (key) => (e) => setAttributes({ [key]: e.target.value });
 
 	return (
 		<PanelBody title={__('Slider Settings', 'commerce-kit')} initialOpen={false}>
