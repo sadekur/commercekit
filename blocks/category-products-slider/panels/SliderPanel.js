@@ -48,7 +48,7 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 			<ToggleControl label={__('Pause on Hover', 'commerce-kit')}  checked={pauseOnHover}   onChange={set('pauseOnHover')} />
 			<ToggleControl label={__('Infinite Loop', 'commerce-kit')}   checked={infiniteLoop}   onChange={set('infiniteLoop')} />
 			<ToggleControl label={__('Adaptive Height', 'commerce-kit')} checked={adaptiveHeight} onChange={set('adaptiveHeight')} />
-			<ToggleControl label={__('Right-to-Left Direction', 'commerce-kit')} checked={rtlDirection} onChange={set('rtlDirection')} />
+			<ToggleControl label={__('Reverse Slide Direction (Right → Left)', 'commerce-kit')} checked={rtlDirection} onChange={set('rtlDirection')} />
 
 			{/* ── Navigation */}
 			<SubHeading>{__('Navigation', 'commerce-kit')}</SubHeading>
