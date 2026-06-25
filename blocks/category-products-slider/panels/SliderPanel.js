@@ -4,8 +4,9 @@ import {
 	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import SubHeading from '../components/SubHeading';
-import ColorRow   from '../components/ColorRow';
+import SubHeading      from '../components/SubHeading';
+import ColorRow        from '../components/ColorRow';
+import NormalHoverTabs from '../components/NormalHoverTabs';
 
 // ── Navigation Position mini-diagram ─────────────────────────────────────────
 const NAV_POS_OPTIONS = [
