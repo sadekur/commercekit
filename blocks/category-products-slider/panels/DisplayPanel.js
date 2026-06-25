@@ -4,9 +4,10 @@ import {
 	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import SubHeading from '../components/SubHeading';
-import ColorRow   from '../components/ColorRow';
-import SpacingRow from '../components/SpacingRow';
+import SubHeading      from '../components/SubHeading';
+import ColorRow        from '../components/ColorRow';
+import SpacingRow      from '../components/SpacingRow';
+import NormalHoverTabs from '../components/NormalHoverTabs';
 
 const DisplayPanel = ({ attributes, setAttributes }) => {
 	const {
