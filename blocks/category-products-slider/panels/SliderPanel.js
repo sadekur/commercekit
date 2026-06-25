@@ -132,6 +132,12 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 
 			{showNavigation && (
 				<>
+					<ToggleControl
+						label={__('Hide on Mobile', 'commerce-kit')}
+						checked={navHideOnMobile}
+						onChange={set('navHideOnMobile')}
+					/>
+
 					<SelectControl
 						label={__('Arrow Icon Style', 'commerce-kit')}
 						value={String(navIconStyle)}
