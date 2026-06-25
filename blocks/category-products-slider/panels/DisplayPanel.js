@@ -147,9 +147,15 @@ const DisplayPanel = ({ attributes, setAttributes }) => {
 			{showShopNow && (
 				<>
 					<TextControl label={__('Button Label', 'commerce-kit')} value={shopNowLabel} onChange={set('shopNowLabel')} />
-					<ColorRow label={__('Background Color', 'commerce-kit')} value={shopNowBgColor}   onChange={set('shopNowBgColor')} />
-					<ColorRow label={__('Hover Background', 'commerce-kit')}  value={shopNowHoverBg}   onChange={set('shopNowHoverBg')} />
-					<ColorRow label={__('Text Color', 'commerce-kit')}         value={shopNowTextColor} onChange={set('shopNowTextColor')} />
+					<ColorRow label={__('Text Color', 'commerce-kit')} value={shopNowTextColor} onChange={set('shopNowTextColor')} />
+					<NormalHoverTabs
+						normal={<>
+							<ColorRow label={__('Background', 'commerce-kit')} value={shopNowBgColor} onChange={set('shopNowBgColor')} />
+						</>}
+						hover={<>
+							<ColorRow label={__('Background', 'commerce-kit')} value={shopNowHoverBg} onChange={set('shopNowHoverBg')} />
+						</>}
+					/>
 					<RangeControl
 						label={__('Border Radius (px)', 'commerce-kit')}
 						value={shopNowBorderRadius}
