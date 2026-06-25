@@ -10,7 +10,7 @@ const NavBtn = ({
 	onClick, disabled,
 }) => {
 	const [ hov, setHov ] = useState( false );
-	const s   = Math.min( 3, Math.max( 1, iconStyle || 1 ) );
+	const s   = Math.min( 6, Math.max( 1, iconStyle || 1 ) );
 	const dim = Math.round( ( size || 22 ) * 1.8 );
 
 	const btnStyle = {
