@@ -160,16 +160,36 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 						onChange={set('navHideOnMobile')}
 					/>
 
-					<SelectControl
-						label={__('Arrow Icon Style', 'commerce-kit')}
-						value={String(navIconStyle)}
-						options={[
-							{ label: __('Style 1 – Chevron', 'commerce-kit'),         value: '1' },
-							{ label: __('Style 2 – Arrow with Line', 'commerce-kit'), value: '2' },
-							{ label: __('Style 3 – Arrow in Circle', 'commerce-kit'), value: '3' },
-						]}
-						onChange={(v) => setAttributes({ navIconStyle: parseInt(v) })}
-					/>
+					<div style={{ marginBottom: 8 }}>
+						<p style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#757575', margin: '0 0 6px' }}>
+							{ __( 'Arrow Icon Style', 'commerce-kit' ) }
+						</p>
+						<div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+							{ [ 1, 2, 3, 4, 5, 6 ].map( ( i ) => {
+								const active = navIconStyle === i;
+								return (
+									<button
+										key={ i }
+										type="button"
+										title={ `Style ${ i }` }
+										onClick={ () => setAttributes( { navIconStyle: i } ) }
+										style={{
+											width: 34, height: 34,
+											display: 'flex', alignItems: 'center', justifyContent: 'center',
+											border:       active ? '2px solid #0073aa' : '1px solid #ddd',
+											borderRadius: 5,
+											background:   active ? '#0073aa' : '#f9f9f9',
+											color:        active ? '#fff' : '#444',
+											cursor: 'pointer', padding: 0,
+											transition: 'all 0.15s',
+										}}
+									>
+										<NavIconPreview style={ i } />
+									</button>
+								);
+							} ) }
+						</div>
+					</div>
 					<RangeControl label={__('Icon Size (px)', 'commerce-kit')} value={navIconSize} onChange={set('navIconSize')} min={12} max={48} />
 
 					<NormalHoverTabs
