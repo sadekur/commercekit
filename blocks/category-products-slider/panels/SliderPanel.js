@@ -8,6 +8,27 @@ import SubHeading      from '../components/SubHeading';
 import ColorRow        from '../components/ColorRow';
 import NormalHoverTabs from '../components/NormalHoverTabs';
 
+// ── Navigation icon picker ────────────────────────────────────────────────────
+const NavIconPreview = ({ style }) => {
+	const paths = () => {
+		switch ( style ) {
+			case 1: return <polyline points="9 18 15 12 9 6"/>;
+			case 2: return <><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>;
+			case 3: return <><circle cx="12" cy="12" r="10"/><polyline points="12 16 16 12 12 8"/><line x1="8" y1="12" x2="16" y2="12"/></>;
+			case 4: return <polyline points="7 4 17 12 7 20"/>;
+			case 5: return <><polyline points="6 5 13 12 6 19"/><polyline points="12 5 19 12 12 19"/></>;
+			case 6: return <><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="10 8 16 12 10 16"/></>;
+			default: return <polyline points="9 18 15 12 9 6"/>;
+		}
+	};
+	return (
+		<svg width={15} height={15} viewBox="0 0 24 24" fill="none"
+			stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+			{ paths() }
+		</svg>
+	);
+};
+
 // ── Navigation Position mini-diagram ─────────────────────────────────────────
 const NAV_POS_OPTIONS = [
 	{ label: __( 'Top Right',       'commerce-kit' ), value: 'top-right'       },
