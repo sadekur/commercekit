@@ -150,6 +150,10 @@ trait CslStylesTrait {
             #<?php echo esc_attr( $uid ); ?> .swiper-pagination-bullet { background:<?php echo esc_attr( $pager_color ); ?>; opacity:0.5; }
             #<?php echo esc_attr( $uid ); ?> .swiper-pagination-bullet-active { background:<?php echo esc_attr( $pager_active ); ?>; opacity:1; }
             #<?php echo esc_attr( $uid ); ?> .swiper-pagination-progressbar .swiper-pagination-progressbar-fill { background:<?php echo esc_attr( $pager_active ); ?>; }
+            <?php if ( 'numbered' === ( $a['sliderPaginationType'] ?? 'bullets' ) ) : ?>
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-pager-num { width:24px !important; height:24px !important; border-radius:50% !important; display:inline-flex !important; align-items:center !important; justify-content:center !important; font-size:11px !important; font-weight:700 !important; line-height:1 !important; background:transparent !important; border:1px solid <?php echo esc_attr( $pager_color ); ?> !important; color:<?php echo esc_attr( $pager_color ); ?> !important; opacity:1 !important; transition:background 0.2s,color 0.2s; }
+            #<?php echo esc_attr( $uid ); ?> .ck-csl-pager-num.swiper-pagination-bullet-active { background:<?php echo esc_attr( $pager_active ); ?> !important; border-color:<?php echo esc_attr( $pager_active ); ?> !important; color:#fff !important; opacity:1 !important; }
+            <?php endif; ?>
             <?php if ( $pager_hide_mobile ) : ?>
             @media (max-width: 767px) { #<?php echo esc_attr( $uid ); ?> .ck-csl-pager { display: none !important; } }
             <?php endif; ?>
