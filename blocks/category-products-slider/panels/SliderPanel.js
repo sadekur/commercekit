@@ -62,9 +62,29 @@ const PagerStylePreview = ({ type, active }) => {
 		<span style={{ fontSize: 11, fontWeight: 700, color: fg, letterSpacing: '-0.02em' }}>1/5</span>
 	);
 
-	return (
+	if ( type === 'progressbar' ) return (
 		<div style={{ width: 42, height: 3, background: dim, borderRadius: 2, overflow: 'hidden' }}>
 			<div style={{ width: '40%', height: '100%', background: fg, borderRadius: 2 }} />
+		</div>
+	);
+
+	// numbered
+	return (
+		<div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+			{ [ 1, 2, 3 ].map( ( n, i ) => (
+				<div key={ n } style={{
+					width: 13, height: 13, borderRadius: '50%',
+					background:  i === 0 ? fg : 'transparent',
+					border:      `1px solid ${ i === 0 ? fg : dim }`,
+					display: 'flex', alignItems: 'center', justifyContent: 'center',
+					fontSize: 7, fontWeight: 700, lineHeight: 1,
+					color: i === 0
+						? ( active ? '#0073aa' : '#eee' )
+						: ( active ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.4)' ),
+				}}>
+					{ n }
+				</div>
+			) ) }
 		</div>
 	);
 };
