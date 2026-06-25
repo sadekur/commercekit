@@ -116,21 +116,11 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 			{/* ── Navigation */}
 			<SubHeading>{__('Navigation', 'commerce-kit')}</SubHeading>
 
-			{/* Show Navigation + Hide on Mobile on the same row */}
-			<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
-				<div style={{ flex: 1, minWidth: 0 }}>
-					<ToggleControl
-						label={__('Show Navigation Arrows', 'commerce-kit')}
-						checked={showNavigation}
-						onChange={set('showNavigation')}
-					/>
-				</div>
-				<CheckboxControl
-					label={__('Hide on Mobile', 'commerce-kit')}
-					checked={navHideOnMobile}
-					onChange={set('navHideOnMobile')}
-				/>
-			</div>
+			<ToggleControl
+				label={__('Show Navigation Arrows', 'commerce-kit')}
+				checked={showNavigation}
+				onChange={set('showNavigation')}
+			/>
 
 			<SelectControl
 				label={__('Navigation Position', 'commerce-kit')}
