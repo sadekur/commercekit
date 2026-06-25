@@ -151,15 +151,18 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 					/>
 					<RangeControl label={__('Icon Size (px)', 'commerce-kit')} value={navIconSize} onChange={set('navIconSize')} min={12} max={48} />
 
-					<div style={{ fontSize: 11, fontWeight: 600, color: '#888', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '12px 0 4px' }}>{__('Normal', 'commerce-kit')}</div>
-					<ColorRow label={__('Arrow Color', 'commerce-kit')}      value={navColor}       onChange={set('navColor')} />
-					<ColorRow label={__('Background', 'commerce-kit')}        value={navBgColor}     onChange={set('navBgColor')} />
-					<ColorRow label={__('Border Color', 'commerce-kit')}      value={navBorderColor} onChange={set('navBorderColor')} />
-
-					<div style={{ fontSize: 11, fontWeight: 600, color: '#888', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '12px 0 4px' }}>{__('Hover', 'commerce-kit')}</div>
-					<ColorRow label={__('Arrow Color', 'commerce-kit')}      value={navHoverColor}       onChange={set('navHoverColor')} />
-					<ColorRow label={__('Background', 'commerce-kit')}        value={navHoverBgColor}     onChange={set('navHoverBgColor')} />
-					<ColorRow label={__('Border Color', 'commerce-kit')}      value={navHoverBorderColor} onChange={set('navHoverBorderColor')} />
+					<NormalHoverTabs
+						normal={<>
+							<ColorRow label={__('Arrow Color', 'commerce-kit')}  value={navColor}       onChange={set('navColor')} />
+							<ColorRow label={__('Background', 'commerce-kit')}   value={navBgColor}     onChange={set('navBgColor')} />
+							<ColorRow label={__('Border Color', 'commerce-kit')} value={navBorderColor} onChange={set('navBorderColor')} />
+						</>}
+						hover={<>
+							<ColorRow label={__('Arrow Color', 'commerce-kit')}  value={navHoverColor}       onChange={set('navHoverColor')} />
+							<ColorRow label={__('Background', 'commerce-kit')}   value={navHoverBgColor}     onChange={set('navHoverBgColor')} />
+							<ColorRow label={__('Border Color', 'commerce-kit')} value={navHoverBorderColor} onChange={set('navHoverBorderColor')} />
+						</>}
+					/>
 
 					<RangeControl label={__('Button Border Radius (px)', 'commerce-kit')} value={navBorderRadius} onChange={set('navBorderRadius')} min={0} max={50} />
 				</>
