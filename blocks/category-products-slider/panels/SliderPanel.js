@@ -252,23 +252,54 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 			{/* ── Pagination */}
 			<SubHeading>{__('Pagination', 'commerce-kit')}</SubHeading>
 
-			<ToggleControl label={__('Show Pagination', 'commerce-kit')} checked={showSliderPagination} onChange={set('showSliderPagination')} />
+			<ToggleControl
+				label={__('Show Pagination', 'commerce-kit')}
+				checked={showSliderPagination}
+				onChange={set('showSliderPagination')}
+			/>
 			{showSliderPagination && (
 				<>
-					<SelectControl
-						label={__('Pagination Type', 'commerce-kit')}
-						value={sliderPaginationType}
-						options={[
-							{ label: __('Bullets', 'commerce-kit'),         value: 'bullets' },
-							{ label: __('Dynamic Bullets', 'commerce-kit'), value: 'dynamic' },
-							{ label: __('Fraction (1/10)', 'commerce-kit'), value: 'fraction' },
-							{ label: __('Progress Bar', 'commerce-kit'),    value: 'progressbar' },
-						]}
-						onChange={set('sliderPaginationType')}
+					<ToggleControl
+						label={__('Hide on Mobile', 'commerce-kit')}
+						checked={paginationHideOnMobile}
+						onChange={set('paginationHideOnMobile')}
 					/>
+
+					<div style={{ marginBottom: 8 }}>
+						<p style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#757575', margin: '0 0 6px' }}>
+							{ __( 'Pagination Style', 'commerce-kit' ) }
+						</p>
+						<div style={{ display: 'flex', gap: 4 }}>
+							{ PAGER_TYPES.map( ( { value, label } ) => {
+								const active = sliderPaginationType === value;
+								return (
+									<button
+										key={ value }
+										type="button"
+										title={ label }
+										onClick={ () => setAttributes( { sliderPaginationType: value } ) }
+										style={{
+											flex: '1 1 0',
+											height: 34,
+											display: 'flex', alignItems: 'center', justifyContent: 'center',
+											border:       active ? '2px solid #0073aa' : '1px solid #ddd',
+											borderRadius: 5,
+											background:   active ? '#0073aa' : '#f9f9f9',
+											color:        active ? '#fff' : '#444',
+											cursor: 'pointer', padding: '0 6px',
+											transition: 'all 0.15s',
+										}}
+									>
+										<PagerStylePreview type={ value } active={ active } />
+									</button>
+								);
+							} ) }
+						</div>
+					</div>
+
 					<Flex>
-						<FlexItem><ColorRow label={__('Bullet Color', 'commerce-kit')} value={paginationColor}       onChange={set('paginationColor')} /></FlexItem>
-						<FlexItem><ColorRow label={__('Active Color', 'commerce-kit')} value={paginationActiveColor} onChange={set('paginationActiveColor')} /></FlexItem>
+						<FlexItem><ColorRow label={__('Bullet Color', 'commerce-kit')}  value={paginationColor}       onChange={set('paginationColor')} /></FlexItem>
+						<FlexItem><ColorRow label={__('Active Color', 'commerce-kit')}  value={paginationActiveColor} onChange={set('paginationActiveColor')} /></FlexItem>
 					</Flex>
 				</>
 			)}
