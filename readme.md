@@ -327,31 +327,91 @@ Open the **Inspector Controls** (right sidebar) to access **Accordion Settings**
 
 **Status:** ✅ Complete
 
-Displays a horizontal sliding carousel of WooCommerce products from a single category. Shows product image, name, short description, and price. Includes previous/next navigation buttons and optional autoplay.
+Displays WooCommerce **product categories** as interactive cards in a fully customisable carousel, slider, grid, or inline scroll layout. Each card links to the category archive and can show the category thumbnail, name, product count, description, custom text, and a "Shop Now" call-to-action.
 
 #### Adding the block
 
 1. In the Gutenberg editor insert **Category Products Slider**
-2. Open the **Inspector Controls** sidebar under **Slider Settings**
+2. Select a layout and configure the block in the **Inspector Controls** sidebar
 
-#### Configuration
+#### Layout options
+
+| Layout | Behaviour |
+|---|---|
+| **Carousel** | Swiper carousel — multiple cards visible at once, slides one at a time |
+| **Slider** | Swiper full-width — one card fills the container and slides into view |
+| **Grid** | Static responsive CSS grid — no sliding |
+| **Inline** | Horizontally scrollable row — no sliding |
+
+#### General settings
 
 | Setting | Description | Default |
 |---|---|---|
-| **Category ID** | ID of the WooCommerce product category to display | `0` (must be set) |
-| **Title** | Heading shown above the slider | `Category Products` |
-| **Product Limit** | Maximum number of products to include | `10` |
-| **Autoplay** | Automatically advance slides | On |
-| **Autoplay Speed (ms)** | Milliseconds between auto-advances | `3000` |
+| **Section Title** | Optional heading rendered above the block | `Category Showcase` |
+| **Category Source** | **Parent only** (top-level categories) or **All** (every depth, with depth-filter toggles) | Parent only |
+| **Specific Categories** | Comma-separated IDs to show only chosen categories | — |
+| **Total Categories** | Maximum number of category cards to display | `12` |
+| **Order By / Order** | Sort by name, ID, or product count; ascending or descending | Name / ASC |
+| **Randomize** | Shuffle categories on each page load | Off |
+| **Hide Empty** | Skip categories with no products | Off |
+| **Hide Without Thumbnail** | Skip categories that have no image set | Off |
 
-> **Finding a Category ID:** Go to **Products → Categories**, hover over a category name, and read the `tag_ID` value from the URL shown at the bottom of the browser (e.g. `.../term.php?taxonomy=product_cat&tag_ID=**12**`).
+#### Display settings
+
+Controls what appears inside each category card.
+
+| Setting | Description |
+|---|---|
+| **Content Position** | Where text sits relative to the thumbnail: Below, Above, Left, Right, or Overlay (bottom / top / middle / full-box) |
+| **Show Category Name** | Toggle the category title link |
+| **Show Product Count** | Show the number of products beside or under the name |
+| **Show Description** | Show the category description text |
+| **Show Custom Text** | Show a static text string on every card |
+| **Show "Shop Now" button** | Add a CTA link to the category archive |
+| **Equal Height** | Force all cards to the same height |
+
+#### Thumbnail settings
+
+Controls the category image inside each card.
+
+| Setting | Description |
+|---|---|
+| **Image Size** | WordPress image size (thumbnail / medium / large / full) |
+| **Thumbnail Shape** | Square or circle |
+| **Border Radius** | Rounds the image corners in px |
+| **Thumbnail Border** | Optional border around the image |
+| **Box Shadow** | Drop shadow on the card |
+| **Zoom on Hover** | Scale, blur, or greyscale effect when the user hovers |
+| **Image Colour Overlay** | Tint the image with a custom colour |
+| **Custom Placeholder** | Image shown when a category has no thumbnail set |
+
+#### Slider settings (carousel and slider layouts only)
+
+| Setting | Description | Default |
+|---|---|---|
+| **Columns** | Slides visible at once per breakpoint (Large / Desktop / Laptop / Tablet / Mobile) | 4 / 3 / 2 / 2 / 1 |
+| **Space Between** | Gap between slides in px | `20` |
+| **Autoplay** | Automatically advance slides | On |
+| **Autoplay Speed** | Milliseconds between auto-advances | `3000` |
+| **Scroll Speed** | Transition duration in ms | `600` |
+| **Slides to Scroll** | How many slides advance per click | `1` |
+| **Pause on Hover** | Stop autoplay when the pointer is over the slider | On |
+| **Infinite Loop** | Wrap around from the last slide to the first | On |
+| **RTL Direction** | Right-to-left slide order | Off |
+| **Show Navigation** | Prev / Next arrow buttons | On |
+| **Navigation Position** | Placement of the nav buttons: Top Right / Top Center / Top Left / Bottom Right / Bottom Center / Bottom Left / Vertical Inner / Vertical Outer / Vertical Center | Top Right |
+| **Hide Nav on Mobile** | Suppress navigation arrows on small screens | Off |
+| **Navigation Style** | Icon set (3 styles), size, colour, background, hover colours, border radius | — |
+| **Show Pagination** | Dot / fraction / progress-bar indicator below the slider | Off |
+| **Pagination Type** | Bullets / Dynamic Bullets / Fraction / Progressbar | Bullets |
+| **Touch Swipe / Mouse Drag** | Allow swipe and drag gestures | On |
 
 #### Frontend behaviour
 
-- Each slide shows a product image (links to product), product name (links to product), short description, and price
-- **Prev / Next** arrow buttons on the left and right edges navigate one slide at a time
-- With autoplay on, slides advance automatically; hovering over the slider pauses autoplay
-- If the Category ID is not set, or no published products exist in that category, a placeholder message is shown instead
+- Each card links to the category archive page
+- Navigation arrows respect the chosen **Navigation Position**
+- Autoplay pauses on hover (when enabled)
+- If no categories are found a notice is shown in place of the block
 
 ---
 
