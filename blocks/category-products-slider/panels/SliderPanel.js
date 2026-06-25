@@ -35,6 +35,7 @@ const PAGER_TYPES = [
 	{ value: 'dynamic',     label: 'Dynamic' },
 	{ value: 'fraction',    label: 'Fraction' },
 	{ value: 'progressbar', label: 'Progress' },
+	{ value: 'numbered',    label: 'Numbers' },
 ];
 
 const PagerStylePreview = ({ type, active }) => {
