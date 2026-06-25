@@ -125,6 +125,7 @@
 
 		"showSliderPagination":     { "type": "boolean", "default": false },
 		"sliderPaginationType":     { "type": "string",  "default": "bullets" },
+		"paginationHideOnMobile":   { "type": "boolean", "default": false },
 		"paginationColor":          { "type": "string",  "default": "#cc2b5e" },
 		"paginationActiveColor":    { "type": "string",  "default": "#333333" },
 		"paginationBgColor":        { "type": "string",  "default": "transparent" },
