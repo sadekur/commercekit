@@ -29,6 +29,45 @@ const NavIconPreview = ({ style }) => {
 	);
 };
 
+// ── Pagination style visual preview ──────────────────────────────────────────
+const PAGER_TYPES = [
+	{ value: 'bullets',     label: 'Bullets' },
+	{ value: 'dynamic',     label: 'Dynamic' },
+	{ value: 'fraction',    label: 'Fraction' },
+	{ value: 'progressbar', label: 'Progress' },
+];
+
+const PagerStylePreview = ({ type, active }) => {
+	const fg  = active ? '#fff' : '#555';
+	const dim = active ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.18)';
+
+	if ( type === 'bullets' ) return (
+		<div style={{ display: 'flex', gap: 3, alignItems: 'center' }}>
+			{ [ 0, 1, 2, 3, 4 ].map( ( i ) => (
+				<div key={ i } style={{ width: 6, height: 6, borderRadius: '50%', background: i === 2 ? fg : dim }} />
+			) ) }
+		</div>
+	);
+
+	if ( type === 'dynamic' ) return (
+		<div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+			{ [ [ 4, false ], [ 5, false ], [ 9, true ], [ 5, false ], [ 4, false ] ].map( ( [ s, a ], i ) => (
+				<div key={ i } style={{ width: s, height: s, borderRadius: '50%', background: a ? fg : dim }} />
+			) ) }
+		</div>
+	);
+
+	if ( type === 'fraction' ) return (
+		<span style={{ fontSize: 11, fontWeight: 700, color: fg, letterSpacing: '-0.02em' }}>1/5</span>
+	);
+
+	return (
+		<div style={{ width: 42, height: 3, background: dim, borderRadius: 2, overflow: 'hidden' }}>
+			<div style={{ width: '40%', height: '100%', background: fg, borderRadius: 2 }} />
+		</div>
+	);
+};
+
 // ── Navigation Position mini-diagram ─────────────────────────────────────────
 const NAV_POS_OPTIONS = [
 	{ label: __( 'Top Right',       'commerce-kit' ), value: 'top-right'       },
