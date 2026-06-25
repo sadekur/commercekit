@@ -42,9 +42,10 @@ trait CslStylesTrait {
         $nav_pos         = $a['navPosition'] ?? 'top-right';
         $nav_is_vertical = in_array( $nav_pos, [ 'vertical-inner', 'vertical-outer', 'vertical-center' ], true );
 
-        $show_pager   = ! empty( $a['showSliderPagination'] );
-        $pager_color  = $a['paginationColor']       ?? '#cc2b5e';
-        $pager_active = $a['paginationActiveColor'] ?? '#333333';
+        $show_pager        = ! empty( $a['showSliderPagination'] );
+        $pager_hide_mobile = ! empty( $a['paginationHideOnMobile'] );
+        $pager_color       = $a['paginationColor']       ?? '#cc2b5e';
+        $pager_active      = $a['paginationActiveColor'] ?? '#333333';
 
         $layout = $a['layout'] ?? 'carousel';
         $col_l  = max( 1, intval( $a['colLarge']   ?? 4 ) );
