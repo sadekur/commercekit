@@ -150,6 +150,9 @@ trait CslStylesTrait {
             #<?php echo esc_attr( $uid ); ?> .swiper-pagination-bullet { background:<?php echo esc_attr( $pager_color ); ?>; opacity:0.5; }
             #<?php echo esc_attr( $uid ); ?> .swiper-pagination-bullet-active { background:<?php echo esc_attr( $pager_active ); ?>; opacity:1; }
             #<?php echo esc_attr( $uid ); ?> .swiper-pagination-progressbar .swiper-pagination-progressbar-fill { background:<?php echo esc_attr( $pager_active ); ?>; }
+            <?php if ( $pager_hide_mobile ) : ?>
+            @media (max-width: 767px) { #<?php echo esc_attr( $uid ); ?> .ck-csl-pager { display: none !important; } }
+            <?php endif; ?>
             <?php endif; ?>
             #<?php echo esc_attr( $uid ); ?> .ck-csl-cup-parent-link { display:inline-block; font-size:<?php echo esc_attr( $cat_name_size ); ?>px; font-weight:<?php echo esc_attr( $cat_name_weight ); ?>; color:<?php echo esc_attr( $cat_name_color ); ?>; transition:opacity 0.2s ease; }
             #<?php echo esc_attr( $uid ); ?> .ck-csl-cup-parent-link:hover { opacity:0.75; }
