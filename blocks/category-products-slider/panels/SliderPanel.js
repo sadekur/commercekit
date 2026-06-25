@@ -107,7 +107,8 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 		navColor, navHoverColor, navBgColor, navHoverBgColor,
 		navBorderColor, navHoverBorderColor, navBorderRadius,
 		// Pagination
-		showSliderPagination, sliderPaginationType, paginationColor, paginationActiveColor,
+		showSliderPagination, paginationHideOnMobile, sliderPaginationType,
+		paginationColor, paginationActiveColor,
 		// Misc
 		touchSwipe, mousewheelControl, mouseDraggable, freeMode,
 	} = attributes;
