@@ -2,9 +2,12 @@
 trait CslScriptTrait {
 
     private function inline_script(): void {
-        $uid       = $this->uid;
-        $cfg       = wp_json_encode( $this->swiper_config() );
-        $preloader = isset( $this->a['preloader'] ) ? (bool) $this->a['preloader'] : true;
+        $uid        = $this->uid;
+        $a          = $this->a;
+        $cfg        = wp_json_encode( $this->swiper_config() );
+        $preloader  = isset( $a['preloader'] ) ? (bool) $a['preloader'] : true;
+        $show_pager = ! empty( $a['showSliderPagination'] );
+        $pager_type = $a['sliderPaginationType'] ?? 'bullets';
         ?>
         <script>
         (function () {
@@ -20,7 +23,13 @@ trait CslScriptTrait {
                 if (!wrap || typeof Swiper === 'undefined') return;
                 var el = wrap.querySelector('.ck-csl-swiper');
                 if (!el) return;
-                new Swiper(el, <?php echo $cfg; // phpcs:ignore ?>);
+                var cfg = <?php echo $cfg; // phpcs:ignore ?>;
+                <?php if ( $show_pager && 'numbered' === $pager_type ) : ?>
+                cfg.pagination.renderBullet = function(i, c) {
+                    return '<span class="' + c + ' ck-csl-pager-num">' + (i + 1) + '</span>';
+                };
+                <?php endif; ?>
+                new Swiper(el, cfg);
             }
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', ckCslInit);
