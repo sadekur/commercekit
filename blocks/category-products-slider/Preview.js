@@ -104,6 +104,29 @@ const Pager = ({ type, total, current, color, activeColor }) => {
 		);
 	}
 
+	if ( type === 'numbered' ) {
+		return (
+			<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 5, marginTop: 14, flexWrap: 'wrap' }}>
+				{ Array.from( { length: total } ).map( ( _, i ) => {
+					const active = i === current;
+					return (
+						<div key={ i } style={{
+							width: 22, height: 22, borderRadius: '50%',
+							border: `1px solid ${ active ? activeColor : color }`,
+							background: active ? activeColor : 'transparent',
+							display: 'flex', alignItems: 'center', justifyContent: 'center',
+							fontSize: 10, fontWeight: 700, lineHeight: 1,
+							color: active ? '#fff' : color,
+							transition: 'all 0.2s',
+						}}>
+							{ i + 1 }
+						</div>
+					);
+				} ) }
+			</div>
+		);
+	}
+
 	// bullets / dynamic
 	const isDynamic = type === 'dynamic';
 	return (
