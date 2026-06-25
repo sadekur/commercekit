@@ -290,7 +290,7 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 						<p style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#757575', margin: '0 0 6px' }}>
 							{ __( 'Pagination Style', 'commerce-kit' ) }
 						</p>
-						<div style={{ display: 'flex', gap: 4 }}>
+						<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
 							{ PAGER_TYPES.map( ( { value, label } ) => {
 								const active = sliderPaginationType === value;
 								return (
@@ -300,14 +300,14 @@ const SliderPanel = ({ attributes, setAttributes }) => {
 										title={ label }
 										onClick={ () => setAttributes( { sliderPaginationType: value } ) }
 										style={{
-											flex: '1 1 0',
-											height: 34,
+											height: 38,
 											display: 'flex', alignItems: 'center', justifyContent: 'center',
+											flexDirection: 'column', gap: 4,
 											border:       active ? '2px solid #0073aa' : '1px solid #ddd',
 											borderRadius: 5,
 											background:   active ? '#0073aa' : '#f9f9f9',
 											color:        active ? '#fff' : '#444',
-											cursor: 'pointer', padding: '0 6px',
+											cursor: 'pointer', padding: 0,
 											transition: 'all 0.15s',
 										}}
 									>
