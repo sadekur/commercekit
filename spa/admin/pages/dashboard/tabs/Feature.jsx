@@ -49,6 +49,42 @@ const FEATURES = [
         status: "soon",
         configHash: null,
     },
+    {
+        name: "inventory-forecasting",
+        icon: "📊",
+        iconBg: "bg-sky-50",
+        label: "Inventory Forecasting",
+        description: "Tracks daily sales velocity to estimate stock-out dates and recommend restock timing, with supplier lead-time awareness. Not yet available.",
+        status: "soon",
+        configHash: null,
+    },
+    {
+        name: "product-health-monitor",
+        icon: "🩺",
+        iconBg: "bg-fuchsia-50",
+        label: "Product Health Monitor",
+        description: "Flags low stock, no-sales, high-views/low-sales, and dead inventory so merchants know which products need attention. Not yet available.",
+        status: "soon",
+        configHash: null,
+    },
+    {
+        name: "dead-inventory-recovery",
+        icon: "♻️",
+        iconBg: "bg-yellow-50",
+        label: "Dead Inventory Recovery",
+        description: "Detects slow-moving and overstocked products and suggests discounts, bundles, or promotions to clear them. Not yet available.",
+        status: "soon",
+        configHash: null,
+    },
+    {
+        name: "smart-scarcity-system",
+        icon: "⏳",
+        iconBg: "bg-orange-50",
+        label: "Smart Scarcity System",
+        description: "Extends Stock Threshold with real sales velocity and recent purchase activity to show genuine scarcity instead of fake urgency timers. Not yet available.",
+        status: "soon",
+        configHash: null,
+    },
 ];
 
 const STATUS = {
