@@ -210,12 +210,12 @@ const Blocks = () => {
 
                                     {/* Actions */}
                                     <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-                                        <span className={`text-[11.5px] font-semibold ${enabled ? "text-blue-600" : "text-gray-400"}`}>
-                                            {enabled ? "Enabled" : "Disabled"}
+                                        <span className={`text-[11.5px] font-semibold ${enabled && !isSoon ? "text-blue-600" : "text-gray-400"}`}>
+                                            {isSoon ? "Coming Soon" : enabled ? "Enabled" : "Disabled"}
                                         </span>
                                         <Toggle
                                             checked={enabled}
-                                            onChange={() => handleToggle(block.name)}
+                                            onChange={() => !isSoon && handleToggle(block.name)}
                                         />
                                     </div>
                                 </div>
