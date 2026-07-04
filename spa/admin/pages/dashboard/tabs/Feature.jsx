@@ -229,7 +229,7 @@ const Features = () => {
             {/* Feature grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {isLoading
-                    ? Array.from({ length: 5 }).map((_, i) => <SkeletonCard key={i} />)
+                    ? Array.from({ length: 9 }).map((_, i) => <SkeletonCard key={i} />)
                     : FEATURES.map((feature) => {
                         const badge   = STATUS[feature.status];
                         const enabled = values[feature.name];
