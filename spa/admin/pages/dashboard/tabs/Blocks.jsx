@@ -171,17 +171,20 @@ const Blocks = () => {
                     : BLOCKS.map((block) => {
                         const badge   = STATUS[block.status];
                         const enabled = values[block.name];
+                        const isSoon  = block.status === "soon";
                         return (
                             <div
                                 key={block.name}
                                 className={`relative bg-white rounded-xl border flex flex-col overflow-hidden transition-all duration-200 ${
-                                    enabled
+                                    isSoon
+                                        ? "border-gray-200 opacity-70"
+                                        : enabled
                                         ? "border-blue-200 shadow-sm hover:shadow-md"
                                         : "border-gray-200 shadow-sm hover:shadow-md"
                                 }`}
                             >
                                 {/* Top accent bar */}
-                                <div className={`h-1 w-full ${enabled ? "bg-blue-500" : "bg-transparent"}`} />
+                                <div className={`h-1 w-full ${enabled && !isSoon ? "bg-blue-500" : "bg-transparent"}`} />
 
                                 <div className="p-5 flex flex-col flex-1">
                                     {/* Icon + badge */}
