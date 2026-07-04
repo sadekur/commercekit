@@ -20,6 +20,46 @@ const BLOCKS = [
         description: "A sliding product carousel filtered by a WooCommerce category. Shows product image, name, short description, and price. Supports autoplay and prev/next navigation.",
         status: "complete",
     },
+    {
+        name: "smart-restock-predictor",
+        icon: "🔮",
+        iconBg: "bg-cyan-50",
+        label: "Smart Restock Predictor",
+        description: "Predicts stock-out dates from sales velocity and recommends when to reorder, with supplier lead-time awareness. Not yet available.",
+        status: "soon",
+    },
+    {
+        name: "product-decision-assistant",
+        icon: "🧭",
+        iconBg: "bg-indigo-50",
+        label: "Product Decision Assistant",
+        description: "An interactive buying guide on product pages that asks guided questions and recommends the right size, product, or version. Not yet available.",
+        status: "soon",
+    },
+    {
+        name: "customer-savings-optimizer",
+        icon: "💰",
+        iconBg: "bg-lime-50",
+        label: "Customer Savings Optimizer",
+        description: "Automatically compares single unit, bundle, subscription, and volume-discount pricing to surface the shopper's best value option. Not yet available.",
+        status: "soon",
+    },
+    {
+        name: "inventory-scarcity-intelligence",
+        icon: "🔥",
+        iconBg: "bg-red-50",
+        label: "Inventory Scarcity Intelligence",
+        description: "Shows real stock velocity and purchase activity instead of fake urgency timers, warning shoppers when a product is genuinely about to sell out. Not yet available.",
+        status: "soon",
+    },
+    {
+        name: "smart-bundle-recommendation-engine",
+        icon: "🎁",
+        iconBg: "bg-teal-50",
+        label: "Smart Bundle Recommendation Engine",
+        description: "Analyses basket data to surface frequently-bought-together combinations and dynamically builds bundle offers. Not yet available.",
+        status: "soon",
+    },
 ];
 
 const STATUS = {
