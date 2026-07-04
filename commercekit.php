@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name:       CommerceKit
- * Plugin URI:        https://commercekit.com
+ * Plugin URI:        https://github.com/sadekur/commercekit
  * Description:       WooCommerce enhancement toolkit by CommerceKit.
  * Version:           1.0.0
  * Requires at least: 5.9
  * Requires PHP:      7.2
  * Author:            Sadekur Rahman
- * Author URI:        https://sadekurrahman.net
+ * Author URI:        https://github.com/sadekur
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       commerce-kit
