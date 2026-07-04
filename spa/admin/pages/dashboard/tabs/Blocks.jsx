@@ -165,7 +165,7 @@ const Blocks = () => {
             </div>
 
             {/* Block grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {isLoading
                     ? Array.from({ length: 7 }).map((_, i) => <SkeletonCard key={i} />)
                     : BLOCKS.map((block) => {
