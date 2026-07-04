@@ -167,7 +167,7 @@ const Blocks = () => {
             {/* Block grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {isLoading
-                    ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
+                    ? Array.from({ length: 7 }).map((_, i) => <SkeletonCard key={i} />)
                     : BLOCKS.map((block) => {
                         const badge   = STATUS[block.status];
                         const enabled = values[block.name];
