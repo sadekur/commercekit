@@ -150,7 +150,7 @@ const Pager = ({ type, total, current, color, activeColor }) => {
 // ─── Main Preview ─────────────────────────────────────────────────────────────
 const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	const {
-		layout, carouselStyle, colDesktop, spaceBetween,
+		layout, carouselStyle, sliderStyle, colDesktop, spaceBetween,
 		contentPosition,
 		showSectionTitle, sectionTitleText,
 		showThumbnail, thumbnailShape, thumbnailRadius,
