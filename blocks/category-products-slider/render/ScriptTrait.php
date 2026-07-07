@@ -99,7 +99,7 @@ trait CslScriptTrait {
             'spaceBetween'   => intval( $a['spaceBetween'] ?? 20 ),
             'speed'          => intval( $a['scrollSpeed']  ?? 600 ),
             'loop'           => isset( $a['infiniteLoop'] ) ? (bool) $a['infiniteLoop'] : true,
-'dir'            => $rtl ? 'ltr' : 'rtl',
+            'dir'            => $rtl ? 'rtl' : 'ltr',
             'grabCursor'     => isset( $a['mouseDraggable'] ) ? (bool) $a['mouseDraggable'] : true,
             'allowTouchMove' => isset( $a['touchSwipe'] ) ? (bool) $a['touchSwipe'] : true,
             'freeMode'       => ! empty( $a['freeMode'] ),
