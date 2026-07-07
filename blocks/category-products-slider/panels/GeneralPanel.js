@@ -40,7 +40,7 @@ function buildHierarchyTree(cats) {
 
 const GeneralPanel = ({ attributes, setAttributes }) => {
 	const {
-		layout, categoryType,
+		layout, carouselStyle, categoryType,
 		parentChildCategories, displayType,
 		excludeParent, excludeChild, excludeGrandChild, excludeGreatGrandChild,
 		spaceBetween, filterType, specificCategories,
