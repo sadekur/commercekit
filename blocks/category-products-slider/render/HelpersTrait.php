@@ -38,6 +38,17 @@ trait CslHelpersTrait {
         return 'standard' === $style ? '' : ' ck-csl-style-' . $style;
     }
 
+    private function slider_style(): string {
+        if ( ( $this->a['layout'] ?? 'carousel' ) !== 'slider' ) return 'slide';
+        $style = $this->a['sliderStyle'] ?? 'slide';
+        return in_array( $style, [ 'fade', 'coverflow', 'flip', 'cube', 'kenburns' ], true ) ? $style : 'slide';
+    }
+
+    private function slider_style_class(): string {
+        $style = $this->slider_style();
+        return 'slide' === $style ? '' : ' ck-csl-style-' . $style;
+    }
+
     private function nav_svgs(): array {
         $style = min( 6, max( 1, intval( $this->a['navIconStyle'] ?? 1 ) ) );
         $icons = [
