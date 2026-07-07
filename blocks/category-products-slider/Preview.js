@@ -730,9 +730,109 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		);
 	};
 
+	// ── 3D styles (Coverflow / Flip / Cube): approximate the depth transform
+	// with a perspective + rotateY crossfade; Swiper's real per-neighbour math
+	// is reproduced on the frontend, this is a visual stand-in for the editor.
+	const THREE_D_LABELS = {
+		coverflow: __( '◪ Coverflow — side slides tilt away in perspective', 'commerce-kit' ),
+		flip:      __( '🔄 Flip — slides flip over like a card', 'commerce-kit' ),
+		cube:      __( '⬛ Cube — slides rotate like faces of a cube', 'commerce-kit' ),
+	};
+	const THREE_D_TRANSFORMS = {
+		coverflow: { active: 'perspective(1000px) rotateY(0deg) scale(1)', inactive: 'perspective(1000px) rotateY(25deg) scale(0.85)' },
+		flip:      { active: 'perspective(1000px) rotateY(0deg)',          inactive: 'perspective(1000px) rotateY(180deg)' },
+		cube:      { active: 'perspective(1000px) rotateY(0deg)',          inactive: 'perspective(1000px) rotateY(90deg)' },
+	};
+
+	const render3DSlider = () => {
+		const xf = THREE_D_TRANSFORMS[ effectiveSliderStyle ] || THREE_D_TRANSFORMS.coverflow;
+		return (
+			<div
+				style={{
+					position: 'relative',
+					paddingTop:    navIsTop    ? navPadding : 0,
+					paddingBottom: navIsBottom ? navPadding : 0,
+				}}
+				onMouseEnter={ () => { if ( pauseOnHover ) setIsPaused( true  ); } }
+				onMouseLeave={ () => { if ( pauseOnHover ) setIsPaused( false ); } }
+			>
+				{ showNavigation && canSlide && (
+					<div style={ navStyle }>
+						<NavBtn
+							isPrev={ true }
+							iconStyle={ navIconStyle }
+							size={ navIconSize || 22 }
+							color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
+							hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
+							borderRadius={ navBorderRadius }
+							onClick={ () => scroll( 'prev' ) }
+							disabled={ ! infiniteLoop && currentSlide === 0 }
+						/>
+						<NavBtn
+							isPrev={ false }
+							iconStyle={ navIconStyle }
+							size={ navIconSize || 22 }
+							color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
+							hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
+							borderRadius={ navBorderRadius }
+							onClick={ () => scroll( 'next' ) }
+							disabled={ ! infiniteLoop && currentSlide === maxSlide }
+						/>
+					</div>
+				) }
+
+				<div style={{ position: 'relative' }}>
+					{ categories.map( ( cat, i ) => (
+						<div key={ cat.id } style={
+							i === currentSlide
+								? { position: 'relative', opacity: 1, transform: xf.active, transformStyle: 'preserve-3d', transition: `transform ${ scrollSpeed || 600 }ms ease, opacity ${ scrollSpeed || 600 }ms ease` }
+								: { position: 'absolute', inset: 0, opacity: 0, transform: xf.inactive, transformStyle: 'preserve-3d', transition: `transform ${ scrollSpeed || 600 }ms ease, opacity ${ scrollSpeed || 600 }ms ease`, pointerEvents: 'none' }
+						}>
+							{ renderCard( cat ) }
+						</div>
+					) ) }
+				</div>
+
+				{ showSliderPagination && canSlide && (
+					<Pager
+						type={ sliderPaginationType }
+						total={ pagerTotal }
+						current={ currentSlide }
+						color={ paginationColor }
+						activeColor={ paginationActiveColor }
+					/>
+				) }
+
+				<div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 10 }}>
+					<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f3e8ff', color: '#6b21a8', border: '1px solid #d8b4fe' }}>
+						{ THREE_D_LABELS[ effectiveSliderStyle ] }
+					</span>
+					{ autoplay ? (
+						<span style={{
+							fontSize: 11, padding: '2px 8px', borderRadius: 3,
+							background: isPaused ? '#f5f5f5'  : '#e6f3ff',
+							color:      isPaused ? '#999'     : '#0073aa',
+							border:     `1px solid ${ isPaused ? '#ddd' : '#b8d9f5' }`,
+						}}>
+							{ isPaused
+								? __( '⏸ Autoplay paused', 'commerce-kit' )
+								: `▶ ${ __( 'Autoplay', 'commerce-kit' ) } — ${ autoplaySpeed || 3000 }ms`
+							}
+						</span>
+					) : (
+						<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f5f5f5', color: '#888', border: '1px solid #ddd' }}>
+							{ __( '⏹ Autoplay off', 'commerce-kit' ) }
+						</span>
+					) }
+				</div>
+			</div>
+		);
+	};
+
 	const renderSlider = () => {
-		if ( isFade )   return renderFadeSlider();
-		if ( isTicker ) return renderTickerSlider();
+		if ( isFade )     return renderFadeSlider();
+		if ( isTicker )   return renderTickerSlider();
+		if ( is3DSlider ) return render3DSlider();
 		return renderStandardSlider();
 	};
 
