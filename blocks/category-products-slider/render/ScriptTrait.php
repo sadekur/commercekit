@@ -128,5 +128,32 @@ trait CslScriptTrait {
                 '1280' => [ 'slidesPerView' => $col_l, 'slidesPerGroup' => $scroll ],
             ],
         ];
+
+        if ( 'ticker' === $style ) {
+            // Continuous, non-stop scroll: freeMode + loop + a 1ms autoplay delay
+            // keeps Swiper perpetually advancing instead of snapping between slides.
+            $config['freeMode']  = [ 'enabled' => true, 'momentum' => false ];
+            $config['loop']      = true;
+            $config['speed']     = max( 1000, intval( $a['scrollSpeed'] ?? 600 ) ) * 8;
+            $config['autoplay']  = [
+                'delay'                => 1,
+                'disableOnInteraction' => false,
+                'pauseOnMouseEnter'    => isset( $a['pauseOnHover'] ) ? (bool) $a['pauseOnHover'] : true,
+            ];
+        } elseif ( 'fade' === $style ) {
+            // Fade only supports a single visible slide, so force 1-up at every breakpoint.
+            $config['effect']        = 'fade';
+            $config['fadeEffect']    = [ 'crossFade' => true ];
+            $config['freeMode']      = false;
+            $config['slidesPerView'] = 1;
+            $config['breakpoints']   = [
+                '480'  => [ 'slidesPerView' => 1, 'slidesPerGroup' => 1 ],
+                '768'  => [ 'slidesPerView' => 1, 'slidesPerGroup' => 1 ],
+                '1024' => [ 'slidesPerView' => 1, 'slidesPerGroup' => 1 ],
+                '1280' => [ 'slidesPerView' => 1, 'slidesPerGroup' => 1 ],
+            ];
+        }
+
+        return $config;
     }
 }
