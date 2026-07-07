@@ -12,7 +12,7 @@ CommerceKit is a WooCommerce enhancement plugin that adds dynamic pricing, buy-n
 - [Features](#features)
   - [Stock Threshold for WooCommerce](#1-stock-threshold-for-woocommerce) ✅ Complete
   - [Buy Button for WooCommerce](#2-buy-button-for-woocommerce) ✅ Complete
-  - [WooCommerce Tips](#3-woocommerce-tips) ⚠️ Partial
+  - [WooCommerce Tips](#3-woocommerce-tips) ✅ Complete
   - [WooCommerce FAQ](#4-woocommerce-faq) 🚧 Incomplete
   - [WooCommerce Product Barcode](#5-woocommerce-product-barcode) 🚧 Incomplete
 - [Gutenberg Blocks](#gutenberg-blocks)
@@ -22,6 +22,12 @@ CommerceKit is a WooCommerce enhancement plugin that adds dynamic pricing, buy-n
 ---
 
 ## Getting Started
+
+### Installation & Activation
+
+1. Install and activate **WooCommerce** first — CommerceKit declares WooCommerce as a required parent plugin, so WordPress will not let you activate CommerceKit until WooCommerce is installed and active.
+2. Install and activate **CommerceKit** the same way as any other plugin (upload the zip via **Plugins → Add New → Upload Plugin**, or place it in `wp-content/plugins/`, then activate).
+3. Go to **WordPress Admin → CommerceKit** in the main admin menu to open the dashboard.
 
 ### Enabling Features
 
@@ -226,9 +232,19 @@ The original shortcode continues to work and respects the current **Button Text*
 
 ### 3. WooCommerce Tips
 
-**Status:** ⚠️ Partially complete — UI renders but tip amounts are not yet processed or added to order totals
+**Status:** ✅ Complete
 
-Displays a tip/donation input form on the cart and/or checkout page. Shoppers can enter a custom tip amount and submit it. The form's visual appearance (button color, button text, text color) is configurable.
+Adds a tip form to the cart and/or checkout page. Shoppers pick a preset percentage or fixed amount (or enter a custom amount, or select "Cash"), and the selected tip is added to the cart as a WooCommerce fee — it appears in the order totals and is charged along with the order. The tip choice is also saved to the completed order so it can be looked up later.
+
+#### How it works
+
+- Presets are rendered as buttons from the **Tip Rates** list, shown either as **%** of the cart subtotal or as a **fixed** currency amount, depending on the **Tip Type** setting.
+- Selecting a preset (or entering a **Custom** amount) sends it via AJAX, stores it in the WooCommerce session, and immediately recalculates the cart totals — no page reload. Percentage tips recalculate live if the cart contents change afterwards; fixed and custom amounts stay static.
+- Selecting **Cash** records the shopper's intent to tip in cash but adds **$0** to the cart total — no fee is charged online.
+- A **Remove Tip** button appears once a tip is selected, letting the shopper clear it before checkout.
+- When **Apply Tax to Tip** is on, the fee is taxed according to your WooCommerce tax settings.
+- When the order is placed, the chosen tip is saved to the order as meta (`_ck_tip`). If **Clear Tip After Order Placed** is on, the session tip is cleared on the thank-you page so the next cart starts fresh.
+- Works on **both classic and WooCommerce Blocks** cart/checkout pages — on Blocks pages the form is injected directly above the cart items block or the payment block; on classic pages it renders via the standard cart/checkout template hooks.
 
 #### Setting it up
 
@@ -236,20 +252,31 @@ Displays a tip/donation input form on the cart and/or checkout page. Shoppers ca
 2. Go to **CommerceKit → Tips Settings**
 3. Configure the options:
 
-| Option | Description |
-|---|---|
-| **Add on Cart Page** | Show the tip form above the cart contents |
-| **Add on Checkout Page** | Show the tip form above the payment section |
-| **Donation Note** | Show a note alongside the tip form |
-| **Button Background Color** | Background color of the submit button |
-| **Button Text** | Label shown on the submit button |
-| **Button Text Color** | Text color of the submit button |
+**Display Settings**
 
-4. Click **Save Settings**
+| Option | Description | Default |
+|---|---|---|
+| **Show on Cart Page** | Displays the tip form after the cart product table | Off |
+| **Show on Checkout Page** | Displays the tip form above the payment section | Off |
 
-> **Known limitation:** The tip form currently collects the amount from the shopper but does not add it to the order total or create a line item. This feature is under active development. It is safe to enable for UI preview, but do not use on a live store where the tip amount needs to be charged.
+**Tip Configuration**
 
-> **Blocks compatibility note:** The tip form uses classic WooCommerce hooks (`woocommerce_before_cart_contents`, `woocommerce_review_order_before_payment`) and does not render inside the WooCommerce Blocks cart or checkout. For Blocks-based pages, keep this feature disabled.
+| Option | Description | Default |
+|---|---|---|
+| **Form Title** | Heading shown above the tip buttons | `Send us a tip` |
+| **Tip Type** | Whether tip rates are a **% Percent** of the subtotal or a **$ Fixed** amount | Percent |
+| **Tip Rates** | Comma-separated list of preset values shown as buttons | `5,10,15,20,25,30` |
+| **Apply Tax to Tip** | Taxes the tip fee per your WooCommerce tax settings | Off |
+
+**Options**
+
+| Option | Description | Default |
+|---|---|---|
+| **Enable Custom Tip** | Lets customers enter any tip amount | On |
+| **Enable Cash Tip** | Shows a "Cash" button that records tip intent without adding a charge | On |
+| **Clear Tip After Order Placed** | Removes the tip from the session after a successful order | On |
+
+4. Click **Save Changes**
 
 ---
 
@@ -421,7 +448,7 @@ Controls the category image inside each card.
 |---|---|---|
 | Stock Threshold for WooCommerce | Feature | ✅ Complete |
 | Buy Button for WooCommerce | Feature | ✅ Complete |
-| WooCommerce Tips | Feature | ⚠️ Partial — UI only, amounts not charged |
+| WooCommerce Tips | Feature | ✅ Complete |
 | WooCommerce FAQ | Feature | 🚧 Not implemented |
 | WooCommerce Product Barcode | Feature | 🚧 Not implemented |
 | Accordion | Block | ✅ Complete |

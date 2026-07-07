@@ -14,6 +14,7 @@
 		"_schemaVersion": { "type": "number", "default": 2 },
 
 		"layout":              { "type": "string",  "default": "carousel" },
+		"carouselStyle":       { "type": "string",  "default": "standard" },
 		"categoryType":           { "type": "string",  "default": "parent" },
 		"parentChildCategories":  { "type": "string",  "default": "" },
 		"displayType":            { "type": "string",  "default": "individualize" },
