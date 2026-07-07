@@ -431,48 +431,177 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	               : navPos === 'vertical-inner'  ? 6
 	               : 0;
 
-	const renderSlider = () => {
-		const navStyle = navIsVertical ? {
-			// Vertical: centered over the slide area
-			position: 'absolute',
-			top: '50%',
-			transform: 'translateY(-50%)',
-			left: navInset,
-			right: navInset,
-			display: 'flex',
-			flexDirection: navFlexDir,
-			justifyContent: 'space-between',
-			alignItems: 'center',
-			pointerEvents: 'none',
-			zIndex: 5,
-		} : navIsBottom ? {
-			// Bottom: pinned to bottom of the padded wrapper
-			position: 'absolute',
-			bottom: 0,
-			left: 0,
-			right: 0,
-			height: btnDim,
-			display: 'flex',
-			justifyContent: navAlign,
-			alignItems: 'center',
-			gap: 6,
-			pointerEvents: 'none',
-			zIndex: 5,
-		} : {
-			// Top: pinned to top of the padded wrapper
-			position: 'absolute',
-			top: 0,
-			left: 0,
-			right: 0,
-			height: btnDim,
-			display: 'flex',
-			justifyContent: navAlign,
-			alignItems: 'center',
-			gap: 6,
-			pointerEvents: 'none',
-			zIndex: 5,
-		};
+	const navStyle = navIsVertical ? {
+		// Vertical: centered over the slide area
+		position: 'absolute',
+		top: '50%',
+		transform: 'translateY(-50%)',
+		left: navInset,
+		right: navInset,
+		display: 'flex',
+		flexDirection: navFlexDir,
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		pointerEvents: 'none',
+		zIndex: 5,
+	} : navIsBottom ? {
+		// Bottom: pinned to bottom of the padded wrapper
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+		height: btnDim,
+		display: 'flex',
+		justifyContent: navAlign,
+		alignItems: 'center',
+		gap: 6,
+		pointerEvents: 'none',
+		zIndex: 5,
+	} : {
+		// Top: pinned to top of the padded wrapper
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		height: btnDim,
+		display: 'flex',
+		justifyContent: navAlign,
+		alignItems: 'center',
+		gap: 6,
+		pointerEvents: 'none',
+		zIndex: 5,
+	};
 
+	// ── Fade: crossfades a single category at a time ───────────────────────
+	const renderFadeSlider = () => (
+		<div
+			style={{
+				position: 'relative',
+				paddingTop:    navIsTop    ? navPadding : 0,
+				paddingBottom: navIsBottom ? navPadding : 0,
+				overflow: navPos === 'vertical-outer' ? 'visible' : undefined,
+			}}
+			onMouseEnter={ () => { if ( pauseOnHover ) setIsPaused( true  ); } }
+			onMouseLeave={ () => { if ( pauseOnHover ) setIsPaused( false ); } }
+		>
+			{ showNavigation && canSlide && (
+				<div style={ navStyle }>
+					<NavBtn
+						isPrev={ true }
+						iconStyle={ navIconStyle }
+						size={ navIconSize || 22 }
+						color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
+						hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
+						borderRadius={ navBorderRadius }
+						onClick={ () => scroll( 'prev' ) }
+						disabled={ ! infiniteLoop && currentSlide === 0 }
+					/>
+					<NavBtn
+						isPrev={ false }
+						iconStyle={ navIconStyle }
+						size={ navIconSize || 22 }
+						color={ navColor }           bgColor={ navBgColor }           borderColor={ navBorderColor }
+						hoverColor={ navHoverColor } hoverBgColor={ navHoverBgColor } hoverBorderColor={ navHoverBorderColor }
+						borderRadius={ navBorderRadius }
+						onClick={ () => scroll( 'next' ) }
+						disabled={ ! infiniteLoop && currentSlide === maxSlide }
+					/>
+				</div>
+			) }
+
+			<div style={{ position: 'relative' }}>
+				{ categories.map( ( cat, i ) => (
+					<div key={ cat.id } style={
+						i === currentSlide
+							? { position: 'relative', opacity: 1, transition: `opacity ${ scrollSpeed || 600 }ms ease` }
+							: { position: 'absolute', inset: 0, opacity: 0, transition: `opacity ${ scrollSpeed || 600 }ms ease`, pointerEvents: 'none' }
+					}>
+						{ renderCard( cat ) }
+					</div>
+				) ) }
+			</div>
+
+			{ showSliderPagination && canSlide && (
+				<Pager
+					type={ sliderPaginationType }
+					total={ pagerTotal }
+					current={ currentSlide }
+					color={ paginationColor }
+					activeColor={ paginationActiveColor }
+				/>
+			) }
+
+			<div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 10 }}>
+				<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#eef2ff', color: '#4361ee', border: '1px solid #c7d2fe' }}>
+					{ __( '⤢ Fade — crossfades one category at a time', 'commerce-kit' ) }
+				</span>
+				{ autoplay ? (
+					<span style={{
+						fontSize: 11, padding: '2px 8px', borderRadius: 3,
+						background: isPaused ? '#f5f5f5'  : '#e6f3ff',
+						color:      isPaused ? '#999'     : '#0073aa',
+						border:     `1px solid ${ isPaused ? '#ddd' : '#b8d9f5' }`,
+					}}>
+						{ isPaused
+							? __( '⏸ Autoplay paused', 'commerce-kit' )
+							: `▶ ${ __( 'Autoplay', 'commerce-kit' ) } — ${ autoplaySpeed || 3000 }ms`
+						}
+					</span>
+				) : (
+					<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f5f5f5', color: '#888', border: '1px solid #ddd' }}>
+						{ __( '⏹ Autoplay off', 'commerce-kit' ) }
+					</span>
+				) }
+			</div>
+		</div>
+	);
+
+	// ── Ticker: continuous, non-stop auto-scroll (no snapping) ─────────────
+	const renderTickerSlider = () => {
+		const durationMs = Math.max( 1000, scrollSpeed || 600 ) * 8;
+		const trackCats  = [ ...categories, ...categories ];
+		const cardWidth  = Math.max( 140, Math.round( 720 / ( colDesktop || 3 ) ) );
+
+		return (
+			<div
+				style={{ position: 'relative', overflow: 'hidden' }}
+				onMouseEnter={ () => { if ( pauseOnHover ) setIsPaused( true  ); } }
+				onMouseLeave={ () => { if ( pauseOnHover ) setIsPaused( false ); } }
+			>
+				<style>{ `@keyframes ${ tickerId } { from { transform: translateX(0); } to { transform: translateX(-50%); } }` }</style>
+				<div style={{
+					display: 'flex',
+					gap: gap + 'px',
+					width: 'max-content',
+					animationName: tickerId,
+					animationDuration: durationMs + 'ms',
+					animationTimingFunction: 'linear',
+					animationIterationCount: 'infinite',
+					animationDirection: rtlDirection ? 'normal' : 'reverse',
+					animationPlayState: ( autoplay && ! isPaused ) ? 'running' : 'paused',
+				}}>
+					{ trackCats.map( ( cat, i ) => (
+						<div key={ i } style={{ flex: `0 0 ${ cardWidth }px`, minWidth: 0 }}>
+							{ renderCard( cat ) }
+						</div>
+					) ) }
+				</div>
+
+				<div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 10 }}>
+					<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#e8f8ee', color: '#1a7f4e', border: '1px solid #b7ebc9' }}>
+						{ __( '➰ Ticker — continuous auto-scroll, no arrows or pagination', 'commerce-kit' ) }
+					</span>
+					{ ! autoplay && (
+						<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f5f5f5', color: '#888', border: '1px solid #ddd' }}>
+							{ __( '⏹ Autoplay off — ticker paused', 'commerce-kit' ) }
+						</span>
+					) }
+				</div>
+			</div>
+		);
+	};
+
+	const renderStandardSlider = () => {
 		return (
 			<div
 				style={{
