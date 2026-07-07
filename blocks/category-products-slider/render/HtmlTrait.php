@@ -23,7 +23,7 @@ trait CslHtmlTrait {
 
         if ( $is_vertical ) {
             $px_cls       = 'vertical-outer' === $nav_pos ? '' : 'px-1.5';
-            $nav_wrap_cls = 'ck-csl-nav-wrap ck-csl-nav-' . $nav_pos . ' absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 ' . $px_cls . ( $rtl ? '' : ' flex-row-reverse' );
+            $nav_wrap_cls = 'ck-csl-nav-wrap ck-csl-nav-' . $nav_pos . ' absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 ' . $px_cls . ( $rtl ? ' flex-row-reverse' : '' );
         } else {
             if ( 'top-left' === $nav_pos || 'bottom-left' === $nav_pos ) {
                 $nav_align = 'justify-start';
@@ -161,7 +161,7 @@ trait CslHtmlTrait {
 
         if ( $is_vertical ) {
             $px_cls       = 'vertical-outer' === $nav_pos ? '' : 'px-1.5';
-            $nav_wrap_cls = 'ck-csl-nav-wrap ck-csl-nav-' . $nav_pos . ' absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 ' . $px_cls . ( $rtl ? '' : ' flex-row-reverse' );
+            $nav_wrap_cls = 'ck-csl-nav-wrap ck-csl-nav-' . $nav_pos . ' absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none z-10 ' . $px_cls . ( $rtl ? ' flex-row-reverse' : '' );
         } else {
             if ( 'top-left' === $nav_pos || 'bottom-left' === $nav_pos ) {
                 $nav_align = 'justify-start';
