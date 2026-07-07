@@ -475,6 +475,8 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	};
 
 	// ── Fade: crossfades a single category at a time ───────────────────────
+	const kenburnsDuration = Math.max( 1000, ( autoplaySpeed || 3000 ) + ( scrollSpeed || 600 ) );
+
 	const renderFadeSlider = () => (
 		<div
 			style={{
@@ -486,6 +488,10 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 			onMouseEnter={ () => { if ( pauseOnHover ) setIsPaused( true  ); } }
 			onMouseLeave={ () => { if ( pauseOnHover ) setIsPaused( false ); } }
 		>
+			{ isKenburns && (
+				<style>{ `@keyframes ${ tickerId }-kb { from { transform: scale(1); } to { transform: scale(1.15); } }` }</style>
+			) }
+
 			{ showNavigation && canSlide && (
 				<div style={ navStyle }>
 					<NavBtn
@@ -511,14 +517,23 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 				</div>
 			) }
 
-			<div style={{ position: 'relative' }}>
+			<div style={{ position: 'relative', overflow: isKenburns ? 'hidden' : undefined }}>
 				{ categories.map( ( cat, i ) => (
 					<div key={ cat.id } style={
 						i === currentSlide
 							? { position: 'relative', opacity: 1, transition: `opacity ${ scrollSpeed || 600 }ms ease` }
 							: { position: 'absolute', inset: 0, opacity: 0, transition: `opacity ${ scrollSpeed || 600 }ms ease`, pointerEvents: 'none' }
 					}>
-						{ renderCard( cat ) }
+						{ isKenburns ? (
+							<div style={{
+								animationName: i === currentSlide ? `${ tickerId }-kb` : 'none',
+								animationDuration: kenburnsDuration + 'ms',
+								animationTimingFunction: 'ease-out',
+								animationFillMode: 'forwards',
+							}}>
+								{ renderCard( cat ) }
+							</div>
+						) : renderCard( cat ) }
 					</div>
 				) ) }
 			</div>
@@ -535,7 +550,10 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 
 			<div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 10 }}>
 				<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#eef2ff', color: '#4361ee', border: '1px solid #c7d2fe' }}>
-					{ __( '⤢ Fade — crossfades one category at a time', 'commerce-kit' ) }
+					{ isKenburns
+						? __( '🎞 Ken Burns — crossfade with a slow zoom', 'commerce-kit' )
+						: __( '⤢ Fade — crossfades one category at a time', 'commerce-kit' )
+					}
 				</span>
 				{ autoplay ? (
 					<span style={{
