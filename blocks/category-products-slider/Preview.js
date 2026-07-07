@@ -576,7 +576,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 					animationDuration: durationMs + 'ms',
 					animationTimingFunction: 'linear',
 					animationIterationCount: 'infinite',
-					animationDirection: rtlDirection ? 'normal' : 'reverse',
+					animationDirection: rtlDirection ? 'reverse' : 'normal',
 					animationPlayState: ( autoplay && ! isPaused ) ? 'running' : 'paused',
 				}}>
 					{ trackCats.map( ( cat, i ) => (
