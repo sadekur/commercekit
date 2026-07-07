@@ -76,13 +76,19 @@ trait CslScriptTrait {
         $a   = $this->a;
         $uid = $this->uid;
 
+        $sld_style  = $this->slider_style();
+        // Fade/Flip/Cube (and Ken Burns, which reuses Fade) only support a single visible
+        // slide — Slide and Coverflow keep the configured Columns per Breakpoint.
+        $sld_forces_single = ( ( $a['layout'] ?? 'carousel' ) === 'slider' )
+            && in_array( $sld_style, [ 'fade', 'flip', 'cube', 'kenburns' ], true );
+
         $col_l = max( 1, intval( $a['colLarge']   ?? 4 ) );
         $col_d = max( 1, intval( $a['colDesktop'] ?? 3 ) );
         $col_p = max( 1, intval( $a['colLaptop']  ?? 2 ) );
         $col_t = max( 1, intval( $a['colTablet']  ?? 2 ) );
         $col_m = max( 1, intval( $a['colMobile']  ?? 1 ) );
 
-        if ( ( $a['layout'] ?? 'carousel' ) === 'slider' ) {
+        if ( $sld_forces_single ) {
             $col_l = $col_d = $col_p = $col_t = $col_m = 1;
         }
 
@@ -93,7 +99,6 @@ trait CslScriptTrait {
         $pager_type = $a['sliderPaginationType'] ?? 'bullets';
         $rtl        = ! empty( $a['rtlDirection'] );
         $style      = $this->carousel_style();
-        $sld_style  = $this->slider_style();
 
         $config = [
             'slidesPerView'  => $col_m,
