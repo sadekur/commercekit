@@ -378,6 +378,17 @@ Displays WooCommerce **product categories** as interactive cards in a fully cust
 | **Ticker** | Continuous, non-stop auto-scroll — cards glide by with no snapping, arrows, or pagination | — |
 | **Fade** | Crossfades between one category at a time (always 1-up, ignoring the Columns setting) | — |
 
+##### Slider Style (Slider layout only)
+
+| Style | Behaviour | Default |
+|---|---|---|
+| **Slide** | Classic slide-in transition | ✅ Default |
+| **Fade** | Crossfades between slides | — |
+| **Coverflow** | 3D — side slides tilt away in perspective | — |
+| **Flip** | Slides flip over like a card | — |
+| **Cube** | Slides rotate like the faces of a cube | — |
+| **Ken Burns** | Crossfades while the image slowly zooms in | — |
+
 #### General settings
 
 | Setting | Description | Default |
