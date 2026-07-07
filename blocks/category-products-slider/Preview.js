@@ -689,7 +689,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 							{ __( '⏹ Autoplay off', 'commerce-kit' ) }
 						</span>
 					) }
-					{ ! rtlDirection && (
+					{ rtlDirection && (
 						<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#fff3e0', color: '#e65100', border: '1px solid #ffcc80' }}>
 							{ __( '↔ Reversed direction', 'commerce-kit' ) }
 						</span>
