@@ -65,7 +65,7 @@ trait CslHtmlTrait {
         ?>
             <div id="<?php echo esc_attr( $uid ); ?>"
                 class="<?php echo esc_attr( $wrap_cls ); ?>"
-                dir="<?php echo $rtl ? 'ltr' : 'rtl'; ?>">
+                dir="<?php echo $rtl ? 'rtl' : 'ltr'; ?>">
 
                 <?php if ( $show_title && $title_text ) : ?>
                     <h3 class="ck-csl-section-title text-[22px] font-bold text-[#222] m-0 mb-5 leading-[1.3]"><?php echo esc_html( $title_text ); ?></h3>
