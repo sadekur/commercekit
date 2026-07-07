@@ -441,6 +441,8 @@ Controls the category image inside each card.
 | **Pagination Type** | Bullets / Dynamic Bullets / Fraction / Progressbar | Bullets |
 | **Touch Swipe / Mouse Drag** | Allow swipe and drag gestures | On |
 
+With **Ticker** style, Autoplay/Navigation/Pagination controls don't apply — scrolling is continuous and **Scroll Speed** controls how long one full pass takes. With **Fade** style, **Scroll Speed** controls the crossfade duration and the Columns setting is ignored (always 1-up).
+
 #### Frontend behaviour
 
 - Each card links to the category archive page
