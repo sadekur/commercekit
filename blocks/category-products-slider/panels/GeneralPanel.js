@@ -31,6 +31,9 @@ const SLIDER_STYLES = [
 	['kenburns',  __('Ken Burns', 'commerce-kit')],
 ];
 
+// Effects that only support a single visible slide (Swiper enforces this for fade/flip/cube)
+const SLIDER_SINGLE_COLUMN_STYLES = [ 'fade', 'flip', 'cube', 'kenburns' ];
+
 const LABEL_STYLE = { fontSize: '12px', fontWeight: 500, color: '#1e1e1e', marginBottom: 4 };
 const HELP_STYLE  = { fontSize: 11, color: '#757575', margin: '0 0 8px' };
 
