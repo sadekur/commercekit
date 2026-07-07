@@ -382,12 +382,12 @@ Displays WooCommerce **product categories** as interactive cards in a fully cust
 
 | Style | Behaviour | Default |
 |---|---|---|
-| **Slide** | Classic slide-in transition | ✅ Default |
-| **Fade** | Crossfades between slides | — |
-| **Coverflow** | 3D — side slides tilt away in perspective | — |
-| **Flip** | Slides flip over like a card | — |
-| **Cube** | Slides rotate like the faces of a cube | — |
-| **Ken Burns** | Crossfades while the image slowly zooms in | — |
+| **Slide** | Classic slide-in transition — respects the Columns per Breakpoint setting | ✅ Default |
+| **Fade** | Crossfades between slides (always 1-up, ignoring the Columns setting) | — |
+| **Coverflow** | 3D — side slides tilt away in perspective — respects the Columns per Breakpoint setting | — |
+| **Flip** | Slides flip over like a card (always 1-up, ignoring the Columns setting) | — |
+| **Cube** | Slides rotate like the faces of a cube (always 1-up, ignoring the Columns setting) | — |
+| **Ken Burns** | Crossfades while the image slowly zooms in (always 1-up, ignoring the Columns setting) | — |
 
 #### General settings
 
