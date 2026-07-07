@@ -16,6 +16,12 @@ const LAYOUTS = [
 	['inline',   __('Inline',   'commerce-kit')],
 ];
 
+const CAROUSEL_STYLES = [
+	['standard', __('Standard', 'commerce-kit')],
+	['ticker',   __('Ticker',   'commerce-kit')],
+	['fade',     __('Fade',     'commerce-kit')],
+];
+
 const LABEL_STYLE = { fontSize: '12px', fontWeight: 500, color: '#1e1e1e', marginBottom: 4 };
 const HELP_STYLE  = { fontSize: 11, color: '#757575', margin: '0 0 8px' };
 
