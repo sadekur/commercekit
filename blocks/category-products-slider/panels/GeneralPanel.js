@@ -353,13 +353,16 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 				</>
 			)}
 
-			{/* ── Responsive columns (carousel only, not applicable to Fade) */}
-			{layout === 'carousel' && carouselStyle !== 'fade' && (
+			{/* ── Responsive columns (carousel + slider, not applicable to single-slide styles) */}
+			{((layout === 'carousel' && carouselStyle !== 'fade') || (layout === 'slider' && ! sliderForcesSingleColumn)) && (
 				<ResponsiveColumns attributes={attributes} setAttributes={setAttributes} />
 			)}
-			{layout === 'carousel' && carouselStyle === 'fade' && (
+			{((layout === 'carousel' && carouselStyle === 'fade') || (layout === 'slider' && sliderForcesSingleColumn)) && (
 				<p style={{ ...HELP_STYLE, marginTop: -4 }}>
-					{__('Fade style always shows one category at a time on every screen size.', 'commerce-kit')}
+					{ layout === 'carousel'
+						? __('Fade style always shows one category at a time on every screen size.', 'commerce-kit')
+						: __('This Slider Style always shows one category at a time on every screen size.', 'commerce-kit')
+					}
 				</p>
 			)}
 
