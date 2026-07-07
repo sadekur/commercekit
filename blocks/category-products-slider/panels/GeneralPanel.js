@@ -130,15 +130,53 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 							>{label}</Button>
 						))}
 					</ButtonGroup>
-					<p style={{ ...HELP_STYLE, marginTop: 5 }}>
-						{(carouselStyle || 'standard') === 'standard' && __('Slides one step at a time with navigation and pagination.', 'commerce-kit')}
-						{carouselStyle === 'ticker' && __('Continuous auto-scrolling — cards glide by non-stop, no snapping.', 'commerce-kit')}
-						{carouselStyle === 'fade'   && __('Crossfades between one category at a time.', 'commerce-kit')}
-					</p>
-				</div>
-			)}
+				<p style={{ ...HELP_STYLE, marginTop: 5 }}>
+					{(carouselStyle || 'standard') === 'standard' && __('Slides one step at a time with navigation and pagination.', 'commerce-kit')}
+					{carouselStyle === 'ticker' && __('Continuous auto-scrolling — cards glide by non-stop, no snapping.', 'commerce-kit')}
+					{carouselStyle === 'fade'   && __('Crossfades between one category at a time.', 'commerce-kit')}
+				</p>
+			</div>
+		)}
 
-			{/* ── Category Type */}
+		{/* ── Slider Style (slider layout only) */}
+		{layout === 'slider' && (
+			<div style={{ marginBottom: 14 }}>
+				<div style={LABEL_STYLE}>{__('Slider Style', 'commerce-kit')}</div>
+				<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
+					{SLIDER_STYLES.map(([val, label]) => {
+						const active = (sliderStyle || 'slide') === val;
+						return (
+							<button
+								key={val}
+								type="button"
+								onClick={() => setAttributes({ sliderStyle: val })}
+								style={{
+									height: 34,
+									display: 'flex', alignItems: 'center', justifyContent: 'center',
+									border:       active ? '2px solid #0073aa' : '1px solid #ddd',
+									borderRadius: 4,
+									background:   active ? '#0073aa' : '#f9f9f9',
+									color:        active ? '#fff' : '#444',
+									fontSize: 12, fontWeight: 500,
+									cursor: 'pointer', padding: 0,
+									transition: 'all 0.15s',
+								}}
+							>{label}</button>
+						);
+					})}
+				</div>
+				<p style={{ ...HELP_STYLE, marginTop: 5 }}>
+					{(sliderStyle || 'slide') === 'slide'     && __('Classic slide-in transition.', 'commerce-kit')}
+					{sliderStyle === 'fade'                    && __('Crossfades between slides.', 'commerce-kit')}
+					{sliderStyle === 'coverflow'                && __('3D carousel — side slides tilt away in perspective.', 'commerce-kit')}
+					{sliderStyle === 'flip'                     && __('Slides flip over like a card.', 'commerce-kit')}
+					{sliderStyle === 'cube'                     && __('Slides rotate like faces of a cube.', 'commerce-kit')}
+					{sliderStyle === 'kenburns'                 && __('Crossfades while the image slowly zooms in.', 'commerce-kit')}
+				</p>
+			</div>
+		)}
+
+		{/* ── Category Type */}
 			<div style={{ marginBottom: 10 }}>
 				<div style={LABEL_STYLE}>{__('Category Type', 'commerce-kit')}</div>
 				<p style={HELP_STYLE}>{__('Select a category type.', 'commerce-kit')}</p>
