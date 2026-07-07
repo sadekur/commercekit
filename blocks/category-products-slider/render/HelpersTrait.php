@@ -27,6 +27,17 @@ trait CslHelpersTrait {
              . ( $a['thumbBorderColor'] ?? '#dddddd' );
     }
 
+    private function carousel_style(): string {
+        if ( ( $this->a['layout'] ?? 'carousel' ) !== 'carousel' ) return 'standard';
+        $style = $this->a['carouselStyle'] ?? 'standard';
+        return in_array( $style, [ 'ticker', 'fade' ], true ) ? $style : 'standard';
+    }
+
+    private function carousel_style_class(): string {
+        $style = $this->carousel_style();
+        return 'standard' === $style ? '' : ' ck-csl-style-' . $style;
+    }
+
     private function nav_svgs(): array {
         $style = min( 6, max( 1, intval( $this->a['navIconStyle'] ?? 1 ) ) );
         $icons = [
