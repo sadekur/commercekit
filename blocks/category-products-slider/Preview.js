@@ -695,6 +695,11 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 
 				{/* ── Status badges ── */}
 				<div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 10 }}>
+					{ isCoverflow && (
+						<span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 3, background: '#f3e8ff', color: '#6b21a8', border: '1px solid #d8b4fe' }}>
+							{ __( '◪ Coverflow — 3D tilt renders on the front-end', 'commerce-kit' ) }
+						</span>
+					) }
 					{ autoplay && (
 						<span style={{
 							fontSize: 11, padding: '2px 8px', borderRadius: 3,
