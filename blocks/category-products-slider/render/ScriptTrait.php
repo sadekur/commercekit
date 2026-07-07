@@ -92,8 +92,9 @@ trait CslScriptTrait {
         $show_pager = ! empty( $a['showSliderPagination'] );
         $pager_type = $a['sliderPaginationType'] ?? 'bullets';
         $rtl        = ! empty( $a['rtlDirection'] );
+        $style      = $this->carousel_style();
 
-        return [
+        $config = [
             'slidesPerView'  => $col_m,
             'spaceBetween'   => intval( $a['spaceBetween'] ?? 20 ),
             'speed'          => intval( $a['scrollSpeed']  ?? 600 ),
