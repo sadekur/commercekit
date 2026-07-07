@@ -64,6 +64,9 @@ trait CslStylesTrait {
             #<?php echo esc_attr( $uid ); ?>.ck-csl-preloader { opacity: 0; transition: opacity 0.5s ease; }
             #<?php echo esc_attr( $uid ); ?>.ck-csl-ready { opacity: 1; }
             <?php endif; ?>
+            <?php if ( 'carousel' === $layout && 'ticker' === $this->carousel_style() ) : ?>
+                #<?php echo esc_attr( $uid ); ?> .ck-csl-swiper.ck-csl-style-ticker .swiper-wrapper { transition-timing-function: linear !important; }
+            <?php endif; ?>
             <?php if ( 'grid' === $layout ) : ?>
                 #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { display:grid; gap:<?php echo esc_attr( $gap ); ?>px; grid-template-columns:repeat(<?php echo esc_attr( $col_m ); ?>,1fr); }
                 @media(min-width:480px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_t ); ?>,1fr); } }
