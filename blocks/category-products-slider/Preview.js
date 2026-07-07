@@ -748,7 +748,11 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 
 	// ── Hint line ─────────────────────────────────────────────────────────
 	const hintText = isSliderLayout
-		? ( canSlide
+		? ( isTicker
+			? __( 'Categories scroll continuously in a loop — no arrows or pagination.', 'commerce-kit' )
+			: isFade
+			? __( 'Categories crossfade one at a time.', 'commerce-kit' )
+			: canSlide
 			? `${ __( 'Showing', 'commerce-kit' ) } ${ slidesPerView } ${ __( 'of', 'commerce-kit' ) } ${ categories.length } ${ __( 'categories. Use arrows to navigate.', 'commerce-kit' ) }`
 			: __( 'Full layout renders on the front-end.', 'commerce-kit' )
 		  )
