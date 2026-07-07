@@ -22,6 +22,15 @@ const CAROUSEL_STYLES = [
 	['fade',     __('Fade',     'commerce-kit')],
 ];
 
+const SLIDER_STYLES = [
+	['slide',     __('Slide',     'commerce-kit')],
+	['fade',      __('Fade',      'commerce-kit')],
+	['coverflow', __('Coverflow', 'commerce-kit')],
+	['flip',      __('Flip',      'commerce-kit')],
+	['cube',      __('Cube',      'commerce-kit')],
+	['kenburns',  __('Ken Burns', 'commerce-kit')],
+];
+
 const LABEL_STYLE = { fontSize: '12px', fontWeight: 500, color: '#1e1e1e', marginBottom: 4 };
 const HELP_STYLE  = { fontSize: 11, color: '#757575', margin: '0 0 8px' };
 
