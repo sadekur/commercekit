@@ -710,6 +710,12 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		);
 	};
 
+	const renderSlider = () => {
+		if ( isFade )   return renderFadeSlider();
+		if ( isTicker ) return renderTickerSlider();
+		return renderStandardSlider();
+	};
+
 	// ── Non-slider card layout ─────────────────────────────────────────────
 	const previewCount = Math.min( colDesktop || 3, 4 );
 	const previewCats  = categories.slice( 0, previewCount );
