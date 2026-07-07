@@ -178,7 +178,10 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		showSliderPagination, sliderPaginationType, paginationColor, paginationActiveColor,
 	} = attributes;
 
-	const isSliderLayout = layout === 'carousel' || layout === 'slider';
+	const isSliderLayout   = layout === 'carousel' || layout === 'slider';
+	const effectiveCarouselStyle = layout === 'carousel' ? ( carouselStyle || 'standard' ) : 'standard';
+	const isTicker = effectiveCarouselStyle === 'ticker';
+	const isFade   = effectiveCarouselStyle === 'fade';
 	const isAbove   = contentPosition === 'above';
 	const isLeft    = contentPosition === 'left';
 	const isRight   = contentPosition === 'right';
