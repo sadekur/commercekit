@@ -306,9 +306,14 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 				</>
 			)}
 
-			{/* ── Responsive columns (carousel only) */}
-			{layout === 'carousel' && (
+			{/* ── Responsive columns (carousel only, not applicable to Fade) */}
+			{layout === 'carousel' && carouselStyle !== 'fade' && (
 				<ResponsiveColumns attributes={attributes} setAttributes={setAttributes} />
+			)}
+			{layout === 'carousel' && carouselStyle === 'fade' && (
+				<p style={{ ...HELP_STYLE, marginTop: -4 }}>
+					{__('Fade style always shows one category at a time on every screen size.', 'commerce-kit')}
+				</p>
 			)}
 
 			<div style={{ marginTop: 12 }}>
