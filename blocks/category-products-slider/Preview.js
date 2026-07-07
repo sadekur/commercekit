@@ -180,8 +180,11 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 
 	const isSliderLayout   = layout === 'carousel' || layout === 'slider';
 	const effectiveCarouselStyle = layout === 'carousel' ? ( carouselStyle || 'standard' ) : 'standard';
-	const isTicker = effectiveCarouselStyle === 'ticker';
-	const isFade   = effectiveCarouselStyle === 'fade';
+	const effectiveSliderStyle   = layout === 'slider'   ? ( sliderStyle   || 'slide' )    : 'slide';
+	const isTicker    = effectiveCarouselStyle === 'ticker';
+	const isKenburns  = effectiveSliderStyle === 'kenburns';
+	const is3DSlider  = [ 'coverflow', 'flip', 'cube' ].includes( effectiveSliderStyle );
+	const isFade      = effectiveCarouselStyle === 'fade' || effectiveSliderStyle === 'fade' || isKenburns;
 	const isAbove   = contentPosition === 'above';
 	const isLeft    = contentPosition === 'left';
 	const isRight   = contentPosition === 'right';
