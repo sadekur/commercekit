@@ -454,6 +454,8 @@ Controls the category image inside each card.
 
 With **Ticker** style, Autoplay/Navigation/Pagination controls don't apply — scrolling is continuous and **Scroll Speed** controls how long one full pass takes. With **Fade** style, **Scroll Speed** controls the crossfade duration and the Columns setting is ignored (always 1-up).
 
+For the **Slider** layout, **Scroll Speed** controls the transition speed for every Slider Style (crossfade duration for Fade/Ken Burns, rotation speed for Coverflow/Flip/Cube). The Coverflow, Flip, and Cube effects render in full 3D on the front-end; the block editor shows an approximate preview.
+
 #### Frontend behaviour
 
 - Each card links to the category archive page
