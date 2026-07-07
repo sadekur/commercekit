@@ -155,6 +155,46 @@ trait CslScriptTrait {
             ];
         }
 
+        switch ( $sld_style ) {
+            case 'fade':
+            case 'kenburns':
+                // Ken Burns reuses the fade crossfade transition; the slow zoom on the
+                // active slide's image is applied separately via CSS (see inline_styles()).
+                $config['effect']     = 'fade';
+                $config['fadeEffect'] = [ 'crossFade' => true ];
+                break;
+
+            case 'coverflow':
+                $config['effect']         = 'coverflow';
+                $config['centeredSlides'] = true;
+                $config['coverflowEffect'] = [
+                    'rotate'       => 35,
+                    'stretch'      => 0,
+                    'depth'        => 120,
+                    'modifier'     => 1,
+                    'slideShadows' => true,
+                ];
+                break;
+
+            case 'flip':
+                $config['effect']     = 'flip';
+                $config['flipEffect'] = [
+                    'slideShadows'  => true,
+                    'limitRotation' => true,
+                ];
+                break;
+
+            case 'cube':
+                $config['effect']     = 'cube';
+                $config['cubeEffect'] = [
+                    'shadow'       => true,
+                    'slideShadows' => true,
+                    'shadowOffset' => 20,
+                    'shadowScale'  => 0.94,
+                ];
+                break;
+        }
+
         return $config;
     }
 }
