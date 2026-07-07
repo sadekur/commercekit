@@ -224,17 +224,17 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 
 	// Autoplay — reads currentSlide from ref to avoid stale-closure issues
 	useEffect( () => {
-		if ( ! isSliderLayout || ! autoplay || ! canSlide ) return;
+		if ( ! isSliderLayout || isTicker || ! autoplay || ! canSlide ) return;
 		const delay = Math.max( 500, autoplaySpeed || 3000 );
 		const t = setInterval( () => {
 			if ( pauseRef.current ) return;
 			const cur  = slideRef.current;
-			const step = Math.max( 1, slidesToScroll || 1 );
+			const step = isFade ? 1 : Math.max( 1, slidesToScroll || 1 );
 			const next = cur + step;
 			setCurrentSlide( next > maxSlide ? ( infiniteLoop ? 0 : cur ) : next );
 		}, delay );
 		return () => clearInterval( t );
-	}, [ isSliderLayout, autoplay, autoplaySpeed, slidesToScroll, maxSlide, infiniteLoop, canSlide ] );
+	}, [ isSliderLayout, isTicker, isFade, autoplay, autoplaySpeed, slidesToScroll, maxSlide, infiniteLoop, canSlide ] );
 
 	// ── Card rendering helpers ─────────────────────────────────────────────
 	const thumbBr = thumbnailShape === 'circle'  ? '50%'
