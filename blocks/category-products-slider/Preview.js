@@ -199,7 +199,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	useEffect( () => { slideRef.current = currentSlide; }, [ currentSlide ] );
 
 	const slidesPerView = ! isSliderLayout ? ( colDesktop || 3 )
-		: layout === 'slider'
+		: ( layout === 'slider' || isFade )
 		? 1
 		: Math.min( colDesktop || 3, Math.max( 1, categories.length ) );
 
