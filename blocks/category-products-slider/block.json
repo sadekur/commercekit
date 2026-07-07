@@ -15,6 +15,7 @@
 
 		"layout":              { "type": "string",  "default": "carousel" },
 		"carouselStyle":       { "type": "string",  "default": "standard" },
+		"sliderStyle":         { "type": "string",  "default": "slide" },
 		"categoryType":           { "type": "string",  "default": "parent" },
 		"parentChildCategories":  { "type": "string",  "default": "" },
 		"displayType":            { "type": "string",  "default": "individualize" },
