@@ -370,6 +370,14 @@ Displays WooCommerce **product categories** as interactive cards in a fully cust
 | **Grid** | Static responsive CSS grid — no sliding |
 | **Inline** | Horizontally scrollable row — no sliding |
 
+##### Carousel Style (Carousel layout only)
+
+| Style | Behaviour | Default |
+|---|---|---|
+| **Standard** | Slides one step at a time, with navigation arrows and pagination | ✅ Default |
+| **Ticker** | Continuous, non-stop auto-scroll — cards glide by with no snapping, arrows, or pagination | — |
+| **Fade** | Crossfades between one category at a time (always 1-up, ignoring the Columns setting) | — |
+
 #### General settings
 
 | Setting | Description | Default |
