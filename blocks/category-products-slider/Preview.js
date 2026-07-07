@@ -211,7 +211,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	useEffect( () => { setCurrentSlide( 0 ); }, [ categories.length ] );
 
 	const scroll = ( dir ) => {
-		const step = Math.max( 1, slidesToScroll || 1 );
+		const step = isFade ? 1 : Math.max( 1, slidesToScroll || 1 );
 		setCurrentSlide( prev => {
 			if ( dir === 'next' ) {
 				const n = prev + step;
