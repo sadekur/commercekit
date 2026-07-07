@@ -63,6 +63,7 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 	const set      = (key) => (val) => setAttributes({ [key]: val });
 	const isSlider  = layout === 'carousel' || layout === 'slider';
 	const isAllMode = categoryType === 'all';
+	const sliderForcesSingleColumn = SLIDER_SINGLE_COLUMN_STYLES.includes( sliderStyle || 'slide' );
 
 	// ── Hierarchical category tree for the selector
 	const [allCats,     setAllCats]     = useState([]);
