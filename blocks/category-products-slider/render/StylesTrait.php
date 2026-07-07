@@ -67,6 +67,20 @@ trait CslStylesTrait {
             <?php if ( 'carousel' === $layout && 'ticker' === $this->carousel_style() ) : ?>
                 #<?php echo esc_attr( $uid ); ?> .ck-csl-swiper.ck-csl-style-ticker .swiper-wrapper { transition-timing-function: linear !important; }
             <?php endif; ?>
+            <?php if ( 'slider' === $layout && in_array( $this->slider_style(), [ 'coverflow', 'flip', 'cube' ], true ) ) : ?>
+                #<?php echo esc_attr( $uid ); ?> .ck-csl-swiper { overflow: visible; }
+            <?php endif; ?>
+            <?php if ( 'slider' === $layout && 'kenburns' === $this->slider_style() ) :
+                $kb_duration = max( 1000, intval( $a['autoplaySpeed'] ?? 3000 ) + intval( $a['scrollSpeed'] ?? 600 ) );
+            ?>
+                #<?php echo esc_attr( $uid ); ?> .ck-csl-swiper.ck-csl-style-kenburns .swiper-slide-active .ck-csl-thumb {
+                    animation: ck-csl-kenburns-<?php echo esc_attr( $uid ); ?> <?php echo esc_attr( $kb_duration ); ?>ms ease-out forwards;
+                }
+                @keyframes ck-csl-kenburns-<?php echo esc_attr( $uid ); ?> {
+                    from { transform: scale(1); }
+                    to   { transform: scale(1.15); }
+                }
+            <?php endif; ?>
             <?php if ( 'grid' === $layout ) : ?>
                 #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { display:grid; gap:<?php echo esc_attr( $gap ); ?>px; grid-template-columns:repeat(<?php echo esc_attr( $col_m ); ?>,1fr); }
                 @media(min-width:480px){ #<?php echo esc_attr( $uid ); ?> .ck-csl-grid-wrap { grid-template-columns:repeat(<?php echo esc_attr( $col_t ); ?>,1fr); } }
