@@ -392,9 +392,8 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 
 	// ── Slider render ──────────────────────────────────────────────────────
 	//
-	// After the RTL fix:
-	//   rtlDirection=true  → standard right-to-left animation (nav: prev left, next right)
-	//   rtlDirection=false → reversed left-to-right animation (nav: row-reverse, cats reversed)
+	//   rtlDirection=false (default) → standard left-to-right (nav: prev left, next right)
+	//   rtlDirection=true            → reversed right-to-left (nav: row-reverse, cats reversed)
 	//
 	// Track translate: pitch per slide = (containerWidth + gap) / slidesPerView
 	//   translateX = -currentSlide * pitch
@@ -406,10 +405,10 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	const translatePx   = currentSlide * gap / slidesPerView;
 
 	// For reversed direction: show categories in reverse order so "next" enters from the left
-	const displayCats = rtlDirection ? categories : [ ...categories ].reverse();
+	const displayCats = rtlDirection ? [ ...categories ].reverse() : categories;
 
 	// Nav bar: standard → row (← left, → right); reversed → row-reverse (→ left, ← right)
-	const navFlexDir = rtlDirection ? 'row' : 'row-reverse';
+	const navFlexDir = rtlDirection ? 'row-reverse' : 'row';
 
 	const pagerTotal = Math.max( 1, maxSlide + 1 );
 
