@@ -870,8 +870,12 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	const hintText = isSliderLayout
 		? ( isTicker
 			? __( 'Categories scroll continuously in a loop — no arrows or pagination.', 'commerce-kit' )
+			: isKenburns
+			? __( 'Categories crossfade one at a time, with a slow zoom on the image.', 'commerce-kit' )
 			: isFade
 			? __( 'Categories crossfade one at a time.', 'commerce-kit' )
+			: is3DSlider
+			? __( 'Editor shows an approximate preview — the exact 3D effect renders on the front-end.', 'commerce-kit' )
 			: canSlide
 			? `${ __( 'Showing', 'commerce-kit' ) } ${ slidesPerView } ${ __( 'of', 'commerce-kit' ) } ${ categories.length } ${ __( 'categories. Use arrows to navigate.', 'commerce-kit' ) }`
 			: __( 'Full layout renders on the front-end.', 'commerce-kit' )
