@@ -183,7 +183,10 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	const effectiveSliderStyle   = layout === 'slider'   ? ( sliderStyle   || 'slide' )    : 'slide';
 	const isTicker    = effectiveCarouselStyle === 'ticker';
 	const isKenburns  = effectiveSliderStyle === 'kenburns';
-	const is3DSlider  = [ 'coverflow', 'flip', 'cube' ].includes( effectiveSliderStyle );
+	// Flip/Cube only support a single visible slide (Swiper enforces this); Coverflow
+	// and Slide keep the configured Columns per Breakpoint, same as Carousel.
+	const is3DSlider  = [ 'flip', 'cube' ].includes( effectiveSliderStyle );
+	const isCoverflow = effectiveSliderStyle === 'coverflow';
 	const isFade      = effectiveCarouselStyle === 'fade' || effectiveSliderStyle === 'fade' || isKenburns;
 	const isAbove   = contentPosition === 'above';
 	const isLeft    = contentPosition === 'left';
