@@ -38,7 +38,7 @@ trait CslHtmlTrait {
         $wrap_cls    = 'ck-csl-wrap relative w-full' . ( $rtl ? '' : ' ck-csl-rtl' ) . ( $show_pager ? ' ck-csl-has-pager' : '' ) . ( $preloader ? ' ck-csl-preloader' : '' );
         $outer_cls   = 'ck-csl-outer relative' . ( $show_nav ? ' ck-has-nav' : '' );
         $nav_btn_cls = 'ck-csl-nav-btn flex items-center justify-center cursor-pointer pointer-events-auto transition-[background,color,border-color] duration-200 shrink-0 focus:outline focus:outline-2 focus:outline-[#0073aa] focus:outline-offset-2';
-        $swiper_cls  = 'swiper ck-csl-swiper overflow-hidden' . ( $show_pager ? ' pb-10' : '' );
+        $swiper_cls  = 'swiper ck-csl-swiper overflow-hidden' . ( $show_pager ? ' pb-10' : '' ) . $this->carousel_style_class();
         $slide_cls   = 'swiper-slide ck-csl-slide box-border' . ( $equal_h ? ' h-full' : '' );
 
         // Capture nav HTML for conditional placement (top vs bottom)
