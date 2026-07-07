@@ -107,6 +107,28 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 				</p>
 			</div>
 
+			{/* ── Carousel Style (carousel layout only) */}
+			{layout === 'carousel' && (
+				<div style={{ marginBottom: 14 }}>
+					<div style={LABEL_STYLE}>{__('Carousel Style', 'commerce-kit')}</div>
+					<ButtonGroup>
+						{CAROUSEL_STYLES.map(([val, label]) => (
+							<Button
+								key={val}
+								variant={(carouselStyle || 'standard') === val ? 'primary' : 'secondary'}
+								onClick={() => setAttributes({ carouselStyle: val })}
+								size="small"
+							>{label}</Button>
+						))}
+					</ButtonGroup>
+					<p style={{ ...HELP_STYLE, marginTop: 5 }}>
+						{(carouselStyle || 'standard') === 'standard' && __('Slides one step at a time with navigation and pagination.', 'commerce-kit')}
+						{carouselStyle === 'ticker' && __('Continuous auto-scrolling — cards glide by non-stop, no snapping.', 'commerce-kit')}
+						{carouselStyle === 'fade'   && __('Crossfades between one category at a time.', 'commerce-kit')}
+					</p>
+				</div>
+			)}
+
 			{/* ── Category Type */}
 			<div style={{ marginBottom: 10 }}>
 				<div style={LABEL_STYLE}>{__('Category Type', 'commerce-kit')}</div>
