@@ -89,5 +89,12 @@ class API {
             'callback'            => [ new Stock(), 'get_variation_stock' ],
             'permission_callback' => [ new Stock(), 'variation_stock_permission' ],
         ] );
+
+        // Category Products Slider — grid pagination page fetch (public)
+        $this->register_route( '/csl-grid-page', [
+            'methods'             => 'GET',
+            'callback'            => [ new CategoryProductsSlider(), 'get_grid_page' ],
+            'permission_callback' => [ new CategoryProductsSlider(), 'grid_page_permission' ],
+        ] );
     }
 }
