@@ -962,6 +962,8 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 			? `${ __( 'Showing', 'commerce-kit' ) } ${ slidesPerView } ${ __( 'of', 'commerce-kit' ) } ${ categories.length } ${ __( 'categories. Use arrows to navigate.', 'commerce-kit' ) }`
 			: __( 'Full layout renders on the front-end.', 'commerce-kit' )
 		  )
+		: isPaginatedGrid
+		? `${ __( 'Page', 'commerce-kit' ) } ${ currentGridPage } ${ __( 'of', 'commerce-kit' ) } ${ totalGridPages } — ${ categories.length } ${ __( 'categories total. Additional pages are fetched from the server on the front-end.', 'commerce-kit' ) }`
 		: ( categories.length > previewCount
 			? `${ __( 'Showing', 'commerce-kit' ) } ${ previewCount } ${ __( 'of', 'commerce-kit' ) } ${ categories.length } ${ __( 'categories. Full layout renders on the front-end.', 'commerce-kit' ) }`
 			: layout === 'grid'
