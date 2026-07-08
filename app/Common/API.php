@@ -7,6 +7,7 @@ use CommerceKit\Commerce\API\Settings;
 use CommerceKit\Commerce\API\Blocks;
 use CommerceKit\Commerce\API\Tips;
 use CommerceKit\Commerce\API\BuyButton;
+use CommerceKit\Commerce\API\CategoryProductsSlider;
 
 class API {
     use Hookable;
