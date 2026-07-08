@@ -1,10 +1,11 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { useState, useEffect, useRef }      from '@wordpress/element';
-import GeneralPanel   from './panels/GeneralPanel';
-import DisplayPanel   from './panels/DisplayPanel';
-import ThumbnailPanel from './panels/ThumbnailPanel';
-import SliderPanel    from './panels/SliderPanel';
-import Preview        from './Preview';
+import GeneralPanel    from './panels/GeneralPanel';
+import DisplayPanel    from './panels/DisplayPanel';
+import ThumbnailPanel  from './panels/ThumbnailPanel';
+import SliderPanel     from './panels/SliderPanel';
+import PaginationPanel from './panels/PaginationPanel';
+import Preview         from './Preview';
 
 const Edit = ({ attributes, setAttributes }) => {
 	const blockProps = useBlockProps({ className: 'ck-csl-editor-wrap' });
