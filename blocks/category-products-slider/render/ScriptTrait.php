@@ -50,15 +50,21 @@ trait CslScriptTrait {
 
     private function inline_script_static(): void {
         $uid       = $this->uid;
-        $preloader = isset( $this->a['preloader'] ) ? (bool) $this->a['preloader'] : true;
-        if ( ! $preloader ) return;
+        $a         = $this->a;
+        $preloader = isset( $a['preloader'] ) ? (bool) $a['preloader'] : true;
+        $paginate  = 'grid' === ( $a['layout'] ?? '' )
+            && in_array( $a['gridPaginationType'] ?? 'none', [ 'load-more', 'numbered' ], true );
+
+        if ( ! $preloader && ! $paginate ) return;
         ?>
         <script>
         (function () {
             'use strict';
+            var wrap = document.getElementById('<?php echo esc_js( $uid ); ?>');
+            if (!wrap) return;
+
+            <?php if ( $preloader ) : ?>
             function ckCslReveal() {
-                var wrap = document.getElementById('<?php echo esc_js( $uid ); ?>');
-                if (!wrap) return;
                 wrap.classList.remove('ck-csl-preloader');
                 wrap.classList.add('ck-csl-ready');
             }
@@ -67,6 +73,77 @@ trait CslScriptTrait {
             } else {
                 window.addEventListener('load', ckCslReveal);
             }
+            <?php endif; ?>
+
+            <?php if ( $paginate ) : ?>
+            var gridWrap = wrap.querySelector('.ck-csl-grid-wrap');
+            if (!gridWrap) return;
+
+            var restUrl = <?php echo wp_json_encode( rest_url( 'commerce-kit/v1/csl-grid-page' ) ); ?>;
+            var pagType = wrap.getAttribute('data-ck-csl-pagination');
+            var attsRaw = wrap.getAttribute('data-ck-csl-atts') || '{}';
+            var busy = false;
+
+            function updateNumberedControls(page, totalPages) {
+                var nums = wrap.querySelectorAll('.ck-csl-page-num');
+                for (var i = 0; i < nums.length; i++) {
+                    var n = parseInt(nums[i].getAttribute('data-page'), 10);
+                    nums[i].classList.toggle('is-active', n === page);
+                }
+                var first = wrap.querySelector('.ck-csl-page-first');
+                var prev  = wrap.querySelector('.ck-csl-page-prev');
+                var next  = wrap.querySelector('.ck-csl-page-next');
+                var last  = wrap.querySelector('.ck-csl-page-last');
+                if (first) first.disabled = page <= 1;
+                if (prev)  { prev.disabled = page <= 1; prev.setAttribute('data-page', Math.max(1, page - 1)); }
+                if (next)  { next.disabled = page >= totalPages; next.setAttribute('data-page', Math.min(totalPages, page + 1)); }
+                if (last)  last.disabled = page >= totalPages;
+            }
+
+            function setPage(page) {
+                if (busy) return;
+                busy = true;
+                wrap.classList.add('ck-csl-loading');
+
+                var url = restUrl + '?page=' + encodeURIComponent(page) + '&atts=' + encodeURIComponent(attsRaw);
+                fetch(url, { credentials: 'omit' })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (!data || typeof data.html !== 'string') return;
+                        if ('load-more' === pagType) {
+                            gridWrap.insertAdjacentHTML('beforeend', data.html);
+                            if (data.page >= data.totalPages) {
+                                var btn = wrap.querySelector('.ck-csl-load-more');
+                                if (btn) btn.style.display = 'none';
+                            }
+                        } else {
+                            gridWrap.innerHTML = data.html;
+                            updateNumberedControls(data.page, data.totalPages);
+                            var top = wrap.getBoundingClientRect().top + window.pageYOffset - 80;
+                            window.scrollTo({ top: top, behavior: 'smooth' });
+                        }
+                        wrap.setAttribute('data-ck-csl-page', data.page);
+                    })
+                    .catch(function () {})
+                    .finally(function () {
+                        busy = false;
+                        wrap.classList.remove('ck-csl-loading');
+                    });
+            }
+
+            wrap.addEventListener('click', function (e) {
+                var loadMoreBtn = e.target.closest('.ck-csl-load-more');
+                if (loadMoreBtn) {
+                    var current = parseInt(wrap.getAttribute('data-ck-csl-page'), 10) || 1;
+                    setPage(current + 1);
+                    return;
+                }
+                var pageBtn = e.target.closest('.ck-csl-page-btn');
+                if (pageBtn && !pageBtn.disabled) {
+                    setPage(parseInt(pageBtn.getAttribute('data-page'), 10) || 1);
+                }
+            });
+            <?php endif; ?>
         })();
         </script>
         <?php
