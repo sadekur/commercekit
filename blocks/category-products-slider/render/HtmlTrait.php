@@ -114,6 +114,7 @@ trait CslHtmlTrait {
         $total_pages = $paginate ? max( 1, (int) ceil( count( $terms ) / $per_page ) ) : 1;
         $grid_terms  = ( $paginate && $total_pages > 1 ) ? array_slice( $terms, 0, $per_page ) : $terms;
         $paginate    = $paginate && $total_pages > 1;
+        $this->paginated = $paginate;
 
         ob_start();
         ?>

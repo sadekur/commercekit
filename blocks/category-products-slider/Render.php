@@ -11,6 +11,7 @@ class CategoryProductsSliderRender {
 
     private array  $a;
     private string $uid = '';
+    private bool   $paginated = false; // set by html_static() once it knows whether a pager was actually rendered
 
     public function __construct( array $attributes ) {
         $this->a = $attributes;
