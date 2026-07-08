@@ -873,33 +873,79 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	};
 
 	// ── Non-slider card layout ─────────────────────────────────────────────
-	const previewCount = Math.min( colDesktop || 3, 4 );
-	const previewCats  = categories.slice( 0, previewCount );
+	const previewCount   = Math.min( colDesktop || 3, 4 );
+	const isPaginatedGrid = layout === 'grid' && gridPaginationType && gridPaginationType !== 'none';
+	const perPage         = Math.max( 1, gridItemsPerPage || 6 );
+	const totalGridPages  = isPaginatedGrid ? Math.max( 1, Math.ceil( categories.length / perPage ) ) : 1;
+	const currentGridPage = Math.min( gridPage, totalGridPages );
+
+	const previewCats = isPaginatedGrid
+		? ( gridPaginationType === 'load-more'
+			? categories.slice( 0, perPage * currentGridPage )
+			: categories.slice( ( currentGridPage - 1 ) * perPage, currentGridPage * perPage ) )
+		: categories.slice( 0, previewCount );
 
 	const renderStaticGrid = () => (
-		<div
-			className="ck-csl-editor-cards"
-			style={
-				layout === 'grid'
-					? { display: 'grid', gridTemplateColumns: `repeat(${ previewCount }, 1fr)`, gap: gap + 'px' }
-					: { display: 'flex', flexWrap: 'nowrap', gap: gap + 'px', overflowX: 'auto' }
-			}
-		>
-			{ previewCats.map( ( cat ) => {
-				const cardWidth = layout === 'inline'
-					? '200px'
-					: `calc(${ 100 / previewCount }% - ${ gap * ( previewCount - 1 ) / previewCount }px)`;
-				const base = layout === 'grid'
-					? { minWidth: 0 }
-					: { flex: `0 0 ${ cardWidth }`, minWidth: 0 };
+		<>
+			<div
+				className="ck-csl-editor-cards"
+				style={
+					layout === 'grid'
+						? { display: 'grid', gridTemplateColumns: `repeat(${ previewCount }, 1fr)`, gap: gap + 'px' }
+						: { display: 'flex', flexWrap: 'nowrap', gap: gap + 'px', overflowX: 'auto' }
+				}
+			>
+				{ previewCats.map( ( cat ) => {
+					const cardWidth = layout === 'inline'
+						? '200px'
+						: `calc(${ 100 / previewCount }% - ${ gap * ( previewCount - 1 ) / previewCount }px)`;
+					const base = layout === 'grid'
+						? { minWidth: 0 }
+						: { flex: `0 0 ${ cardWidth }`, minWidth: 0 };
 
-				return (
-					<div key={ cat.id } className="ck-csl-editor-card" style={ base }>
-						{ renderCard( cat ) }
-					</div>
-				);
-			} ) }
-		</div>
+					return (
+						<div key={ cat.id } className="ck-csl-editor-card" style={ base }>
+							{ renderCard( cat ) }
+						</div>
+					);
+				} ) }
+			</div>
+
+			{ isPaginatedGrid && totalGridPages > 1 && gridPaginationType === 'load-more' && currentGridPage < totalGridPages && (
+				<div style={{ textAlign: 'center', marginTop: 16 }}>
+					<button
+						type="button"
+						onClick={ () => setGridPage( Math.min( totalGridPages, currentGridPage + 1 ) ) }
+						style={ gridPageBtnStyle( false, false ) }
+					>
+						{ __( 'Load More', 'commerce-kit' ) }
+					</button>
+				</div>
+			) }
+
+			{ isPaginatedGrid && totalGridPages > 1 && gridPaginationType === 'numbered' && (
+				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, marginTop: 16, flexWrap: 'wrap' }}>
+					<button type="button" disabled={ currentGridPage <= 1 } onClick={ () => setGridPage( 1 ) } style={ gridPageBtnStyle( false, currentGridPage <= 1 ) }>«</button>
+					<button type="button" disabled={ currentGridPage <= 1 } onClick={ () => setGridPage( Math.max( 1, currentGridPage - 1 ) ) } style={ gridPageBtnStyle( false, currentGridPage <= 1 ) }>‹</button>
+					{ paginateNumbers( currentGridPage, totalGridPages ).map( ( n, i ) => (
+						n === '...' ? (
+							<span key={ 'ellipsis-' + i } style={{ padding: '0 4px', color: '#999', fontSize: 12 }}>…</span>
+						) : (
+							<button
+								key={ n }
+								type="button"
+								onClick={ () => setGridPage( n ) }
+								style={ gridPageBtnStyle( n === currentGridPage, false ) }
+							>
+								{ n }
+							</button>
+						)
+					) ) }
+					<button type="button" disabled={ currentGridPage >= totalGridPages } onClick={ () => setGridPage( Math.min( totalGridPages, currentGridPage + 1 ) ) } style={ gridPageBtnStyle( false, currentGridPage >= totalGridPages ) }>›</button>
+					<button type="button" disabled={ currentGridPage >= totalGridPages } onClick={ () => setGridPage( totalGridPages ) } style={ gridPageBtnStyle( false, currentGridPage >= totalGridPages ) }>»</button>
+				</div>
+			) }
+		</>
 	);
 
 	// ── Hint line ─────────────────────────────────────────────────────────
