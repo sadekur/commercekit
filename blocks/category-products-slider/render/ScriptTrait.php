@@ -52,8 +52,7 @@ trait CslScriptTrait {
         $uid       = $this->uid;
         $a         = $this->a;
         $preloader = isset( $a['preloader'] ) ? (bool) $a['preloader'] : true;
-        $paginate  = 'grid' === ( $a['layout'] ?? '' )
-            && in_array( $a['gridPaginationType'] ?? 'none', [ 'load-more', 'numbered' ], true );
+        $paginate  = $this->paginated;
 
         if ( ! $preloader && ! $paginate ) return;
         ?>
