@@ -38,6 +38,9 @@
 		"order":               { "type": "string",  "default": "ASC" },
 		"randomize":           { "type": "boolean", "default": false },
 
+		"gridPaginationType":  { "type": "string",  "default": "none" },
+		"gridItemsPerPage":    { "type": "number",  "default": 6 },
+
 		"showSectionTitle":    { "type": "boolean", "default": true },
 		"sectionTitleText":    { "type": "string",  "default": "Category Showcase" },
 		"contentPosition":     { "type": "string",  "default": "below" },
