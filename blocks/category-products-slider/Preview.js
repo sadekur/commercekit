@@ -176,6 +176,8 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		navBorderColor, navHoverBorderColor, navBorderRadius,
 		// Pagination
 		showSliderPagination, sliderPaginationType, paginationColor, paginationActiveColor,
+		// Grid pagination
+		gridPaginationType, gridItemsPerPage,
 	} = attributes;
 
 	const isSliderLayout   = layout === 'carousel' || layout === 'slider';
