@@ -370,6 +370,15 @@ Displays WooCommerce **product categories** as interactive cards in a fully cust
 | **Grid** | Static responsive CSS grid — no sliding |
 | **Inline** | Horizontally scrollable row — no sliding |
 
+##### Grid Pagination (Grid layout only)
+
+| Setting | Description | Default |
+|---|---|---|
+| **Pagination** | **None** (all categories up to Total Categories render at once) / **Load More** (a button appends the next page of categories) / **Numbered** (First « Prev, page numbers, Next › Last) | None |
+| **Items Per Page** | How many categories are shown per page/load when Pagination is not None | `6` |
+
+Only the first page of categories is included in the page's initial HTML — later pages are fetched on demand from a public REST endpoint (`commerce-kit/v1/csl-grid-page`), so enabling pagination reduces the markup sent for large category counts.
+
 ##### Carousel Style (Carousel layout only)
 
 | Style | Behaviour | Default |
