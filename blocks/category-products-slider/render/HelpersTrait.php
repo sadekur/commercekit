@@ -79,4 +79,20 @@ trait CslHelpersTrait {
         ];
         return $icons[ $style ];
     }
+
+    /**
+     * Builds a 1..N page-number range with '...' gaps for large page counts,
+     * always keeping the first, last, and pages near $current visible.
+     */
+    private function paginate_numbers( int $current, int $total ): array {
+        $range = [];
+        for ( $i = 1; $i <= $total; $i++ ) {
+            if ( 1 === $i || $total === $i || abs( $i - $current ) <= 2 ) {
+                $range[] = $i;
+            } elseif ( '...' !== end( $range ) ) {
+                $range[] = '...';
+            }
+        }
+        return $range;
+    }
 }
