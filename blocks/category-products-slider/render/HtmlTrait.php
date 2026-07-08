@@ -108,9 +108,24 @@ trait CslHtmlTrait {
         $title_text = sanitize_text_field( $a['sectionTitleText'] ?? 'Category Showcase' );
         $preloader  = isset( $a['preloader'] ) ? (bool) $a['preloader'] : true;
 
+        $pagination_type = $a['gridPaginationType'] ?? 'none';
+        $paginate    = ( 'grid' === $layout ) && in_array( $pagination_type, [ 'load-more', 'numbered' ], true );
+        $per_page    = max( 1, intval( $a['gridItemsPerPage'] ?? 6 ) );
+        $total_pages = $paginate ? max( 1, (int) ceil( count( $terms ) / $per_page ) ) : 1;
+        $grid_terms  = ( $paginate && $total_pages > 1 ) ? array_slice( $terms, 0, $per_page ) : $terms;
+        $paginate    = $paginate && $total_pages > 1;
+
         ob_start();
         ?>
-            <div id="<?php echo esc_attr( $uid ); ?>" class="ck-csl-wrap ck-csl-layout-<?php echo esc_attr( $layout ); ?> w-full<?php echo $preloader ? ' ck-csl-preloader' : ''; ?>">
+            <div id="<?php echo esc_attr( $uid ); ?>"
+                class="ck-csl-wrap ck-csl-layout-<?php echo esc_attr( $layout ); ?> w-full<?php echo $preloader ? ' ck-csl-preloader' : ''; ?>"
+                <?php if ( $paginate ) : ?>
+                data-ck-csl-pagination="<?php echo esc_attr( $pagination_type ); ?>"
+                data-ck-csl-page="1"
+                data-ck-csl-total-pages="<?php echo esc_attr( $total_pages ); ?>"
+                data-ck-csl-atts="<?php echo esc_attr( wp_json_encode( $this->grid_ajax_atts() ) ); ?>"
+                <?php endif; ?>
+            >
 
                 <?php if ( $show_title && $title_text ) : ?>
                     <h3 class="ck-csl-section-title text-[22px] font-bold text-[#222] m-0 mb-5 leading-[1.3]"><?php echo esc_html( $title_text ); ?></h3>
@@ -127,18 +142,109 @@ trait CslHtmlTrait {
                 </div>
                 <?php else : /* grid */ ?>
                 <div class="ck-csl-grid-wrap">
-                    <?php foreach ( $terms as $term ) :
+                    <?php foreach ( $grid_terms as $term ) :
                         if ( ! ( $term instanceof WP_Term ) ) continue; ?>
                         <div class="ck-csl-grid-item">
                             <?php $this->render_item( $term, $ctx ); ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
+                <?php if ( $paginate ) :
+                    if ( 'load-more' === $pagination_type ) {
+                        $this->render_load_more_button();
+                    } else {
+                        $this->render_numbered_pager( 1, $total_pages );
+                    }
+                endif; ?>
                 <?php endif; ?>
 
             </div><!-- .ck-csl-wrap -->
         <?php
         echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput
+    }
+
+    /**
+     * Only the ~35 attributes that affect querying/rendering a grid page — sent to
+     * the front-end as JSON so the AJAX pagination endpoint can rebuild the exact
+     * same term list without round-tripping every block attribute.
+     */
+    private function grid_ajax_atts(): array {
+        $keys = [
+            'categoryType', 'hideEmpty', 'totalCategories', 'randomize', 'orderBy', 'order',
+            'filterType', 'specificCategories', 'hideCatWithoutThumb', 'parentChildCategories',
+            'excludeParent', 'excludeChild', 'excludeGrandChild', 'excludeGreatGrandChild',
+            'gridItemsPerPage',
+            'contentPosition', 'equalHeight', 'contentPadTop', 'contentPadRight', 'contentPadBottom', 'contentPadLeft',
+            'thumbnailImgSize', 'showThumbnail', 'useCustomPlaceholder', 'customPlaceholderUrl', 'imageMode',
+            'showCatName', 'showProductCount', 'productCountPos', 'productCountBefore', 'productCountAfter',
+            'showDescription', 'showCustomText', 'customText', 'catNameMarginTop', 'descMarginTop',
+            'showShopNow', 'shopNowLabel', 'shopNowAlignment', 'shopNowTarget', 'shopNowMarginTop',
+        ];
+        return array_intersect_key( $this->a, array_flip( $keys ) );
+    }
+
+    private function render_load_more_button(): void {
+        ?>
+        <div class="ck-csl-load-more-wrap">
+            <button type="button" class="ck-csl-load-more"><?php esc_html_e( 'Load More', 'commerce-kit' ); ?></button>
+        </div>
+        <?php
+    }
+
+    private function render_numbered_pager( int $current, int $total_pages ): void {
+        ?>
+        <nav class="ck-csl-pagination" role="navigation" aria-label="<?php esc_attr_e( 'Category pagination', 'commerce-kit' ); ?>">
+            <button type="button" class="ck-csl-page-btn ck-csl-page-first" data-page="1" aria-label="<?php esc_attr_e( 'First page', 'commerce-kit' ); ?>" <?php disabled( $current <= 1 ); ?>>«</button>
+            <button type="button" class="ck-csl-page-btn ck-csl-page-prev" data-page="<?php echo esc_attr( max( 1, $current - 1 ) ); ?>" aria-label="<?php esc_attr_e( 'Previous page', 'commerce-kit' ); ?>" <?php disabled( $current <= 1 ); ?>>‹</button>
+            <?php foreach ( $this->paginate_numbers( $current, $total_pages ) as $num ) :
+                if ( '...' === $num ) : ?>
+                    <span class="ck-csl-page-ellipsis">…</span>
+                <?php else : ?>
+                    <button type="button" class="ck-csl-page-btn ck-csl-page-num<?php echo $num === $current ? ' is-active' : ''; ?>" data-page="<?php echo esc_attr( $num ); ?>"><?php echo esc_html( $num ); ?></button>
+                <?php endif;
+            endforeach; ?>
+            <button type="button" class="ck-csl-page-btn ck-csl-page-next" data-page="<?php echo esc_attr( min( $total_pages, $current + 1 ) ); ?>" aria-label="<?php esc_attr_e( 'Next page', 'commerce-kit' ); ?>" <?php disabled( $current >= $total_pages ); ?>>›</button>
+            <button type="button" class="ck-csl-page-btn ck-csl-page-last" data-page="<?php echo esc_attr( $total_pages ); ?>" aria-label="<?php esc_attr_e( 'Last page', 'commerce-kit' ); ?>" <?php disabled( $current >= $total_pages ); ?>>»</button>
+        </nav>
+        <?php
+    }
+
+    /**
+     * Renders a single grid page of items as an HTML fragment — called by the
+     * public REST endpoint for every page after the first (which is server-rendered
+     * inline by html_static() above).
+     */
+    public function render_grid_page( int $page ): array {
+        ob_start();
+        $terms = $this->get_terms();
+        ob_end_clean(); // discard any "no categories found" notice; empty state is conveyed via the return value instead
+
+        $terms       = is_array( $terms ) ? $terms : [];
+        $per_page    = max( 1, intval( $this->a['gridItemsPerPage'] ?? 6 ) );
+        $total_items = count( $terms );
+        $total_pages = max( 1, (int) ceil( $total_items / $per_page ) );
+        $page        = max( 1, min( $page, $total_pages ) );
+
+        $slice = array_slice( $terms, ( $page - 1 ) * $per_page, $per_page );
+        $ctx   = $this->item_context();
+
+        ob_start();
+        foreach ( $slice as $term ) :
+            if ( ! ( $term instanceof WP_Term ) ) continue;
+            ?>
+            <div class="ck-csl-grid-item">
+                <?php $this->render_item( $term, $ctx ); ?>
+            </div>
+            <?php
+        endforeach;
+        $html = ob_get_clean();
+
+        return [
+            'html'       => $html,
+            'page'       => $page,
+            'totalPages' => $total_pages,
+            'totalItems' => $total_items,
+        ];
     }
 
     private function html_cup_slider( array $groups ): void {
