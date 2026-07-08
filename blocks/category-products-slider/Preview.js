@@ -202,6 +202,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	const pauseRef = useRef( false );
 	const slideRef = useRef( 0 );
 	const [ tickerId ] = useState( () => 'ck-tick-' + Math.random().toString( 36 ).slice( 2 ) );
+	const [ gridPage,  setGridPage ] = useState( 1 );
 
 	useEffect( () => { pauseRef.current = isPaused; }, [ isPaused ] );
 	useEffect( () => { slideRef.current = currentSlide; }, [ currentSlide ] );
