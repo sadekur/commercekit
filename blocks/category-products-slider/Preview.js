@@ -147,6 +147,31 @@ const Pager = ({ type, total, current, color, activeColor }) => {
 	);
 };
 
+// ─── Grid pagination number range, with ellipsis (mirrors the PHP front-end logic) ──
+const paginateNumbers = ( current, total ) => {
+	const range = [];
+	for ( let i = 1; i <= total; i++ ) {
+		if ( i === 1 || i === total || Math.abs( i - current ) <= 2 ) {
+			range.push( i );
+		} else if ( range[ range.length - 1 ] !== '...' ) {
+			range.push( '...' );
+		}
+	}
+	return range;
+};
+
+const gridPageBtnStyle = ( active, disabled ) => ({
+	minWidth: 28, height: 28, padding: '0 6px',
+	display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+	fontSize: 12, fontWeight: active ? 700 : 500,
+	color:      active ? '#fff' : ( disabled ? '#bbb' : '#333' ),
+	background: active ? '#cc2b5e' : '#fff',
+	border: `1px solid ${ active ? '#cc2b5e' : '#ddd' }`,
+	borderRadius: 4,
+	cursor: disabled ? 'default' : 'pointer',
+	opacity: disabled ? 0.5 : 1,
+});
+
 // ─── Main Preview ─────────────────────────────────────────────────────────────
 const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 	const {
