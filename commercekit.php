@@ -4,8 +4,8 @@
  * Plugin URI:        https://github.com/sadekur/commercekit
  * Description:       WooCommerce enhancement toolkit by CommerceKit.
  * Version:           1.0.0
- * Requires at least: 5.9
- * Requires PHP:      7.2
+ * Requires at least: 6.9
+ * Requires PHP:      7.4
  * Author:            Sadekur Rahman
  * Author URI:        https://github.com/sadekur
  * License:           GPL v2 or later
