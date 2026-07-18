@@ -87,7 +87,7 @@ trait CslItemTrait {
                     <a href="<?php echo esc_url( $link ); ?>" tabindex="-1">
                         <img src="<?php echo esc_url( $thumb_url ); ?>"
                              alt="<?php echo esc_attr( $term->name ); ?>"
-                             class="ck-csl-thumb w-full h-auto block [transition:transform_0.4s_ease,filter_0.3s_ease]" loading="lazy" />
+                             class="ck-csl-thumb w-full h-full block object-cover [transition:transform_0.4s_ease,filter_0.3s_ease]" loading="lazy" />
                     </a>
                 <?php else : ?>
                     <div class="ck-csl-thumb-placeholder w-full aspect-square bg-gray-100 flex items-center justify-center text-gray-300">
