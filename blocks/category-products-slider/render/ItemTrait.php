@@ -17,8 +17,14 @@ trait CslItemTrait {
         $thumb_wrap_cls = 'ck-csl-thumb-wrap overflow-hidden leading-[0] relative';
         if ( in_array( $content_pos, [ 'left', 'right' ], true ) ) {
             $thumb_wrap_cls .= ' basis-[45%] max-w-[45%] shrink-0';
-        } elseif ( $is_overlay ) {
-            $thumb_wrap_cls .= ' flex-none w-full';
+        } elseif ( 'above' === $content_pos ) {
+            $thumb_wrap_cls .= ' flex-none w-full'; // height comes from the flex-grow rule in StylesTrait
+        } else {
+            // Below (default) and overlay positions have no flex-based height
+            // source, so pin every thumbnail to the same square box — otherwise
+            // a tall product photo and a small square logo render at different
+            // heights and the row of cards no longer lines up.
+            $thumb_wrap_cls .= ' flex-none w-full aspect-square';
         }
 
         $details_cls = 'ck-csl-details flex-1 transition-opacity duration-300';
