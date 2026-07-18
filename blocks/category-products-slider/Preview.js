@@ -278,6 +278,11 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 
 	const thumbWrapBase = {
 		overflow: 'hidden', position: 'relative',
+		// Static square box by default so mixed portrait/landscape/logo images
+		// line up instead of pushing card heights apart. Positions that derive
+		// their height from flex layout (left/right, above) opt back out via
+		// extraWrapStyle below.
+		aspectRatio: '1',
 		borderRadius: thumbBr,
 		border:    showThumbBorder ? `${ thumbBorderWidth }px ${ thumbBorderStyle } ${ thumbBorderColor }` : 'none',
 		boxShadow: showBoxShadow   ? `${ boxShadowH }px ${ boxShadowV }px ${ boxShadowBlur }px ${ boxShadowSpread }px ${ boxShadowColor }` : 'none',
