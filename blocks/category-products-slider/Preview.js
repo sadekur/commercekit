@@ -308,7 +308,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		</div>
 	);
 
-	const renderThumb = ( cat, extraWrapStyle = {}, imgStyle = { width: '100%', display: 'block' } ) => {
+	const renderThumb = ( cat, extraWrapStyle = {}, imgStyle = { width: '100%', height: '100%', objectFit: 'cover', display: 'block' } ) => {
 		const src = cat.image && cat.image.src
 			? cat.image.src
 			: ( useCustomPlaceholder && customPlaceholderUrl ? customPlaceholderUrl : null );
