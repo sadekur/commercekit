@@ -409,7 +409,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 						{ renderContent( cat ) }
 					</div>
 					{ showThumbnail && renderThumb( cat,
-						{ flex: '1 1 auto', minHeight: 120 },
+						{ aspectRatio: 'auto', flex: '1 1 auto', minHeight: 120 },
 						{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }
 					) }
 				</div>
