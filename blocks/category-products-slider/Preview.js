@@ -392,7 +392,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 			return (
 				<div style={{ display: 'flex', flexDirection: isLeft ? 'row-reverse' : 'row', alignItems: 'stretch', overflow: 'hidden', borderRadius: 4, background: '#fff' }}>
 					{ showThumbnail && renderThumb( cat,
-						{ width: '45%', flexShrink: 0, alignSelf: 'stretch' },
+						{ aspectRatio: 'auto', width: '45%', flexShrink: 0, alignSelf: 'stretch' },
 						{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }
 					) }
 					<div style={{ flex: 1, padding: `${ contentPadTop }px ${ contentPadRight }px ${ contentPadBottom }px ${ contentPadLeft }px` }}>
