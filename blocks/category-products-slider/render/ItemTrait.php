@@ -183,12 +183,12 @@ trait CslItemTrait {
         <div class="ck-csl-item ck-csl-cup-card relative flex flex-col bg-white rounded overflow-hidden">
 
             <?php if ( $show_thumb && $parent ) : ?>
-            <div class="ck-csl-thumb-wrap overflow-hidden leading-[0] relative">
+            <div class="ck-csl-thumb-wrap overflow-hidden leading-[0] relative flex-none w-full aspect-square">
                 <?php if ( $p_thumb ) : ?>
                     <a href="<?php echo esc_url( $p_link ); ?>" tabindex="-1">
                         <img src="<?php echo esc_url( $p_thumb ); ?>"
                              alt="<?php echo esc_attr( $p_name ); ?>"
-                             class="ck-csl-thumb w-full h-auto block [transition:transform_0.4s_ease,filter_0.3s_ease]"
+                             class="ck-csl-thumb w-full h-full block object-cover [transition:transform_0.4s_ease,filter_0.3s_ease]"
                              loading="lazy" />
                     </a>
                 <?php else : ?>
