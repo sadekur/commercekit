@@ -969,9 +969,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		  )
 		: isPaginatedGrid
 		? `${ __( 'Page', 'commerce-kit' ) } ${ currentGridPage } ${ __( 'of', 'commerce-kit' ) } ${ totalGridPages } — ${ categories.length } ${ __( 'categories total. Additional pages are fetched from the server on the front-end.', 'commerce-kit' ) }`
-		: ( categories.length > previewCount
-			? `${ __( 'Showing', 'commerce-kit' ) } ${ previewCount } ${ __( 'of', 'commerce-kit' ) } ${ categories.length } ${ __( 'categories. Full layout renders on the front-end.', 'commerce-kit' ) }`
-			: layout === 'grid'
+		: ( layout === 'grid'
 			? __( 'Front-end renders a static responsive CSS grid.', 'commerce-kit' )
 			: __( 'Front-end renders a horizontally scrollable row.', 'commerce-kit' )
 		  );
