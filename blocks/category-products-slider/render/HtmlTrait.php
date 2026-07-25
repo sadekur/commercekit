@@ -184,10 +184,29 @@ trait CslHtmlTrait {
         return array_intersect_key( $this->a, array_flip( $keys ) );
     }
 
-    private function render_load_more_button(): void {
+    private function render_load_more_button( int $shown, int $total ): void {
+        $remaining = max( 0, $total - $shown );
         ?>
         <div class="ck-csl-load-more-wrap">
-            <button type="button" class="ck-csl-load-more"><?php esc_html_e( 'Load More', 'commerce-kit' ); ?></button>
+            <p class="ck-csl-load-more-status">
+                <?php
+                printf(
+                    /* translators: 1: number of categories shown so far, 2: total number of categories */
+                    esc_html__( 'You have viewed %1$d of %2$d categories', 'commerce-kit' ),
+                    esc_html( $shown ),
+                    esc_html( $total )
+                );
+                ?>
+            </p>
+            <button type="button" class="ck-csl-load-more" data-ck-csl-remaining="<?php echo esc_attr( $remaining ); ?>" <?php echo $remaining <= 0 ? 'style="display:none;"' : ''; // phpcs:ignore ?>>
+                <?php
+                printf(
+                    /* translators: %d: number of categories left to load */
+                    esc_html__( 'Load More (%d)', 'commerce-kit' ),
+                    esc_html( $remaining )
+                );
+                ?>
+            </button>
         </div>
         <?php
     }
