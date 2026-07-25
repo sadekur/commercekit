@@ -916,15 +916,20 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 				} ) }
 			</div>
 
-			{ isPaginatedGrid && totalGridPages > 1 && gridPaginationType === 'load-more' && currentGridPage < totalGridPages && (
+			{ isPaginatedGrid && totalGridPages > 1 && gridPaginationType === 'load-more' && (
 				<div style={{ textAlign: 'center', marginTop: 16 }}>
-					<button
-						type="button"
-						onClick={ () => setGridPage( Math.min( totalGridPages, currentGridPage + 1 ) ) }
-						style={ gridPageBtnStyle( false, false ) }
-					>
-						{ __( 'Load More', 'commerce-kit' ) }
-					</button>
+					<p style={{ margin: '0 0 12px', fontSize: 13, color: '#666' }}>
+						{ `${ __( 'You have viewed', 'commerce-kit' ) } ${ previewCats.length } ${ __( 'of', 'commerce-kit' ) } ${ categories.length } ${ __( 'categories', 'commerce-kit' ) }` }
+					</p>
+					{ currentGridPage < totalGridPages && (
+						<button
+							type="button"
+							onClick={ () => setGridPage( Math.min( totalGridPages, currentGridPage + 1 ) ) }
+							style={ gridPageBtnStyle( false, false ) }
+						>
+							{ `${ __( 'Load More', 'commerce-kit' ) } (${ categories.length - previewCats.length })` }
+						</button>
+					) }
 				</div>
 			) }
 
