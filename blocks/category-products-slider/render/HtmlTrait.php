@@ -152,7 +152,7 @@ trait CslHtmlTrait {
                 </div>
                 <?php if ( $paginate ) :
                     if ( 'load-more' === $pagination_type ) {
-                        $this->render_load_more_button();
+                        $this->render_load_more_button( count( $grid_terms ), count( $terms ) );
                     } else {
                         $this->render_numbered_pager( 1, $total_pages );
                     }
