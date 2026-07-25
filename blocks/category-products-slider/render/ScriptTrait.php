@@ -114,22 +114,13 @@ trait CslScriptTrait {
 
                             var shown     = typeof data.shown === 'number' ? data.shown : data.totalItems;
                             var remaining = Math.max(0, data.totalItems - shown);
-                            var status    = wrap.querySelector('.ck-csl-load-more-status');
+                            var shownEl   = wrap.querySelector('.ck-csl-shown');
                             var btn       = wrap.querySelector('.ck-csl-load-more');
+                            var remainEl  = wrap.querySelector('.ck-csl-remaining');
 
-                            if (status) {
-                                status.textContent = status.textContent.replace(/\d+/, shown).replace(/(\d+)(\D*)$/, function (m, num, tail) {
-                                    return data.totalItems + tail;
-                                });
-                            }
-                            if (btn) {
-                                if (remaining <= 0) {
-                                    btn.style.display = 'none';
-                                } else {
-                                    btn.setAttribute('data-ck-csl-remaining', remaining);
-                                    btn.textContent = btn.textContent.replace(/\d+/, remaining);
-                                }
-                            }
+                            if (shownEl) shownEl.textContent = shown;
+                            if (remainEl) remainEl.textContent = remaining;
+                            if (btn && remaining <= 0) btn.style.display = 'none';
                         } else {
                             gridWrap.innerHTML = data.html;
                             updateNumberedControls(data.page, data.totalPages);
