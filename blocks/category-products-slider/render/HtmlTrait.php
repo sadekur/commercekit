@@ -264,6 +264,7 @@ trait CslHtmlTrait {
             'page'       => $page,
             'totalPages' => $total_pages,
             'totalItems' => $total_items,
+            'shown'      => min( $page * $per_page, $total_items ),
         ];
     }
 
