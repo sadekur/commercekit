@@ -111,9 +111,24 @@ trait CslScriptTrait {
                         if (!data || typeof data.html !== 'string') return;
                         if ('load-more' === pagType) {
                             gridWrap.insertAdjacentHTML('beforeend', data.html);
-                            if (data.page >= data.totalPages) {
-                                var btn = wrap.querySelector('.ck-csl-load-more');
-                                if (btn) btn.style.display = 'none';
+
+                            var shown     = typeof data.shown === 'number' ? data.shown : data.totalItems;
+                            var remaining = Math.max(0, data.totalItems - shown);
+                            var status    = wrap.querySelector('.ck-csl-load-more-status');
+                            var btn       = wrap.querySelector('.ck-csl-load-more');
+
+                            if (status) {
+                                status.textContent = status.textContent.replace(/\d+/, shown).replace(/(\d+)(\D*)$/, function (m, num, tail) {
+                                    return data.totalItems + tail;
+                                });
+                            }
+                            if (btn) {
+                                if (remaining <= 0) {
+                                    btn.style.display = 'none';
+                                } else {
+                                    btn.setAttribute('data-ck-csl-remaining', remaining);
+                                    btn.textContent = btn.textContent.replace(/\d+/, remaining);
+                                }
                             }
                         } else {
                             gridWrap.innerHTML = data.html;
