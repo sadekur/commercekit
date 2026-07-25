@@ -186,26 +186,15 @@ trait CslHtmlTrait {
 
     private function render_load_more_button( int $shown, int $total ): void {
         $remaining = max( 0, $total - $shown );
+        /* translators: leave the <span> tags in place — JS updates the numbers inside them after each AJAX load. */
+        $status_tpl = __( 'You have viewed <span class="ck-csl-shown">%1$d</span> of <span class="ck-csl-total">%2$d</span> categories', 'commerce-kit' );
+        /* translators: leave the <span> tag in place — JS updates the number inside it after each AJAX load. */
+        $button_tpl = __( 'Load More (<span class="ck-csl-remaining">%d</span>)', 'commerce-kit' );
         ?>
         <div class="ck-csl-load-more-wrap">
-            <p class="ck-csl-load-more-status">
-                <?php
-                printf(
-                    /* translators: 1: number of categories shown so far, 2: total number of categories */
-                    esc_html__( 'You have viewed %1$d of %2$d categories', 'commerce-kit' ),
-                    esc_html( $shown ),
-                    esc_html( $total )
-                );
-                ?>
-            </p>
-            <button type="button" class="ck-csl-load-more" data-ck-csl-remaining="<?php echo esc_attr( $remaining ); ?>" <?php echo $remaining <= 0 ? 'style="display:none;"' : ''; // phpcs:ignore ?>>
-                <?php
-                printf(
-                    /* translators: %d: number of categories left to load */
-                    esc_html__( 'Load More (%d)', 'commerce-kit' ),
-                    esc_html( $remaining )
-                );
-                ?>
+            <p class="ck-csl-load-more-status"><?php echo wp_kses( sprintf( $status_tpl, $shown, $total ), [ 'span' => [ 'class' => [] ] ] ); ?></p>
+            <button type="button" class="ck-csl-load-more" <?php echo $remaining <= 0 ? 'style="display:none;"' : ''; // phpcs:ignore ?>>
+                <?php echo wp_kses( sprintf( $button_tpl, $remaining ), [ 'span' => [ 'class' => [] ] ] ); ?>
             </button>
         </div>
         <?php
