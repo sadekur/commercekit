@@ -888,7 +888,7 @@ const Preview = ({ attributes, categories, isLoading, fetchError }) => {
 		? ( gridPaginationType === 'load-more'
 			? categories.slice( 0, perPage * currentGridPage )
 			: categories.slice( ( currentGridPage - 1 ) * perPage, currentGridPage * perPage ) )
-		: categories.slice( 0, previewCount );
+		: categories;
 
 	const renderStaticGrid = () => (
 		<>
