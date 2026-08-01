@@ -228,6 +228,10 @@ trait CslScriptTrait {
                 'disableOnInteraction' => false,
                 'pauseOnMouseEnter'    => isset( $a['pauseOnHover'] ) ? (bool) $a['pauseOnHover'] : true,
             ];
+            // No discrete "current slide" in a continuous ticker, so arrows/pagination
+            // never apply here — the matching markup is already omitted in HtmlTrait.
+            $config['navigation'] = false;
+            $config['pagination'] = false;
         } elseif ( 'fade' === $style ) {
             // Fade only supports a single visible slide, so force 1-up at every breakpoint.
             $config['effect']        = 'fade';
