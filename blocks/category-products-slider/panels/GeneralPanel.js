@@ -11,6 +11,7 @@ import SubHeading       from '../components/SubHeading';
 
 const LAYOUTS = [
 	['carousel', __('Carousel', 'commerce-kit')],
+	['ticker',   __('Ticker',   'commerce-kit')],
 	['slider',   __('Slider',   'commerce-kit')],
 	['grid',     __('Grid',     'commerce-kit')],
 	['inline',   __('Inline',   'commerce-kit')],
@@ -18,7 +19,6 @@ const LAYOUTS = [
 
 const CAROUSEL_STYLES = [
 	['standard', __('Standard', 'commerce-kit')],
-	['ticker',   __('Ticker',   'commerce-kit')],
 	['fade',     __('Fade',     'commerce-kit')],
 ];
 
