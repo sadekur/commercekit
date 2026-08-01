@@ -63,6 +63,10 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 	const set      = (key) => (val) => setAttributes({ [key]: val });
 	const isSlider  = layout === 'carousel' || layout === 'slider';
 	const isAllMode = categoryType === 'all';
+	// "Ticker" is a Layout Preset shortcut for layout: carousel + carouselStyle: ticker —
+	// it isn't a separate layout attribute value, just a friendlier top-level entry point.
+	const isTickerLayout = layout === 'carousel' && carouselStyle === 'ticker';
+	const displayLayout  = isTickerLayout ? 'ticker' : layout;
 	const sliderForcesSingleColumn = SLIDER_SINGLE_COLUMN_STYLES.includes( sliderStyle || 'slide' );
 
 	// ── Hierarchical category tree for the selector
