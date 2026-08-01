@@ -6,7 +6,7 @@ trait CslScriptTrait {
         $a          = $this->a;
         $cfg        = wp_json_encode( $this->swiper_config() );
         $preloader  = isset( $a['preloader'] ) ? (bool) $a['preloader'] : true;
-        $show_pager = ! empty( $a['showSliderPagination'] );
+        $show_pager = ! empty( $a['showSliderPagination'] ) && 'ticker' !== $this->carousel_style();
         $pager_type = $a['sliderPaginationType'] ?? 'bullets';
         ?>
         <script>
