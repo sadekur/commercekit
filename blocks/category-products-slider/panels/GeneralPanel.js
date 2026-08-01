@@ -110,22 +110,34 @@ const GeneralPanel = ({ attributes, setAttributes }) => {
 					{LAYOUTS.map(([val, label]) => (
 						<Button
 							key={val}
-							variant={layout === val ? 'primary' : 'secondary'}
-							onClick={() => setAttributes({ layout: val })}
+							variant={displayLayout === val ? 'primary' : 'secondary'}
+							onClick={() => {
+								if ('ticker' === val) {
+									setAttributes({ layout: 'carousel', carouselStyle: 'ticker' });
+								} else if ('carousel' === val) {
+									setAttributes({
+										layout: 'carousel',
+										carouselStyle: carouselStyle === 'ticker' ? 'standard' : (carouselStyle || 'standard'),
+									});
+								} else {
+									setAttributes({ layout: val });
+								}
+							}}
 							size="small"
 						>{label}</Button>
 					))}
 				</ButtonGroup>
 				<p style={{ ...HELP_STYLE, marginTop: 5 }}>
-					{layout === 'carousel' && __('Multi-column Swiper carousel.', 'commerce-kit')}
-					{layout === 'slider'   && __('Full-width single-column slider.', 'commerce-kit')}
-					{layout === 'grid'     && __('Static responsive CSS grid — no slider.', 'commerce-kit')}
-					{layout === 'inline'   && __('Horizontal scrollable row.', 'commerce-kit')}
+					{displayLayout === 'carousel' && __('Multi-column Swiper carousel.', 'commerce-kit')}
+					{displayLayout === 'ticker'   && __('Continuous auto-scrolling — cards glide by non-stop, no snapping.', 'commerce-kit')}
+					{displayLayout === 'slider'   && __('Full-width single-column slider.', 'commerce-kit')}
+					{displayLayout === 'grid'     && __('Static responsive CSS grid — no slider.', 'commerce-kit')}
+					{displayLayout === 'inline'   && __('Horizontal scrollable row.', 'commerce-kit')}
 				</p>
 			</div>
 
-			{/* ── Carousel Style (carousel layout only) */}
-			{layout === 'carousel' && (
+			{/* ── Carousel Style (carousel layout only, excluding the Ticker shortcut) */}
+			{displayLayout === 'carousel' && (
 				<div style={{ marginBottom: 14 }}>
 					<div style={LABEL_STYLE}>{__('Carousel Style', 'commerce-kit')}</div>
 					<ButtonGroup>
