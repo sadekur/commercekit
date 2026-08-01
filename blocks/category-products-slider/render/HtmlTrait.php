@@ -264,9 +264,10 @@ trait CslHtmlTrait {
         $a   = $this->a;
         $uid = $this->uid;
 
+        $is_ticker  = 'ticker' === $this->carousel_style();
         $rtl        = ! empty( $a['rtlDirection'] );
-        $show_pager = ! empty( $a['showSliderPagination'] );
-        $show_nav   = isset( $a['showNavigation'] ) ? (bool) $a['showNavigation'] : true;
+        $show_pager = ! empty( $a['showSliderPagination'] ) && ! $is_ticker;
+        $show_nav   = ( isset( $a['showNavigation'] ) ? (bool) $a['showNavigation'] : true ) && ! $is_ticker;
         $show_title = isset( $a['showSectionTitle'] ) ? (bool) $a['showSectionTitle'] : true;
         $title_text = sanitize_text_field( $a['sectionTitleText'] ?? 'Category Showcase' );
         $nav_size   = intval( $a['navIconSize'] ?? 22 );
