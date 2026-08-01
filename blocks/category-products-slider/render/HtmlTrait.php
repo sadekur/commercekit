@@ -6,9 +6,12 @@ trait CslHtmlTrait {
         $uid = $this->uid;
         $ctx = $this->item_context();
 
+        $is_ticker  = 'ticker' === $this->carousel_style();
         $rtl        = ! empty( $a['rtlDirection'] );
-        $show_pager = ! empty( $a['showSliderPagination'] );
-        $show_nav   = isset( $a['showNavigation'] ) ? (bool) $a['showNavigation'] : true;
+        // Ticker is a continuous, non-stop scroll — arrows/pagination imply a discrete
+        // "current slide" that doesn't exist here, so they're always suppressed.
+        $show_pager = ! empty( $a['showSliderPagination'] ) && ! $is_ticker;
+        $show_nav   = ( isset( $a['showNavigation'] ) ? (bool) $a['showNavigation'] : true ) && ! $is_ticker;
         $equal_h    = $ctx['equal_h'];
         $show_title = isset( $a['showSectionTitle'] ) ? (bool) $a['showSectionTitle'] : true;
         $title_text = sanitize_text_field( $a['sectionTitleText'] ?? 'Category Showcase' );
