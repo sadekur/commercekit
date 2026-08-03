@@ -366,6 +366,7 @@ Displays WooCommerce **product categories** as interactive cards in a fully cust
 | Layout | Behaviour |
 |---|---|
 | **Carousel** | Swiper carousel — multiple cards visible at once, slides one at a time |
+| **Ticker** | Shortcut button next to Carousel — sets layout to Carousel with Carousel Style forced to **Ticker** (continuous, non-stop auto-scroll) |
 | **Slider** | Swiper slider with selectable transition styles (Slide, Fade, Coverflow, Flip, Cube, Ken Burns) — see Columns per Breakpoint below |
 | **Grid** | Static responsive CSS grid — no sliding |
 | **Inline** | Horizontally scrollable row — no sliding |
