@@ -463,7 +463,7 @@ Controls the category image inside each card.
 | **Pagination Type** | Bullets / Dynamic Bullets / Fraction / Progressbar | Bullets |
 | **Touch Swipe / Mouse Drag** | Allow swipe and drag gestures | On |
 
-With **Ticker** style, Autoplay/Navigation/Pagination controls don't apply — scrolling is continuous and **Scroll Speed** controls how long one full pass takes. With **Fade** style, **Scroll Speed** controls the crossfade duration and the Columns setting is ignored (always 1-up).
+With the **Ticker** layout, Autoplay/Navigation/Pagination controls don't apply — scrolling is continuous and **Scroll Speed** controls how long one full pass takes. With **Fade** style, **Scroll Speed** controls the crossfade duration and the Columns setting is ignored (always 1-up).
 
 For the **Slider** layout, **Scroll Speed** controls the transition speed for every Slider Style (crossfade duration for Fade/Ken Burns, rotation speed for Coverflow/Flip/Cube). The Coverflow, Flip, and Cube effects render in full 3D on the front-end; the block editor shows an approximate preview.
 
