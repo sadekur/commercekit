@@ -385,8 +385,9 @@ Only the first page of categories is included in the page's initial HTML — lat
 | Style | Behaviour | Default |
 |---|---|---|
 | **Standard** | Slides one step at a time, with navigation arrows and pagination | ✅ Default |
-| **Ticker** | Continuous, non-stop auto-scroll — cards glide by with no snapping, arrows, or pagination | — |
 | **Fade** | Crossfades between one category at a time (always 1-up, ignoring the Columns setting) | — |
+
+> **Ticker** is not chosen from this dropdown — click the **Ticker** button in the Layout Preset row instead. It's a shortcut that sets Layout to Carousel and Carousel Style to Ticker: continuous, non-stop auto-scroll with cards gliding by and no snapping, arrows, or pagination.
 
 ##### Slider Style (Slider layout only)
 
